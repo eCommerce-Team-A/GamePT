@@ -15,4 +15,15 @@ public class DuoArticleService {
     public List<DuoArticle> getAllDuoArticles() {
         return duoArticleRepository.findAll();
     }
+
+    public DuoArticle createDuoArticle(String myLine, String findLine, Boolean microphoneCheck, String content) {
+        DuoArticle duoArticle = DuoArticle.builder()
+                .myLine(myLine)
+                .findLine(findLine)
+                .microphoneCheck(microphoneCheck)
+                .content(content)
+                .build();
+        this.duoArticleRepository.save(duoArticle);
+        return duoArticle;
+    }
 }
