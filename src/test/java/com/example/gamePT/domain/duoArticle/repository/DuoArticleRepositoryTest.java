@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -20,7 +19,6 @@ public class DuoArticleRepositoryTest {
 
     @Test
     public void 데이터넣어보기() {
-
         final DuoArticle duoArticle = DuoArticle.builder()
                 .id(1L)
                 .myLine("상관없음")
@@ -39,11 +37,13 @@ public class DuoArticleRepositoryTest {
     public void 데이터찾아오기() {
         Optional<DuoArticle> duoArticle1 = duoarticleRepository.findById(1L);
         Optional<DuoArticle> duoArticle2 = duoarticleRepository.findById(2L);
+        List<DuoArticle> duoArticleList = duoarticleRepository.findAll();
         List<DuoArticle> duoArticleList1 = duoarticleRepository.findByMyLine("상관없음");
         List<DuoArticle> duoArticleList2 = duoarticleRepository.findByMyLine("탑");
 
         assertThat(duoArticle1).isNotEmpty();
         assertThat(duoArticle2).isEmpty();
+        assertThat(duoArticleList).isNotEmpty();
         assertThat(duoArticleList1).isNotEmpty();
         assertThat(duoArticleList2).isEmpty();
     }
