@@ -13,4 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CourseController {
     private final CourseService courseService;
 
+    @GetMapping("/create")
+    public String createCourse (){
+        return "course_create_form";
+    }
 }
