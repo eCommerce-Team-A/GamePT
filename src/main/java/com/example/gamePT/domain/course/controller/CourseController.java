@@ -15,6 +15,6 @@ public class CourseController {
 
     @GetMapping("/create")
     public String createCourse (){
-        return "course_create_form";
+        return "course/course_create_form";
     }
 }
