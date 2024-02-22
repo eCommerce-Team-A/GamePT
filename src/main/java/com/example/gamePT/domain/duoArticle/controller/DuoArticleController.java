@@ -1,11 +1,15 @@
 package com.example.gamePT.domain.duoArticle.controller;
 
 import com.example.gamePT.domain.duoArticle.enity.DuoArticle;
+import com.example.gamePT.domain.duoArticle.enity.DuoArticleCreateForm;
 import com.example.gamePT.domain.duoArticle.service.DuoArticleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -21,5 +25,21 @@ public class DuoArticleController {
         List<DuoArticle> duoArticleList = this.duoArticleService.getAllDuoArticles();
         model.addAttribute("duoArticleList", duoArticleList);
         return "duo/list";
+    }
+
+    @GetMapping("/create")
+    public String create(DuoArticleCreateForm duoArticleCreateForm) {
+        return "duo/form";
+    }
+
+    @PostMapping("/create")
+    public String create(@Valid DuoArticleCreateForm duoArticleCreateForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "duo/form";
+        }
+        this.duoArticleService.createDuoArticle(duoArticleCreateForm.getMyLine(), duoArticleCreateForm.getFindLine(),
+                duoArticleCreateForm.getMicrophoneCheck(), duoArticleCreateForm.getContent());
+
+        return "redirect:/duo/list";
     }
 }

@@ -1,0 +1,15 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="mb-3">
+    <form th:action="@{/duo/create}" method="post" th:object="${duoArticleCreateForm}">
+        <label for="myLine"></label>
+        <input type="text" id="myLine" name="myLine">
+        <label for="findLine"></label>
+        <input type="text" id="findLine" name="findLine">
+        <label for="microphoneCheck"></label>
+        <input type="checkbox" id="microphoneCheck" name="microphoneCheck">
+        <label for="content"></label>
+        <input type="text" id="content" name="content">
+        <button type="submit">등록</button>
+    </form>
+</div>
+</html>

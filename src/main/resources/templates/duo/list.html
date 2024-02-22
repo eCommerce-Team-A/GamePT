@@ -1,5 +1,98 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <div layout:fragment="content" class="mb-3">
+    <div style="margin-top: 10rem; display: flex; justify-content: center; flex-wrap: wrap;">
+        <div id="top" style="width:1084px; display: flex; justify-content: space-between;">
+            <div id="left">
+                <ul style="display: flex;">
+                    <li style="list-style: none; border-style: solid">all</li>
+                    <li style="list-style: none; border-style: solid">top</li>
+                    <li style="list-style: none; border-style: solid">jug</li>
+                    <li style="list-style: none; border-style: solid">mid</li>
+                    <li style="list-style: none; border-style: solid">adc</li>
+                    <li style="list-style: none; border-style: solid">sup</li>
+                </ul>
+            </div>
+            <div id="right">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    듀오 찾기
+                </button>
+            </div>
+        </div>
+        <div id="bottom" style="width: 1084px;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">소환사명</th>
+                    <th scope="col">주 포지션</th>
+                    <th scope="col">티어</th>
+                    <th scope="col">찾는 포지션</th>
+                    <th scope="col">메모</th>
+                    <th scope="col">등록일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="duoArticle, loop : ${duoArticleList}">
+                    <td th:text="소환사이름"></td>
+                    <td th:text="${duoArticle.myLine}"></td>
+                    <td th:text="gold"></td>
+                    <td th:text="${duoArticle.findLine}"></td>
+                    <td th:text="${duoArticle.content}"></td>
+                    <td th:id="|result${loop.index + 1}|"></td>
+                    <script th:src="@{/js/calculateDate.js}"></script>
+                    <script th:inline="javascript">
+                        calculateDate(/*[[${duoArticle.createDate}]]*/, 'result' + /*[[${loop.index + 1}]]*/);
+                    </script>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">듀오찾기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="was-validated" th:action="@{/duo/create}" method="post">
+                    <div class="modal-body">
+                        <ul style="display: flex;">내 포지션
+                            <li style="list-style: none; border-style: solid">all</li>
+                            <li style="list-style: none; border-style: solid">top</li>
+                            <li style="list-style: none; border-style: solid">jug</li>
+                            <li style="list-style: none; border-style: solid">mid</li>
+                            <li style="list-style: none; border-style: solid">adc</li>
+                            <li style="list-style: none; border-style: solid">sup</li>
+                        </ul>
+                        <div class="form-check form-switch">마이크
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                        </div>
+                        <ul style="display: flex;">찾는 포지션
+                            <li style="list-style: none; border-style: solid">all</li>
+                            <li style="list-style: none; border-style: solid">top</li>
+                            <li style="list-style: none; border-style: solid">jug</li>
+                            <li style="list-style: none; border-style: solid">mid</li>
+                            <li style="list-style: none; border-style: solid">adc</li>
+                            <li style="list-style: none; border-style: solid">sup</li>
+                        </ul>
+                        <div class="mb-3">
+                            <label class="col-form-label" for="validationTextareaArticle">내용</label>
+                            <textarea class="form-control" id="validationTextareaArticle" name="content"
+                                      placeholder="내용을 입력해주세요." required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <button type="submit" class="btn btn-primary">등록</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 </html>

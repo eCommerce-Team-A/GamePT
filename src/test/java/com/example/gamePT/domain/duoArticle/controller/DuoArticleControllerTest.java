@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -47,6 +48,26 @@ public class DuoArticleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("duoArticleList"))
                 .andExpect(view().name("duo/list"))
+                .andDo(print());
+    }
+
+    @Test
+    public void 게시글폼이동() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(duoArticleController).build();
+        mockMvc.perform(get("/duo/create")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(view().name("duo/form"))
+                .andDo(print());
+    }
+
+    @Test
+    public void 게시글저장() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(duoArticleController).build();
+        mockMvc.perform(post("/duo/create")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(view().name("duo/form"))
                 .andDo(print());
     }
 
