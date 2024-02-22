@@ -1,21 +1,24 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <div layout:fragment="content" class="mb-3">
+    <link rel="stylesheet" href="/css/duoArticle.css" type="text/css">
     <div style="margin-top: 10rem; display: flex; justify-content: center; flex-wrap: wrap;">
         <div id="top" style="width:1084px; display: flex; justify-content: space-between;">
-            <div id="left">
-                <ul style="display: flex;">
-                    <li style="list-style: none; border-style: solid">all</li>
-                    <li style="list-style: none; border-style: solid">top</li>
-                    <li style="list-style: none; border-style: solid">jug</li>
-                    <li style="list-style: none; border-style: solid">mid</li>
-                    <li style="list-style: none; border-style: solid">adc</li>
-                    <li style="list-style: none; border-style: solid">sup</li>
+            <div id="left" style="display: flex">
+                <ul class="positions">
+                    <li class="position-button">all</li>
+                    <li class="position-button">top</li>
+                    <li class="position-button">jug</li>
+                    <li class="position-button">mid</li>
+                    <li class="position-button">adc</li>
+                    <li class="position-button">sup
+                    </li>
                 </ul>
             </div>
             <div id="right">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     듀오 찾기
                 </button>
+                <a href="/duo/create">임시</a>
             </div>
         </div>
         <div id="bottom" style="width: 1084px;">
@@ -45,6 +48,8 @@
                 </tr>
                 </tbody>
             </table>
+            <h2>데이타</h2>
+            <div th:text="${championData}"></div>
         </div>
     </div>
 
@@ -55,28 +60,33 @@
                     <h5 class="modal-title" id="exampleModalLabel">듀오찾기</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="was-validated" th:action="@{/duo/create}" method="post">
+                <form class="was-validated" method="post">
                     <div class="modal-body">
-                        <ul style="display: flex;">내 포지션
-                            <li style="list-style: none; border-style: solid">all</li>
-                            <li style="list-style: none; border-style: solid">top</li>
-                            <li style="list-style: none; border-style: solid">jug</li>
-                            <li style="list-style: none; border-style: solid">mid</li>
-                            <li style="list-style: none; border-style: solid">adc</li>
-                            <li style="list-style: none; border-style: solid">sup</li>
-                        </ul>
-                        <div class="form-check form-switch">마이크
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                        <div>내 포지션
+                            <ul class="positions">
+                                <li class="position-button">all</li>
+                                <li class="position-button">top</li>
+                                <li class="position-button">jug</li>
+                                <li class="position-button">mid</li>
+                                <li class="position-button">adc</li>
+                                <li class="position-button">sup</li>
+                            </ul>
+                            <div class="form-check form-switch">마이크
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="flexSwitchCheckDefault">
+                                <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                            </div>
                         </div>
-                        <ul style="display: flex;">찾는 포지션
-                            <li style="list-style: none; border-style: solid">all</li>
-                            <li style="list-style: none; border-style: solid">top</li>
-                            <li style="list-style: none; border-style: solid">jug</li>
-                            <li style="list-style: none; border-style: solid">mid</li>
-                            <li style="list-style: none; border-style: solid">adc</li>
-                            <li style="list-style: none; border-style: solid">sup</li>
-                        </ul>
+                        <div>찾는 포지션
+                            <ul class="positions">
+                                <li class="position-button">all</li>
+                                <li class="position-button">top</li>
+                                <li class="position-button">jug</li>
+                                <li class="position-button">mid</li>
+                                <li class="position-button">adc</li>
+                                <li class="position-button">sup</li>
+                            </ul>
+                        </div>
                         <div class="mb-3">
                             <label class="col-form-label" for="validationTextareaArticle">내용</label>
                             <textarea class="form-control" id="validationTextareaArticle" name="content"
@@ -87,7 +97,6 @@
                             <button type="submit" class="btn btn-primary">등록</button>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
