@@ -20,7 +20,7 @@ public class CourseService {
         return _course.get();
     }
 
-    public void createCourse(String expertname, String gameCategoryname, String name, String information, Integer price) {
+    public Course createCourse(String expertname, String gameCategoryname, String name, String information, Integer price) {
         Course course = Course.builder()
                 .expertname(expertname)
                 .gameCategoryname(gameCategoryname)
@@ -29,5 +29,7 @@ public class CourseService {
                 .price(price)
                 .build();
         this.courseRepository.save(course);
+
+        return findCourseById(course.getId());
     }
 }
