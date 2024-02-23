@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -29,7 +26,7 @@ public class DuoArticleController {
 
     @GetMapping("/list")
     public String list(Model model) throws IOException {
-        String apiUrl = "https://ddragon.leagueoflegends.com/cdn/14.4.1/data/en_US/champion.json";
+        String apiUrl = "https://ddragon.leagueoflegends.com/cdn/14.4.1/data/en_US/champion/Aatrox.json";
         RestTemplate restTemplate = new RestTemplate();
         String jsonData = restTemplate.getForObject(apiUrl, String.class);
 
@@ -77,4 +74,11 @@ public class DuoArticleController {
         this.duoArticleService.deleteDuoArticle(duoArticle);
         return "redirect:/duo/list";
     }
+
+    @GetMapping("/api/create")
+    public String apiCreate() {
+        return "duo/api_test_form";
+    }
+
+
 }

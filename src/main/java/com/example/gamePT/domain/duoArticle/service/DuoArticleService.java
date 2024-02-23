@@ -39,4 +39,6 @@ public class DuoArticleService {
     public void deleteDuoArticle(DuoArticle duoArticle) {
         this.duoArticleRepository.delete(duoArticle);
     }
+
+
 }
