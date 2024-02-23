@@ -17,7 +17,7 @@ public class UserService {
 
     public boolean signUp(SiteUserRequest.Signup signup, BindingResult br) {
 
-        if(this.signupValidate(signup,br));
+        if(!this.signupValidate(signup,br)) return false;
 
         SiteUser signUp = SiteUser.builder()
                 .username(signup.getUsername())
