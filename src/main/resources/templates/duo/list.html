@@ -4,15 +4,21 @@
     <div style="margin-top: 10rem; display: flex; justify-content: center; flex-wrap: wrap;">
         <div id="top" style="width:1084px; display: flex; justify-content: space-between;">
             <div id="left" style="display: flex">
-                <ul class="positions">
-                    <li class="position-button">all</li>
-                    <li class="position-button">top</li>
-                    <li class="position-button">jug</li>
-                    <li class="position-button">mid</li>
-                    <li class="position-button">adc</li>
-                    <li class="position-button">sup
-                    </li>
-                </ul>
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary" for="btnradio1">all</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio2">top</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio3">jug</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio4">mid</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio5">adc</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio6">sup</label>
+                </div>
+
             </div>
             <div id="right">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -31,6 +37,7 @@
                     <th scope="col">찾는 포지션</th>
                     <th scope="col">메모</th>
                     <th scope="col">등록일</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -45,6 +52,9 @@
                     <script th:inline="javascript">
                         calculateDate(/*[[${duoArticle.createDate}]]*/, 'result' + /*[[${loop.index + 1}]]*/);
                     </script>
+                    <td>
+                    <a th:href="@{|/duo/delete/${duoArticle.id}|}" class="btn btn-sm btn-outline-secondary" th:text="삭제"></a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

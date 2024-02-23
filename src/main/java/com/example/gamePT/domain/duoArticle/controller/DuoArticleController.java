@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
@@ -67,6 +68,13 @@ public class DuoArticleController {
         this.duoArticleService.createDuoArticle(duoArticleForm.getMyLine(), duoArticleForm.getFindLine(),
                 duoArticleForm.getMicrophoneCheck(), duoArticleForm.getContent());
 
+        return "redirect:/duo/list";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id")Long id) {
+        DuoArticle duoArticle = this.duoArticleService.getDuoArticleById(id);
+        this.duoArticleService.deleteDuoArticle(duoArticle);
         return "redirect:/duo/list";
     }
 }
