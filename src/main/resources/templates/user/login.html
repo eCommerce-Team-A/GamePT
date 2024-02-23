@@ -64,43 +64,37 @@
 
 <div class="position-relative" style="height:100%;">
     <div class="position-absolute top-50 start-50 translate-middle">
-        <div class="card">
+        <div class="card w-75">
             <div class="card-body mt-3">
-                <h4 class="card-title text-center">회원가입</h4>
+                <h4 class="card-title text-center">로그인</h4>
                 <p class="card-text text-center mt-3">모든 게이머들을 위한 GamePT에 오신것을 환영합니다.</p>
 
-                <form th:action="@{/user/signup}" th:object="${signup}" method="post">
-                    <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+                <form th:action="@{/user/login}" method="post">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger">
+                            사용자ID 또는 비밀번호를 확인해 주세요.
+                        </div>
+                    </div>
                     <div>
-                        <div class="form-floating has-validation input-group">
+                        <div class="form-floating mb-3 has-validation">
                             <input name="username" type="text" class="form-control" id="floatingInput" placeholder="Login Id"  aria-describedby="inputGroupPrepend" required>
                             <label for="floatingInput">Login Id</label>
-                            <button class="btn btn-outline-secondary" type="button" id="isUniqueUsername">중복확인</button>
+                            <div class="invalid-feedback">
+                                Please choose a username.
+                            </div>
                         </div>
-
-                        <div class="form-floating has-validation mt-3">
+                        <div class="form-floating has-validation">
                             <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" aria-describedby="inputGroupPrepend" required>
                             <label for="floatingPassword">Password</label>
+                            <div class="invalid-feedback">
+                                Please choose a username.
+                            </div>
                         </div>
-                        <div class="form-floating has-validation mt-2">
-                            <input name="passwordConfirm" type="password" class="form-control" id="floatingPasswordConfirm" placeholder="Password" aria-describedby="inputGroupPrepend" required>
-                            <label for="floatingPassword">Password Confirm</label>
-                        </div>
-                        <div class="form-floating has-validation mt-3">
-                            <input name="email" type="email" class="form-control" id="floatingEmail" placeholder="Password" aria-describedby="inputGroupPrepend" required>
-                            <label for="floatingPassword">Email</label>
-                            <button class="btn btn-outline-secondary" type="button" id="isUniqueEmail">중복확인</button>
-                        </div>
-                        <div class="form-floating has-validation mt-3 input-group">
-                            <input name="nickname" type="text" class="form-control" id="floatingNickname" placeholder="Password" aria-describedby="inputGroupPrepend" required>
-                            <label for="floatingPassword">Nickname</label>
-                            <button class="btn btn-outline-secondary" type="button" id="isUniqueNickname">중복확인</button>
-                        </div>
-                        <button class="btn btn-outline-primary mt-3 w-100" type="submit">회원가입</button>
+                        <button class="btn btn-outline-primary mt-3 w-100" type="submit">로그인</button>
                         <hr>
                         <div class="d-flex justify-content-between">
                             <a href="">ID/PW 찾기</a>
-                            <a href="/user/login">로그인</a>
+                            <a href="/user/signup">회원가입</a>
                         </div>
                     </div>
                 </form>
@@ -108,6 +102,9 @@
         </div>
     </div>
 </div>
+
+
+
 
 <!-- JavaScript Libraries -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>

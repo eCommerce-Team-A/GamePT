@@ -16,8 +16,16 @@ public class UserController {
 
     private final UserService userService;
 
+
+    // 회원가입
+    @GetMapping("/signup")
+    public String signupPage(SiteUserRequest.Signup signup){
+
+        return "/user/signup";
+    }
+
     @PostMapping("/signup")
-    public String signup(@RequestBody @Valid SiteUserRequest.Signup signup, BindingResult bindingResult){
+    public String signup(@Valid SiteUserRequest.Signup signup, BindingResult bindingResult){
 
         if(!userService.signUp(signup,bindingResult)){
             return "/user/signup";
@@ -26,10 +34,14 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping("/signup")
-    public String s1(@Valid SiteUserRequest.Signup signup, BindingResult bindingResult){
+    // 회원 가입 시
 
-        return "redirect:/";
+    // 로그인
+    @GetMapping("/login")
+    public String loginPage(){
+
+        return "/user/login";
     }
+
 
 }

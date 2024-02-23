@@ -8,6 +8,7 @@ import lombok.*;
 public class SiteUserRequest {
 
     @Getter
+    @Setter
     @Builder
     public static class Signup {
 
@@ -28,12 +29,13 @@ public class SiteUserRequest {
     }
 
     @Getter
+    @Setter
     public static class Login {
 
-        @NotNull
+        @NotEmpty(message = "아이디를 입력해 주세요")
         private String username;
 
-        @NotNull
+        @NotEmpty(message = "비밀번호를 입력해 주세요")
         private String password;
     }
 
