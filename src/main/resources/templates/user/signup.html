@@ -35,6 +35,9 @@
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet">
 
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
 </head>
 
 <body style="height:100%;">
@@ -46,57 +49,65 @@
 </div>
 <!-- Spinner End -->
 
-
-<!-- Navbar start -->
-<div class="container-fluid fixed-top">
-    <div class="container px-0">
-        <nav class="navbar navbar-light bg-white navbar-expand-xl">
-            <a href="/" class="navbar-brand text-align-center"><img src="/img/GamePT.svg" style="width:250px; height:auto;" alt="logo" /></a>
-            <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarCollapse">
-                <span class="fa fa-bars text-primary"></span>
-            </button>
-
-        </nav>
-    </div>
-</div>
-<!-- Navbar End -->
-
 <div class="position-relative" style="height:100%;">
     <div class="position-absolute top-50 start-50 translate-middle">
         <div class="card">
-            <div class="card-body mt-3">
+            <div class="card-body">
+                <div class="text-center my-5 pb-2">
+                    <a href="/" class="navbar-brand text-align-center"><img src="/img/GamePT.svg" style="width:250px; height:auto;" alt="logo" /></a>
+                </div>
+
                 <h4 class="card-title text-center">회원가입</h4>
                 <p class="card-text text-center mt-3">모든 게이머들을 위한 GamePT에 오신것을 환영합니다.</p>
 
-                <form th:action="@{/user/signup}" th:object="${signup}" method="post">
+                <form class="needs-validation" th:action="@{/user/signup}" th:object="${signup}" method="post" enctype="multipart/form-data">
                     <div th:replace="~{form_errors :: formErrorsFragment}"></div>
                     <div>
-                        <div class="form-floating has-validation input-group">
-                            <input name="username" type="text" class="form-control" id="floatingInput" placeholder="Login Id"  aria-describedby="inputGroupPrepend" required>
-                            <label for="floatingInput">Login Id</label>
-                            <button class="btn btn-outline-secondary" type="button" id="isUniqueUsername">중복확인</button>
+                        <div class="input-group has-validation">
+                            <div class="form-floating">
+                                <input name="username" type="text" th:field="*{username}" class="form-control" id="username" placeholder="Login Id"  aria-describedby="inputGroupPrepend" required>
+                                <label for="username">Login Id</label>
+                            </div>
+                            <button class="btn btn-outline-secondary isUnique" type="button" value="username">중복확인</button>
                         </div>
 
-                        <div class="form-floating has-validation mt-3">
-                            <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" aria-describedby="inputGroupPrepend" required>
-                            <label for="floatingPassword">Password</label>
+                        <div class="form-floating mt-3">
+                            <input name="password" type="password" th:field="*{password}" class="form-control pwInput" id="password" placeholder="Password" aria-describedby="inputGroupPrepend" required>
+                            <label for="password">Password</label>
                         </div>
-                        <div class="form-floating has-validation mt-2">
-                            <input name="passwordConfirm" type="password" class="form-control" id="floatingPasswordConfirm" placeholder="Password" aria-describedby="inputGroupPrepend" required>
-                            <label for="floatingPassword">Password Confirm</label>
+                        <div class="form-floating mt-2">
+                            <input name="passwordConfirm" type="password" th:field="*{passwordConfirm}" class="form-control pwInput" id="passwordConfirm" placeholder="Password" aria-describedby="inputGroupPrepend" required>
+                            <label for="passwordConfirm">Password Confirm</label>
                         </div>
-                        <div class="form-floating has-validation mt-3">
-                            <input name="email" type="email" class="form-control" id="floatingEmail" placeholder="Password" aria-describedby="inputGroupPrepend" required>
-                            <label for="floatingPassword">Email</label>
-                            <button class="btn btn-outline-secondary" type="button" id="isUniqueEmail">중복확인</button>
+
+                        <div class="input-group mt-3 has-validation">
+                            <div class="form-floating">
+                                <input name="email" type="email" class="form-control" th:field="*{email}" id="email" placeholder="Email" aria-describedby="inputGroupPrepend" required>
+                                <label for="email">Email</label>
+                            </div>
+                            <button class="btn btn-outline-secondary isUnique" type="button" value="email">중복확인</button>
                         </div>
-                        <div class="form-floating has-validation mt-3 input-group">
-                            <input name="nickname" type="text" class="form-control" id="floatingNickname" placeholder="Password" aria-describedby="inputGroupPrepend" required>
-                            <label for="floatingPassword">Nickname</label>
-                            <button class="btn btn-outline-secondary" type="button" id="isUniqueNickname">중복확인</button>
+
+                        <div class="mt-3 input-group has-validation">
+
+                            <div class="form-floating">
+                                <input name="nickname" type="text" class="form-control" th:field="*{nickname}" id="nickname" placeholder="Password" aria-describedby="inputGroupPrepend" required>
+                                <label for="nickname">Nickname</label>
+                            </div>
+
+                            <button class="btn btn-outline-secondary isUnique" type="button" value="nickname">중복확인</button>
                         </div>
-                        <button class="btn btn-outline-primary mt-3 w-100" type="submit">회원가입</button>
+
+                        <div class="mt-3 row">
+                            <div class="col-2 text-center">
+                                <img style="width:50px; height:50px; object-fit:scale-down;" id="preview" class="preview" src="/img/kakako-00.jpg">
+                            </div>
+                            <div class="col-10">
+                                <input class="form-control form-control-lg profileImg" name="profileImg" id="profileImg" type="file" accept="image/gif,image/jpeg,image/png">
+                            </div>
+                        </div>
+
+                        <button class="btn btn-outline-primary mt-3 w-100" id="submit" type="submit">회원가입</button>
                         <hr>
                         <div class="d-flex justify-content-between">
                             <a href="">ID/PW 찾기</a>
@@ -118,8 +129,97 @@
 <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
 
 <!-- Template Javascript -->
-<script src="/js/main.js"></script>
+<script src="/js/main.js">
+</script>
 
+<script>
+    $(function() {
+
+        $("#profileImg").on("change", function(event) {
+
+
+            var file = event.target.files[0];
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+
+                $("#preview").attr("src", e.target.result);
+            }
+            reader.readAsDataURL(file);
+        });
+
+        $( '.form-control' ).change( function() {
+            $(this).removeClass("is-valid");
+            $(this).removeClass("is-invalid");
+        } );
+
+        $( '.pwInput' ).change( function() {
+            if($('#password').val().trim() != $('#passwordConfirm').val().trim()){
+                $('.pwInput').removeClass("is-valid");
+                $('.pwInput').addClass("is-invalid");
+            }else{
+                $('.pwInput').removeClass("is-invalid");
+                $('.pwInput').addClass("is-valid");
+            }
+        } );
+
+        $( ".isUnique" ).on( "click", function() {
+
+            var name = $(this).val();
+            var value = $('#'+name).val().trim();
+
+            if(value == ""){
+                alert("값을 입력해 주세요");
+                return;
+            }
+
+            let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+
+            if(name == "email" && !regex.test(value)){
+                alert("이메일 형식이 아닙니다.");
+                $('#'+name).addClass("is-invalid");
+
+                return;
+            }
+
+            var token = $("meta[name='_csrf']").attr("content");
+		    var header = $("meta[name='_csrf_header']").attr("content");
+
+            $.ajax({
+                type : 'post',              // 타입 (get, post, put 등등)
+                url : '/user/isUnique',     // 요청할 서버url
+                async : true,               // 비동기화 여부 (default : true)
+                beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                    xhr.setRequestHeader(header, token);
+                },
+                headers : {                 // Http header
+                    "Content-Type" : "application/json",
+                    "X-HTTP-Method-Override" : "POST"
+                },
+                dataType : 'text',          // 데이터 타입 (html, xml, json, text 등등)
+                data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                    "name" : name,
+                    "value" : value
+                }),
+                success : function(result) { // 결과 성공 콜백함수
+                    let data = JSON.parse(result)
+                    alert(data.message);
+
+                    if(data.isSuccess){
+                        $('#'+name).addClass("is-valid");
+                    }else{
+                        $('#'+name).addClass("is-invalid");
+                    }
+                  },
+                error : function(request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
+                }
+            })
+
+        } );
+
+    });
+</script>
 
 </body>
 

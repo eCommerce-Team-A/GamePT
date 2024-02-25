@@ -3,7 +3,6 @@ package com.example.gamePT.domain.user.entity;
 import com.example.gamePT.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,4 +31,5 @@ public class SiteUser extends BaseEntity {
     @Column(columnDefinition = "varchar(100)")
     @Builder.Default
     private String authorization = "Member";
+
 }
