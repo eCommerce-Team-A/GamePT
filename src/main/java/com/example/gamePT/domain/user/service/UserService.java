@@ -160,4 +160,8 @@ public class UserService {
     public SiteUser findByUsername(String username) {
         return this.userRepository.findByUsername(username).get();
     }
+
+    public String getProfileImg(Long id) {
+        return imageService.getSiteUserImg(id);
+    }
 }

@@ -37,6 +37,7 @@ public class Rq {
 
         if (authentication != null && authentication.getPrincipal() instanceof User) {
             this.user = (User) authentication.getPrincipal();
+            getSiteUser();
         } else {
             this.user = null;
         }
@@ -68,6 +69,12 @@ public class Rq {
         if (isLogout()) return null;
 
         return user.getUsername();
+    }
+
+    public String getProfileImg() {
+        if (isLogout()) return null;
+
+        return userService.getProfileImg(siteUser.getId());
     }
 
 }

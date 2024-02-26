@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -39,7 +40,7 @@ public class ImageService {
             profileImg.transferTo(profileImgFile);
         }
 
-        Image userProfile = Image.builder().path(filePath).originalFileName(originalFileName).relationId(siteUser.getId()).relationEntity("siteUser").build();
+        Image userProfile = Image.builder().path("/file/"+filePath).originalFileName(originalFileName).relationId(siteUser.getId()).relationEntity("siteUser").build();
 
         this.imageRepository.save(userProfile);
     }
@@ -58,4 +59,11 @@ public class ImageService {
         }
     }
 
+    public String getSiteUserImg(Long id) {
+        Optional<Image> profileImg = imageRepository.findByRelationEntityAndRelationId("siteUser",id);
+
+        if(profileImg.isEmpty()) return  null;
+
+        return profileImg.get().getPath();
+    }
 }
