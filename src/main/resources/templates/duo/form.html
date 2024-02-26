@@ -1,0 +1,26 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="mb-3">
+    <div style="margin-top: 10rem; display: flex; justify-content: center;">
+        <form style="width: 1084px;" th:action="@{/duo/create}" method="post" th:object="${duoArticleForm}">
+            <div class="mb-3">
+                <label class="form-label" for="myLine">내라인</label>
+                <input class="form-control" type="text" id="myLine" name="myLine">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="findLine">찾는라인</label>
+                <input class="form-control" type="text" id="findLine" name="findLine">
+            </div>
+            <div class="mb-3 form-check">
+                <input class="form-check-input" type="checkbox" id="microphoneCheck" name="microphoneCheck"
+                       value="true">마이크
+                <label class="form-check-label" for="microphoneCheck"></label>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="content">내용</label>
+                <input class="form-control" type="text" id="content" name="content">
+            </div>
+            <button type="submit" class="btn btn-primary">등록</button>
+        </form>
+    </div>
+</div>
+</html>

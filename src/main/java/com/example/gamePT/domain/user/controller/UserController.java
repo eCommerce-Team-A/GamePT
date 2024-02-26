@@ -5,6 +5,7 @@ import com.example.gamePT.domain.user.response.SiteUserResponse;
 import com.example.gamePT.domain.user.service.UserService;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,26 @@ public class UserController {
     private final UserService userService;
     private final Gson gson;
 
+    // mypage
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage")
+    public String mypage(){
+
+        return "/user/mypage";
+    }
+
+    // Id/PW 찾기
+    @GetMapping("/findUserInfo")
+    public String findUserInfo(){
+
+        return "/user/findUserInfo";
+    }
+
+    @PostMapping("/findUserInfo")
+    @ResponseBody
+    public SiteUserResponse.AjaxRes findUserInfo(@RequestBody SiteUserRequest.FindUserInfoAjax data){
+        return this.userService.findUserInfoAjax(data);
+    }
 
     // 회원가입
     @GetMapping("/signup")
@@ -41,7 +62,7 @@ public class UserController {
 
     @PostMapping("/isUnique")
     @ResponseBody
-    public SiteUserResponse.IsUnique isUniqueAjax(@RequestBody @Valid SiteUserRequest.IsUniqueAjax data, BindingResult bindingResult){
+    public SiteUserResponse.AjaxRes isUniqueAjax(@RequestBody @Valid SiteUserRequest.IsUniqueAjax data, BindingResult bindingResult){
         return this.userService.isUnique(data,bindingResult);
     }
 

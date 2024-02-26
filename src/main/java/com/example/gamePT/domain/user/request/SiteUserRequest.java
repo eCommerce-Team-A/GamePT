@@ -52,5 +52,18 @@ public class SiteUserRequest {
         private String value;
     }
 
+    @Getter
+    @Setter
+    public static class FindUserInfoAjax {
+
+        private String type;
+
+        private String username;
+
+        private String nickname;
+
+        private String email;
+    }
+
 
 }

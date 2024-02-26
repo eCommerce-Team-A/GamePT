@@ -1,0 +1,13 @@
+.positions {
+    display: flex;
+    padding: 0;
+    list-style: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.position-button {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+}
