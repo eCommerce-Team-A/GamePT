@@ -12,5 +12,7 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     defer-datasource-initialization: true
+custom:
+  fileDirPath: C:\gamePT\file_upload
