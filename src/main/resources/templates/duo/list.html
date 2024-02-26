@@ -1,0 +1,118 @@
+<html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div layout:fragment="content" class="mb-3">
+    <link rel="stylesheet" href="/css/duoArticle.css" type="text/css">
+    <div style="margin-top: 10rem; display: flex; justify-content: center; flex-wrap: wrap;">
+        <div id="top" style="width:1084px; display: flex; justify-content: space-between;">
+            <div id="left" style="display: flex">
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary" for="btnradio1">all</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio2">top</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio3">jug</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio4">mid</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio5">adc</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btnradio6">sup</label>
+                </div>
+
+            </div>
+            <div id="right">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    듀오 찾기
+                </button>
+                <a href="/duo/create">임시</a>
+                <a href="/duo/api/create">api</a>
+            </div>
+        </div>
+        <div id="bottom" style="width: 1084px;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">소환사명</th>
+                    <th scope="col">주 포지션</th>
+                    <th scope="col">티어</th>
+                    <th scope="col">찾는 포지션</th>
+                    <th scope="col">메모</th>
+                    <th scope="col">등록일</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="duoArticle, loop : ${duoArticleList}">
+                    <td th:text="소환사이름"></td>
+                    <td th:text="${duoArticle.myLine}"></td>
+                    <td th:text="gold"></td>
+                    <td th:text="${duoArticle.findLine}"></td>
+                    <td th:text="${duoArticle.content}"></td>
+                    <td th:id="|result${loop.index + 1}|"></td>
+                    <script th:src="@{/js/calculateDate.js}"></script>
+                    <script th:inline="javascript">
+                        calculateDate(/*[[${duoArticle.createDate}]]*/, 'result' + /*[[${loop.index + 1}]]*/);
+                    </script>
+                    <td>
+                    <a th:href="@{|/duo/delete/${duoArticle.id}|}" class="btn btn-sm btn-outline-secondary" th:text="삭제"></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <h2>데이타</h2>
+            <div th:text="${championData}"></div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">듀오찾기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="was-validated" method="post">
+                    <div class="modal-body">
+                        <div>내 포지션
+                            <ul class="positions">
+                                <li class="position-button">all</li>
+                                <li class="position-button">top</li>
+                                <li class="position-button">jug</li>
+                                <li class="position-button">mid</li>
+                                <li class="position-button">adc</li>
+                                <li class="position-button">sup</li>
+                            </ul>
+                            <div class="form-check form-switch">마이크
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="flexSwitchCheckDefault">
+                                <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                            </div>
+                        </div>
+                        <div>찾는 포지션
+                            <ul class="positions">
+                                <li class="position-button">all</li>
+                                <li class="position-button">top</li>
+                                <li class="position-button">jug</li>
+                                <li class="position-button">mid</li>
+                                <li class="position-button">adc</li>
+                                <li class="position-button">sup</li>
+                            </ul>
+                        </div>
+                        <div class="mb-3">
+                            <label class="col-form-label" for="validationTextareaArticle">내용</label>
+                            <textarea class="form-control" id="validationTextareaArticle" name="content"
+                                      placeholder="내용을 입력해주세요." required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <button type="submit" class="btn btn-primary">등록</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</html>
