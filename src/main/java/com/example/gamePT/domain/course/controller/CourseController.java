@@ -60,4 +60,12 @@ public class CourseController {
         return "course/course_detail";
     }
 
+
+    @GetMapping("/list")
+    public String courseList(Model model) {
+        List<Course> courseList = this.courseService.findAllCourse();
+        model.addAttribute("courseList", courseList);
+
+        return "course/course_list";
+    }
 }
