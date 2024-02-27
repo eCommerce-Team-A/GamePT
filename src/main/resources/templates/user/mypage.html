@@ -15,7 +15,7 @@
         <div class="container mx-auto">
             <div class="row">
                 <div class="col-1 text-center">
-                    <div class="bg-light border border-secondary rounded-circle" style=" width:100px; height:100px; overflow: hidden;">
+                    <div class="bg-white rounded-circle shadow" style=" width:100px; height:100px; overflow: hidden;">
                         <img th:src="${@rq.getProfileImg()}" alt="..." style="width:100%; height:100%; object-fit:contain;">
                     </div>
                 </div>
@@ -34,12 +34,33 @@
             </div>
             <div class="row mt-4">
                 <div class="col-3">
-                    <div class="card">
+                    <div class="card w-100 Regular shadow border-0">
+                        <div class="card-header bg-white">솔로랭크</div>
+
+                        <div class="card-body">
+                            <div class="bg-light rounded-circle" style=" width:100px; height:100px; overflow: hidden;">
+                                <img id="rankImg" src="" alt="..." style="width:100%; height:100%; object-fit:contain;">
+                            </div>
+                            <div class="d-flex">
+                                <div id="tier">
+
+                                </div>
+                                <div id="rank">
+
+                                </div>
+                                <div id="win-lose">
+
+                                </div>
+                                <div id="win-rate">
+
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
                 <div class="col-9">
-                    <div class="card col-7">
+                    <div class="card w-100 Regular shadow border-0">
                         <div>
                             <img src="..." class="card-img-top" alt="..." style="">
                         </div>
@@ -63,6 +84,38 @@
         </div>
     </div>
 
+<script th:inline="javascript">
+$(function() {
+
+    var puuid = [[${@rq.getSiteUser().puuid}]];
+
+    $.ajax({
+        type : 'get',              // 타입 (get, post, put 등등)
+        url : '/riotApiController/getLeagueDataByPuuid/' + puuid,     // 요청할 서버url
+        async : true,               // 비동기화 여부 (default : true)
+        headers : {                 // Http header
+            "Content-Type" : "application/json",
+            "X-HTTP-Method-Override" : "GET"
+        },
+        dataType : 'json',
+        success : function(result) { // 결과 성공 콜백함수
+            if(result != null){
+                $('#rankImg').attr("src","/img/"+result.tier+".png")
+                $('#tier').text(result.tier)
+                $('#rank').text(result.rank)
+                $('#win-lose').text(result.wins+"승 "+result.losses+"패")
+                $('#win-rate').text(Math.ceil((result.wins / (result.wins+result.losses))*100))
+            }
+            console.log(result)
+<!--            let data = JSON.parse(result)-->
+          },
+        error : function(request, status, error) { // 결과 에러 콜백함수
+                console.log(error)
+        }
+    })
+
+});
+</script>
 
 </div>
 </html>
