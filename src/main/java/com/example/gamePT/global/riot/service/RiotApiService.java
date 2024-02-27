@@ -1,9 +1,6 @@
 package com.example.gamePT.global.riot.service;
 
-import com.example.gamePT.global.riot.entity.LeagueDTO;
-import com.example.gamePT.global.riot.entity.MatchInfoDTO;
-import com.example.gamePT.global.riot.entity.SummonerDTO;
-import com.example.gamePT.global.riot.entity.TagLineDTO;
+import com.example.gamePT.global.riot.entity.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -144,6 +141,16 @@ public class RiotApiService {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ParticipantDTO getParticipant(MatchInfoDTO matchInfoDTO, String puuid) {
+        List<ParticipantDTO> participantDTOList = matchInfoDTO.getInfo().getParticipants();
+        for (ParticipantDTO p : participantDTOList) {
+            if (p.getPuuid().equals(puuid)) {
+                return p;
+            }
         }
         return null;
     }
