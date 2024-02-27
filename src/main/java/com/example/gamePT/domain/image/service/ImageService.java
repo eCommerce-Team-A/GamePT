@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,10 +31,14 @@ public class ImageService {
             filePath = "/img/kakako-00.jpg";
             originalFileName = "defaultImage";
         } else if (!profileImg.isEmpty()) {
+
+            createFolder("user");
+
             originalFileName = profileImg.getOriginalFilename();
             filePath = "user/" + UUID.randomUUID().toString() +"."+ originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
             File profileImgFile = new File(fileDirPath +"/"+ filePath);
             profileImg.transferTo(profileImgFile);
+            filePath =  "/file/" + filePath;
         }
 
         Image userProfile = Image.builder().path(filePath).originalFileName(originalFileName).relationId(siteUser.getId()).relationEntity("siteUser").build();
@@ -41,4 +46,25 @@ public class ImageService {
         this.imageRepository.save(userProfile);
     }
 
+    public void createFolder(String folderName){
+
+        File folder = new File(fileDirPath+"\\"+folderName+"\\");
+
+        // 해당 디렉토리가 없다면 디렉토리를 생성.
+        if (!folder.exists()) {
+            try{
+                folder.mkdirs();
+            }catch(Exception e){
+                e.getStackTrace();
+            }
+        }
+    }
+
+    public String getSiteUserImg(Long id) {
+        Optional<Image> profileImg = imageRepository.findByRelationEntityAndRelationId("siteUser",id);
+
+        if(profileImg.isEmpty()) return  null;
+
+        return profileImg.get().getPath();
+    }
 }

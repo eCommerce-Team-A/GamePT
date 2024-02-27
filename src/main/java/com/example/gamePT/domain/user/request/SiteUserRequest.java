@@ -28,6 +28,12 @@ public class SiteUserRequest {
         @NotEmpty(message = "이메일을 입력해 주세요")
         private String email;
 
+        @NotEmpty(message = "소환사명을 입력해주세요")
+        private String gameName;
+
+        @NotEmpty(message = "태그 번호를 입력해 주세요")
+        private String tag;
+
     }
 
     @Getter
@@ -50,6 +56,19 @@ public class SiteUserRequest {
 
         @NotEmpty(message = "값을 입력해주세요")
         private String value;
+    }
+
+    @Getter
+    @Setter
+    public static class FindUserInfoAjax {
+
+        private String type;
+
+        private String username;
+
+        private String nickname;
+
+        private String email;
     }
 
 

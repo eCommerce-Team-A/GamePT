@@ -23,13 +23,20 @@ public class SiteUser extends BaseEntity {
     private String password;
 
     @Column(columnDefinition = "varchar(100)", unique = true)
-    private String nickname;
+    private String email;
 
     @Column(columnDefinition = "varchar(100)", unique = true)
-    private String email;
+    private String nickname;
 
     @Column(columnDefinition = "varchar(100)")
     @Builder.Default
     private String authorization = "Member";
 
+    @Column(columnDefinition = "varchar(100)")
+    private String gameName;
+
+    @Column(columnDefinition = "varchar(100)")
+    private String tag;
+
+    private String puuid;
 }

@@ -5,6 +5,8 @@ import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.repository.UserRepository;
 import com.example.gamePT.domain.user.request.SiteUserRequest;
 import com.example.gamePT.domain.user.response.SiteUserResponse;
+import com.example.gamePT.global.email.EmailService;
+import com.example.gamePT.global.riot.service.RiotApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,42 +24,110 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
+    private final RiotApiService riotApiService;
 
     private final ImageService imageService;
 
-    public SiteUserResponse.IsUnique isUnique(SiteUserRequest.IsUniqueAjax isUniqueAjax, BindingResult br) {
+    public SiteUserResponse.AjaxRes findUserInfoAjax(SiteUserRequest.FindUserInfoAjax data) {
 
-        if(br.hasErrors()){
-            return SiteUserResponse.IsUnique.builder().isSuccess(false).message(br.getAllErrors().get(0).getDefaultMessage()).build();
+        String message = "";
+
+        if(data.getType().isEmpty()){
+            return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("유효하지 않은 접근입니다.").build();
         }
 
-        String[] strArray = {"username", "email", "nickname"};
+        if(data.getType().equals("findUsername")){
+            if(data.getNickname().isEmpty() || data.getEmail().isEmpty()){
+                return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("유효하지 않은 접근입니다.").build();
+            }
+
+            Optional<SiteUser> siteUser = userRepository.findByNicknameAndEmail(data.getNickname(), data.getEmail());
+
+            if(siteUser.isEmpty()){
+                return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("해당 정보의 회원이 없습니다.").build();
+            }
+
+            return SiteUserResponse.AjaxRes.builder().isSuccess(true).message("회원님의 아이디는 " +siteUser.get().getUsername() +" 입니다.").build();
+
+        }
+
+        if(data.getType().equals("findPassword")){
+            if(data.getUsername().isEmpty() || data.getEmail().isEmpty()){
+                return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("유효하지 않은 접근입니다.").build();
+            }
+
+            Optional<SiteUser> siteUser = userRepository.findByUsernameAndEmail(data.getUsername(), data.getEmail());
+
+            if(siteUser.isEmpty()){
+                return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("해당 정보의 회원이 없습니다.").build();
+            }
+
+            // 메일 보내기
+            String tempPassword = emailService.sendConfirm(siteUser.get().getEmail()) + "";
+
+            // 비밀번호 변경
+            SiteUser changePasswordUser = siteUser.get();
+
+            changePasswordUser = changePasswordUser.toBuilder().password(passwordEncoder.encode(tempPassword)).build();
+
+            this.userRepository.save(changePasswordUser);
+
+            return SiteUserResponse.AjaxRes.builder().isSuccess(true).message("회원님의 Email로 임시 비밀번호를 발송 하였습니다.").build();
+        }
+
+        return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("유효하지 않은 접근입니다.").build();
+    }
+
+    public SiteUserResponse.AjaxRes isUnique(SiteUserRequest.IsUniqueAjax isUniqueAjax, BindingResult br) {
+
+        if(br.hasErrors()){
+            return SiteUserResponse.AjaxRes.builder().isSuccess(false).message(br.getAllErrors().get(0).getDefaultMessage()).build();
+        }
+
+        String[] strArray = {"username", "email", "nickname","gameName-tag"};
 
         if(!Arrays.stream(strArray).anyMatch(isUniqueAjax.getName()::equals)) {
-            return SiteUserResponse.IsUnique.builder().isSuccess(false).message("잘못된 요청 입니다.").build();
+            return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("잘못된 요청 입니다.").build();
         }
 
         if(isUniqueAjax.getName().equals("username") && this.userRepository.existsByUsername(isUniqueAjax.getValue())){
-            return SiteUserResponse.IsUnique.builder().isSuccess(false).message("이미 가입 되어 있는 아이디 입니다.").build();
+            return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("이미 가입 되어 있는 아이디 입니다.").build();
         }else if(isUniqueAjax.getName().equals("email") && this.userRepository.existsByEmail(isUniqueAjax.getValue())){
-            return SiteUserResponse.IsUnique.builder().isSuccess(false).message("이미 가입 되어 있는 이메일 입니다.").build();
+            return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("이미 가입 되어 있는 이메일 입니다.").build();
         }
         else if(isUniqueAjax.getName().equals("nickname") && this.userRepository.existsByNickname(isUniqueAjax.getValue())){
-            return SiteUserResponse.IsUnique.builder().isSuccess(false).message("이미 가입 되어 있는 닉네임 입니다.").build();
+            return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("이미 가입 되어 있는 닉네임 입니다.").build();
+        } else if (isUniqueAjax.getName().equals("gameName-tag")) {
+            String[] gameName_tagList = isUniqueAjax.getValue().split("라이엇");
+
+            String puuid = riotApiService.getPuuid(gameName_tagList[0],gameName_tagList[1]);
+
+            if (puuid == null){
+                return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("존재하지 않는 소환사입니다.").build();
+            }
+            if (this.userRepository.existsByPuuid(puuid)){
+                return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("이미 가입되어 있는 소환사입니다.").build();
+            }
         }
 
-        return SiteUserResponse.IsUnique.builder().isSuccess(true).message(isUniqueAjax.getValue()+"은 사용 가능 합니다.").build();
+        return SiteUserResponse.AjaxRes.builder().isSuccess(true).message(isUniqueAjax.getValue()+"은 사용 가능 합니다.").build();
     }
 
     public boolean signUp(SiteUserRequest.Signup signup, BindingResult br, MultipartFile profileImg) throws IOException {
 
-        if(!this.signupValidate(signup,br)) return false;
+        String puuid = riotApiService.getPuuid(signup.getGameName(), signup.getTag());
+
+        if(!this.signupValidate(signup,br,puuid)) return false;
 
         SiteUser signUp = SiteUser.builder()
                 .username(signup.getUsername())
                 .password(passwordEncoder.encode(signup.getPassword()))
                 .email(signup.getEmail())
                 .nickname(signup.getNickname())
+                .gameName(signup.getGameName())
+                .tag(signup.getTag())
+                .puuid(puuid)
                 .build();
 
         SiteUser siteUser = userRepository.save(signUp);
@@ -66,9 +137,23 @@ public class UserService {
         return true;
     }
 
-    private boolean signupValidate(SiteUserRequest.Signup signup, BindingResult br){
+    private boolean signupValidate(SiteUserRequest.Signup signup, BindingResult br, String puuid){
 
         if(br.hasErrors()){
+            return false;
+        }
+
+        if (puuid == null) {
+
+            br.rejectValue("non-existent summoner", "non-existent summoner", "존재하지 않는 소환사 입니다.");
+
+            return false;
+        }
+
+        if(this.userRepository.existsByPuuid(puuid)){
+
+            br.rejectValue("puuid", "unique violation", "가입 되어 있는 소환사 입니다.");
+
             return false;
         }
 
@@ -102,5 +187,13 @@ public class UserService {
 
         return true;
     }
-    
+
+
+    public SiteUser findByUsername(String username) {
+        return this.userRepository.findByUsername(username).get();
+    }
+
+    public String getProfileImg(Long id) {
+        return imageService.getSiteUserImg(id);
+    }
 }

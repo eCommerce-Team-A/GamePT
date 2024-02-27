@@ -11,7 +11,7 @@ public class SiteUserResponse {
     @Getter
     @Setter
     @Builder
-    public static class IsUnique {
+    public static class AjaxRes {
 
         private Boolean isSuccess;
 
