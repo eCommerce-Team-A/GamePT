@@ -24,4 +24,5 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     Optional<SiteUser> findByUsernameAndEmail(String username, String email);
 
+    boolean existsByPuuid(String puuid);
 }

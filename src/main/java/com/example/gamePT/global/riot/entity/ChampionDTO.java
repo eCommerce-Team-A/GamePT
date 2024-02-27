@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true) //json데이터를 사용할 때, 클래스에 정의되지 않은 속성은 무시
-public class ChampionDTO {
+public class ChampionDTO { //챔피언정보
     private String id;
     private int key;
     private String name;

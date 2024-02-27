@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" style="height:100%;">
+<html lang="ko" style="height:100%;" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -98,6 +98,20 @@
                             <button class="btn btn-outline-secondary isUnique" type="button" value="nickname">중복확인</button>
                         </div>
 
+                        <div class="mt-3 input-group has-validation">
+
+                            <div class="form-floating">
+                                <input name="gameName" type="text" class="form-control" th:field="*{gameName}" id="gameName" placeholder="소환사명" aria-describedby="inputGroupPrepend" required>
+                                <label for="nickname">소환사명</label>
+                            </div>
+                            <div class="form-floating">
+                                <input name="tag" type="text" class="form-control" th:field="*{tag}" id="tag" placeholder="tag" aria-describedby="inputGroupPrepend" required>
+                                <label for="nickname">태그 ex)KR1 </label>
+                            </div>
+
+                            <button class="btn btn-outline-secondary isUnique" type="button" value="gameName-tag">중복확인</button>
+                        </div>
+
                         <div class="mt-3 row">
                             <div class="col-2 text-center">
                                 <img style="width:50px; height:50px; object-fit:scale-down;" id="preview" class="preview" src="/img/kakako-00.jpg">
@@ -166,7 +180,14 @@
         $( ".isUnique" ).on( "click", function() {
 
             var name = $(this).val();
-            var value = $('#'+name).val().trim();
+            var value = ""
+
+            if(name == "gameName-tag"){
+                value = $('#gameName').val().trim() + "라이엇" + $('#tag').val().trim();
+            }
+            else{
+                value = $('#'+name).val().trim();
+            }
 
             if(value == ""){
                 alert("값을 입력해 주세요");
@@ -205,11 +226,23 @@
                     let data = JSON.parse(result)
                     alert(data.message);
 
-                    if(data.isSuccess){
-                        $('#'+name).addClass("is-valid");
+                    if(name == "gameName-tag"){
+                        if(data.isSuccess){
+                            $('#gameName').addClass("is-valid");
+                            $('#tag').addClass("is-valid");
+                        }else{
+                            $('#gameName').addClass("is-invalid");
+                            $('#tag').addClass("is-invalid");
+                        }
                     }else{
-                        $('#'+name).addClass("is-invalid");
+                        if(data.isSuccess){
+                            $('#'+name).addClass("is-valid");
+                        }else{
+                            $('#'+name).addClass("is-invalid");
+                        }
                     }
+
+
                   },
                 error : function(request, status, error) { // 결과 에러 콜백함수
                         console.log(error)

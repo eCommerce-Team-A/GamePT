@@ -38,9 +38,10 @@ public class ImageService {
             filePath = "user/" + UUID.randomUUID().toString() +"."+ originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
             File profileImgFile = new File(fileDirPath +"/"+ filePath);
             profileImg.transferTo(profileImgFile);
+            filePath =  "/file/" + filePath;
         }
 
-        Image userProfile = Image.builder().path("/file/"+filePath).originalFileName(originalFileName).relationId(siteUser.getId()).relationEntity("siteUser").build();
+        Image userProfile = Image.builder().path(filePath).originalFileName(originalFileName).relationId(siteUser.getId()).relationEntity("siteUser").build();
 
         this.imageRepository.save(userProfile);
     }
