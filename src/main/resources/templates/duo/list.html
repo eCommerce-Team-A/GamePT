@@ -19,7 +19,6 @@
                         data-bs-target="#createModalDuo">
                     듀오 찾기
                 </button>
-                <a href="/duo/api/create">api</a>
             </div>
         </div>
         <div id="bottom" style="width: 1084px;">
@@ -30,6 +29,7 @@
                     <th scope="col">주 포지션</th>
                     <th scope="col">티어</th>
                     <th scope="col">찾는 포지션</th>
+                    <th scope="col">승률</th>
                     <th scope="col">메모</th>
                     <th scope="col">등록일</th>
                     <th scope="col"></th>
@@ -37,10 +37,13 @@
                 </thead>
                 <tbody>
                 <tr th:each="duoArticle, loop : ${duoArticleList}">
-                    <td th:text="소환사이름"></td>
+                    <td th:text="${duoArticle.gameName}"></td>
                     <td th:text="${duoArticle.myLine}"></td>
-                    <td th:text="gold"></td>
+                    <td th:text="${duoArticle.tier}"></td>
                     <td th:text="${duoArticle.findLine}"></td>
+                    <td>
+                        <span th:text="|${duoArticle.wins}승 ${duoArticle.losses}패|"></span>
+                    </td>
                     <td th:text="${duoArticle.content}"></td>
                     <td th:id="|result${loop.index + 1}|"></td>
                     <script th:src="@{/js/calculateDate.js}"></script>

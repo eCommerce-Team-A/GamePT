@@ -1,16 +1,14 @@
 package com.example.gamePT.domain.user.request;
 
 import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class SiteUserRequest {
 
     @Getter
     @Setter
-    @Builder
     public static class Signup {
 
         @NotEmpty(message = "로그인 아이디를 입력해 주세요")
