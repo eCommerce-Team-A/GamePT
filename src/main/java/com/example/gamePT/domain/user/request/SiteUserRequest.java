@@ -1,9 +1,8 @@
 package com.example.gamePT.domain.user.request;
 
 import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class SiteUserRequest {

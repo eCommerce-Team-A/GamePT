@@ -1,9 +1,6 @@
 package com.example.gamePT.global.riot.service;
 
-import com.example.gamePT.global.riot.entity.LeagueDTO;
-import com.example.gamePT.global.riot.entity.MatchInfoDTO;
-import com.example.gamePT.global.riot.entity.SummonerDTO;
-import com.example.gamePT.global.riot.entity.TagLineDTO;
+import com.example.gamePT.global.riot.entity.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +17,7 @@ import java.util.List;
 public class RiotApiService {
 
 
-    private String myKey = "RGAPI-2d501e2c-17ac-4899-b156-bb62509e2aec";
+    private String myKey = "RGAPI-016ec826-c6e3-4170-a2d8-213d40b64c49";
 
 
     //닉네임 입력 시, PuuId 반환
@@ -144,6 +141,16 @@ public class RiotApiService {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ParticipantDTO getParticipant(MatchInfoDTO matchInfoDTO, String puuid) {
+        List<ParticipantDTO> participantDTOList = matchInfoDTO.getInfo().getParticipants();
+        for (ParticipantDTO p : participantDTOList) {
+            if (p.getPuuid().equals(puuid)) {
+                return p;
+            }
         }
         return null;
     }
