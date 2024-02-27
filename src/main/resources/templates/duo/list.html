@@ -2,29 +2,23 @@
 <div layout:fragment="content" class="mb-3">
     <link rel="stylesheet" href="/css/duoArticle.css" type="text/css">
     <div style="margin-top: 10rem; display: flex; justify-content: center; flex-wrap: wrap;">
-        <div id="top" style="width:1084px; display: flex; justify-content: space-between;">
+        <div style="width:1084px; display: flex; justify-content: space-between;">
             <div id="left" style="display: flex">
-                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-                    <label class="btn btn-outline-primary" for="btnradio1">all</label>
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio2">top</label>
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio3">jug</label>
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio4">mid</label>
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio5">adc</label>
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio6">sup</label>
-                </div>
+                <ul class="positions">
+                    <li class="position-button">all</li>
+                    <li class="position-button">top</li>
+                    <li class="position-button">jug</li>
+                    <li class="position-button">mid</li>
+                    <li class="position-button">adc</li>
+                    <li class="position-button">sup</li>
+                </ul>
 
             </div>
             <div id="right">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                        data-bs-target="#createModalDuo">
                     듀오 찾기
                 </button>
-                <a href="/duo/create">임시</a>
                 <a href="/duo/api/create">api</a>
             </div>
         </div>
@@ -54,65 +48,104 @@
                         calculateDate(/*[[${duoArticle.createDate}]]*/, 'result' + /*[[${loop.index + 1}]]*/);
                     </script>
                     <td>
-                    <a th:href="@{|/duo/delete/${duoArticle.id}|}" class="btn btn-sm btn-outline-secondary" th:text="삭제"></a>
+                        <a th:href="@{|/duo/delete/${duoArticle.id}|}" class="btn btn-sm btn-outline-secondary"
+                           th:text="삭제"></a>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <h2>데이타</h2>
-            <div th:text="${championData}"></div>
         </div>
     </div>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="createModalDuo" tabindex="-1" aria-labelledby="createDuoModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">듀오찾기</h5>
+                    <h5 class="modal-title" id="createDuoModal">듀오찾기</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="was-validated" method="post">
+                <form th:action="@{/duo/create}" method="post" th:object="${duoArticleForm}">
                     <div class="modal-body">
-                        <div>내 포지션
-                            <ul class="positions">
-                                <li class="position-button">all</li>
-                                <li class="position-button">top</li>
-                                <li class="position-button">jug</li>
-                                <li class="position-button">mid</li>
-                                <li class="position-button">adc</li>
-                                <li class="position-button">sup</li>
-                            </ul>
-                            <div class="form-check form-switch">마이크
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                       id="flexSwitchCheckDefault">
-                                <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                        <div>
+                            <p>내라인</p>
+                            <div class="btn-group" role="group" aria-label="position Group">
+                                <input type="radio" class="btn-check" name="myLine" id="ALL" autocomplete="off" checked>
+                                <label class="btn btn-outline-primary" for="ALL">ALL</label>
+                                <input type="radio" class="btn-check" name="myLine" id="TOP" autocomplete="off" checked>
+                                <label class="btn btn-outline-primary" for="TOP">TOP</label>
+                                <input type="radio" class="btn-check" name="myLine" id="JUG" autocomplete="off" checked>
+                                <label class="btn btn-outline-primary" for="JUG">JUG</label>
+                                <input type="radio" class="btn-check" name="myLine" id="MID" autocomplete="off" checked>
+                                <label class="btn btn-outline-primary" for="MID">MID</label>
+                                <input type="radio" class="btn-check" name="myLine" id="ADC" autocomplete="off" checked>
+                                <label class="btn btn-outline-primary" for="ADC">ADC</label>
+                                <input type="radio" class="btn-check" name="myLine" id="SUP" autocomplete="off" checked>
+                                <label class="btn btn-outline-primary" for="SUP">SUP</label>
                             </div>
                         </div>
-                        <div>찾는 포지션
-                            <ul class="positions">
-                                <li class="position-button">all</li>
-                                <li class="position-button">top</li>
-                                <li class="position-button">jug</li>
-                                <li class="position-button">mid</li>
-                                <li class="position-button">adc</li>
-                                <li class="position-button">sup</li>
-                            </ul>
+                        <div class="mb-3 form-check">
+                            <input class="form-check-input" type="checkbox" role="switch" id="microphoneCheck"
+                                   name="microphoneCheck"
+                                   value="true">마이크
+                            <label class="form-check-label" for="microphoneCheck"></label>
                         </div>
+                        <div>
+                            <p>찾는라인</p>
+                            <div class="btn-group" role="group" aria-label="position Group">
+                                <button type="button" class="btn btn-secondary" value="ALL"
+                                        onclick="selectedFindLine('ALL')">ALL
+                                </button>
+                                <button type="button" class="btn btn-secondary" value="TOP"
+                                        onclick="selectedFindLine('TOP')">TOP
+                                </button>
+                                <button type="button" class="btn btn-secondary" value="JUG"
+                                        onclick="selectedFindLine('JUG')">JUG
+                                </button>
+                                <button type="button" class="btn btn-secondary" value="MID"
+                                        onclick="selectedFindLine('MID')">MID
+                                </button>
+                                <button type="button" class="btn btn-secondary" value="ADC"
+                                        onclick="selectedFindLine('ADC')">ADC
+                                </button>
+                                <button type="button" class="btn btn-secondary" value="SUP"
+                                        onclick="selectedFindLine('SUP')">SUP
+                                </button>
+                                <input type="hidden" name="findLine" id="findLine">
+                            </div>
+                        </div>
+
                         <div class="mb-3">
-                            <label class="col-form-label" for="validationTextareaArticle">내용</label>
-                            <textarea class="form-control" id="validationTextareaArticle" name="content"
+                            <label class="col-form-label" for="content">내용</label>
+                            <textarea class="form-control" id="content" name="content"
                                       placeholder="내용을 입력해주세요." required></textarea>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                            <button type="submit" class="btn btn-primary">등록</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary">등록</button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
+    <script>
+        function selectedMyLine(button) {
+            document.querySelectorAll('.btn').forEach(function (btn) {
+                btn.classList.remove('btn-primary')
+            });
+
+            button.classList.add('btn-primary');
+
+            document.getElementById('myLine').value = button.value;
+        }
 
 
+        function selectedFindLine(value) {
+            document.getElementById('findLine').value = value;
+        }
+    </script>
 </div>
+
 </html>
+
