@@ -1,6 +1,5 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="mb-3">
-
     <!-- Modal Search Start -->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
@@ -24,61 +23,64 @@
 
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-white display-6">강의 등록</h1>
+        <h1 class="text-center text-white display-6">강의 목록</h1>
         <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Pages</a></li>
-            <li class="breadcrumb-item active text-white">강의 등록</li>
+            <li class="breadcrumb-item active text-white">홈</li>
+            <li class="breadcrumb-item active text-white">강의 목록</li>
         </ol>
     </div>
     <!-- Single Page Header End -->
 
 
-    <!-- Checkout Page Start -->
-    <div class="container-fluid py-5">
+    <!-- Fruits Shop Start-->
+    <div class="container-fluid fruite py-5">
         <div class="container py-5">
-            <h1 class="mb-4">강의 등록</h1>
-            <form th:action="@{/course/create}" method="post">
-                <div class="row g-5">
-                    <div class="col-md-12 col-lg-6 col-xl-7">
-                        <div class="form-item">
-                            <label class="form-label my-3">게임 카테고리 <sup>*</sup></label>
-                            <input type="text" name="gameCategoryname" class="form-control"
-                                   placeholder="게임 카테고리를 입력해주세요.">
+            <div class="row row-cols-4 g-4 justify-content-center">
+                <div class="col" th:each="course : ${courseList}">
+                    <div class="rounded position-relative fruite-item">
+                        <a th:href="@{|/course/detail/${course.id}|}">
+                            <div class="fruite-img">
+                                <img src="https://i.ibb.co/w7yw4kK/image.jpg"
+                                     class="img-fluid w-100 rounded-top" alt="">
+                            </div>
+                        </a>
+                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                             style="top: 10px; left: 10px;" th:text="${course.gameCategoryname}">
                         </div>
-                        <div class="form-item">
-                            <label class="form-label my-3">강의명 <sup>*</sup></label>
-                            <input type="text" name="name" class="form-control" placeholder="강의명을 입력해주세요.">
-                        </div>
-                        <div class="form-item">
-                            <label class="form-label my-3">강의 소개 <sup>*</sup></label>
-                            <textarea name="introduce" class="form-control" cols="30" rows="20" style="resize: none;"
-                                      placeholder="강의 소개를 입력해주세요."></textarea>
-                        </div>
-                        <div class="form-item">
-                            <label class="form-label my-3">강의 커리큘럼 <sup>*</sup></label>
-                            <textarea name="curriculum" class="form-control" cols="30" rows="10" style="resize: none;"
-                                      placeholder="강의 커리큘럼을 입력해주세요.">
-예)
-
-1. ~~강의 ( x 분)
-2. ~~강의 ( x 분)</textarea>
-                        </div>
-                        <div class="form-item">
-                            <label class="form-label my-3">가격(포인트) <sup>*</sup></label>
-                            <input type="number" name="price" class="form-control" placeholder="예) 5000 (단위는 생략해주세요.)">
-                        </div>
-                        <div class="form-item">
-                            <button type="submit"
-                                    class="btn border-secondary py-3 my-5 w-100 text-primary">강의 등록하기
-                            </button>
+                        <div class="p-4 border border-top-0 rounded-bottom">
+                            <h4 class="mb-3">
+                                <a th:href="@{|/course/detail/${course.id}|}" style="text-decoration: none; color: inherit;"
+                                   th:text="${course.name}"></a>
+                            </h4>
+                            <p th:text="${course.introduce}"></p>
+                            <div class="d-flex justify-content-between flex-lg-wrap">
+                                <p class="text-dark fs-7 fw-bold mb-0"
+                                   th:text="@{|${course.price} 포인트|}"></p>
+                            </div>
+                            <br>
+                            <a th:href="@{|/course/detail/${course.id}|}"
+                               class="btn border border-secondary rounded-pill px-3 text-primary"
+                               style="display:block;">상세
+                                보기</a>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
+            <div class="col-12">
+                <div class="pagination d-flex justify-content-center mt-5">
+                    <a href="#" class="rounded">&laquo;</a>
+                    <a href="#" class="active rounded">1</a>
+                    <a href="#" class="rounded">2</a>
+                    <a href="#" class="rounded">3</a>
+                    <a href="#" class="rounded">4</a>
+                    <a href="#" class="rounded">5</a>
+                    <a href="#" class="rounded">6</a>
+                    <a href="#" class="rounded">&raquo;</a>
+                </div>
+            </div>
         </div>
     </div>
-    <!-- Checkout Page End -->
+    <!-- Fruits Shop End-->
 
 
     <!-- Footer Start -->
@@ -185,6 +187,5 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
             class="fa fa-arrow-up"></i></a>
-
 </div>
 </html>
