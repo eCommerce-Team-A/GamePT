@@ -2,6 +2,7 @@ package com.example.gamePT.domain.course.service;
 
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.repository.CourseRepository;
+import com.example.gamePT.domain.user.entity.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,13 @@ import java.util.Optional;
 public class CourseService {
     private final CourseRepository courseRepository;
 
-    public Course createCourse(String expertname, String gameCategoryname, String name, String information, Integer price) {
+    public Course createCourse(SiteUser siteUser, String gameCategoryname, String name, String introduce, String curriculum, Integer price) {
         Course course = Course.builder()
-                .expertname(expertname)
+                .siteUser(siteUser)
                 .gameCategoryname(gameCategoryname)
                 .name(name)
-                .information(information)
+                .introduce(introduce)
+                .curriculum(curriculum)
                 .price(price)
                 .build();
         this.courseRepository.save(course);
