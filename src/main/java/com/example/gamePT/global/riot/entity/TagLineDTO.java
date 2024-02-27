@@ -9,12 +9,9 @@ import lombok.ToString;
 @Setter
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true) //json데이터를 사용할 때, 클래스에 정의되지 않은 속성은 무시
-public class SummonerDTO { //소환사정보
-    private String id;
-    private String accountId;
+public class TagLineDTO { //태그정보
     private String puuid;
-    private String name;
-    private int profileIconId;
-    private String revisionDate;
-    private int summonerLevel;
+    private String gameName;
+    private String tagLine;
 }
+
