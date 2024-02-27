@@ -10,7 +10,6 @@ public class SiteUserRequest {
 
     @Getter
     @Setter
-    @Builder
     public static class Signup {
 
         @NotEmpty(message = "로그인 아이디를 입력해 주세요")
