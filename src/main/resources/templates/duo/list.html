@@ -81,12 +81,15 @@
                 <tr th:each="duoArticle, loop : ${duoArticleList}">
                     <!-- GameName/Microphone Start-->
                     <td style="width: 12%">
-                        <div class="article-element">
+                        <div class="article-element" style="flex-direction: column;">
+                            <div>
                             <span style="font-size: 15px;" th:text="${duoArticle.gameName}"></span>
                             <i class="fa-solid fa-microphone" th:if="${duoArticle.getMicrophoneCheck()}"
-                               style="width: 20px;"></i>
+                               style="width: 20px; font-size: 13px;"></i>
                             <i class="fa-solid fa-microphone-slash" th:if="${!duoArticle.getMicrophoneCheck()}"
-                               style="width: 20px;"></i>
+                               style="width: 20px; font-size: 13px;"></i>
+                            </div>
+                            <span th:text="|#${duoArticle.tag}|" style="font-size: 13px; color: grey;"></span>
                         </div>
                     </td>
                     <!-- GameName/Microphone End-->

@@ -22,13 +22,14 @@ public class DuoArticle extends BaseEntity {
     private String puuid;
     private String content;
     private String gameName;
+    private String tag;
     private String tier;
     private String rank;
     private int wins;
     private int losses;
-    private double avgKills;
-    private double avgDeaths;
-    private double avgAssists;
+//    private double avgKills;
+//    private double avgDeaths;
+//    private double avgAssists;
 
     public double getWinRate() {
         if (wins == 0) {
