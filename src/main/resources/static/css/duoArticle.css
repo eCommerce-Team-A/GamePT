@@ -32,3 +32,14 @@
     align-items: center;
     justify-content: center;
 }
+
+.custom-dropend .btn::after{
+    display: none;
+}
+
+.custom-dropend .dropdown-menu{
+    width: 100px !important;
+}
+.custom-dropend .dropdown-menu a:hover{
+    background-color: darkgray;
+}
