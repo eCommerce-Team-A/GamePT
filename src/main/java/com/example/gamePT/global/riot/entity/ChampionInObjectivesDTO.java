@@ -5,14 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 @Getter
 @Setter
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true) //json데이터를 사용할 때, 클래스에 정의되지 않은 속성은 무시
-public class InfoDTO { //경기모든정보
-    private String gameMode;
-    private List<ParticipantDTO> participants;
-    private List<TeamsDTO> teams;
+public class ChampionInObjectivesDTO { //경기모든정보
+
+    private int kills;
 }

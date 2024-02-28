@@ -36,23 +36,97 @@
             <div class="row mt-4">
                 <div class="col-4">
                     <div class="card w-100 Regular shadow border-0">
-                        <div class="card-header bg-white">솔로랭크</div>
+                        <div class="card-header bg-white d-flex justify-content-between">
+                            <div class="">내 정보</div>
 
-                        <div class="card-body row">
-                            <div class="col-8 d-flex align-items-center">
-                                <div class="bg-light rounded-circle"
-                                     style=" width:100px; height:100px; overflow: hidden;">
-                                    <img id="rankImg" src="" alt="..."
-                                         style="width:100%; height:100%; object-fit:contain;">
+                            <div class="dropstart">
+                                <a href="#" class="px-2" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="text-dark dropdown-item" href="#">
+                                            <i class="fa-regular fa-pen-to-square text-success"></i> &nbsp;정보 수정
+                                        </a>
+                                    </li>
+<!--                                    <li class="mt-1">-->
+<!--                                        <a class="text-dark dropdown-item deleteTeam" href="#">-->
+<!--                                            <i class="fa-regular fa-trash-can text-danger"></i> &nbsp;팀 삭제-->
+<!--                                        </a>-->
+<!--                                    </li>-->
+                                    <li class="mt-1">
+                                        <a class="text-dark dropdown-item leaveTeam" href="#">
+                                            <i class="fa-solid fa-right-from-bracket text-danger"></i> &nbsp;탈퇴
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <div class="card-body row justify-content-center">
+                            <div class="col-1 text-center">
+                                <div>
+                                    <i class="fa-solid fa-address-card"></i>
                                 </div>
-                                <div id="tier-rank" class="ms-2 fs-4 fw-bold">
+                                <div>
+                                    <i class="fa-solid fa-comment"></i>
+                                </div>
+                                <div>
+                                    <i class="fa-solid fa-envelope"></i>
                                 </div>
                             </div>
-                            <div class="col-4 d-flex align-items-center justify-content-end">
-                                <div class="text-end fs-6 text-secondary">
-                                    <div id="win-lose">
+                            <div class="text-center col-3">
+                                <div>
+                                    Id
+                                </div>
+                                <div>
+                                    Nickname
+                                </div>
+                                <div>
+                                    Email
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div>
+                                    [[${@rq.getSiteUser().username}]]
+                                </div>
+                                <div>
+                                    [[${@rq.getSiteUser().nickname}]]
+                                </div>
+                                <div>
+                                    [[${@rq.getSiteUser().email}]]
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card w-100 Regular shadow border-0 mt-3">
+                        <div class="card-header bg-white">솔로랭크</div>
+                        <!-- spinner -->
+                        <div class="text-center my-3 text-primary rankInfo-spinner">
+                            <div class="spinner-border" role="status"></div>
+                        </div>
+
+                        <div class="rankInfo" style="display:none;">
+
+                            <div class="card-body row">
+                                <div class="col-8 d-flex align-items-center">
+                                    <div class="bg-light rounded-circle"
+                                         style=" width:100px; height:100px; overflow: hidden;">
+                                        <img id="rankImg" src="" alt="..."
+                                             style="width:100%; height:100%; object-fit:contain;">
                                     </div>
-                                    <div id="win-rate">
+                                    <div id="tier-rank" class="ms-2 fs-4 fw-bold">
+                                    </div>
+                                </div>
+                                <div class="col-4 d-flex align-items-center justify-content-end">
+                                    <div class="text-end fs-6 text-secondary">
+                                        <div id="win-lose">
+                                        </div>
+                                        <div id="win-rate">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -62,23 +136,33 @@
                     <div class="card w-100 Regular shadow border-0 mt-3">
                         <div class="card-header bg-white">최근 20 경기</div>
 
-                        <div class="card-body row">
-                            <div class="text-center text-primary delay-spinner">
+                        <div class="card-body">
+                            <div class="text-center text-primary games-spinner">
                                 <div class="spinner-border" role="status"></div>
                             </div>
-                            <div class="show" style="display:none;">
-                                <div class="col-7 d-flex align-items-center">
-                                    <canvas id="myChart" width="100px" height="100px">
+                            <div class="games" style="display:none;">
+                                <div class="row">
+                                    <div class="col-5 d-flex flex-column align-items-center">
+                                        <div id="chart-title" class="text-secondary text-center" style="font-size:13px;">
 
-                                    </canvas>
-                                    <div id="1" class="ms-2 fs-4 fw-bold">
-                                    </div>
-                                </div>
-                                <div class="col-5 d-flex align-items-center justify-content-end">
-                                    <div class="text-end fs-6 text-secondary">
-                                        <div id="2">
                                         </div>
-                                        <div id="3">
+                                        <canvas id="myChart" width="100px" height="100px">
+
+                                        </canvas>
+                                    </div>
+                                    <div class="col-7 d-flex align-items-center justify-content-center">
+                                        <div class="text-start">
+                                            <div id="avg" class="d-flex fs-6 text-secondary">
+                                                <div id="avgKills"></div>
+                                                <div class="mx-1">/</div>
+                                                <div id="avgDeaths" class="text-danger"></div>
+                                                <div class="mx-1"> / </div>
+                                                <div id="avgAssists"></div>
+                                            </div>
+                                            <div id="totalKDA" class="fs-4 fw-bold">
+                                            </div>
+                                            <div id="killPercent" class="fs-6 text-danger">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -89,24 +173,35 @@
                 </div>
                 <div class="col-8">
                     <div class="card w-100 Regular shadow border-0">
-                        <div>
+                        <div class="card-header bg-white">
+                            <i class="fa-solid fa-landmark"></i> 진행중인 강의
+                        </div>
 
+                        <div class="card-body">
+                            <p class="card-text">진행중인 강의가 보여질 예정</p>
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">강의 1</li>
+                            <li class="list-group-item">강의 2</li>
+                            <li class="list-group-item">강의 3</li>
+                        </ul>
+                    </div>
+
+                    <div class="card w-100 Regular shadow border-0 mt-4">
+                        <div class="card-header bg-white">
+                            <i class="fa-regular fa-credit-card"></i> 주문내역
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                                of the card's content.</p>
+                            <p class="card-text">주문 내역이 보여질 예정</p>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
+                            <li class="list-group-item">주문내역 1</li>
+                            <li class="list-group-item">주문내역 2</li>
+                            <li class="list-group-item">주문내역 3</li>
                         </ul>
-                        <div class="card-body">
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -128,30 +223,51 @@
                 },
                 dataType : 'json',
                 success : function(result) { // 결과 성공 콜백함수
-                    $('.delay-spinner').css("display","none");
-                    $('.show').css("display","block");
+                    $('.games-spinner').css("display","none");
+                    $('.games').css("display","block");
 
                     const ctx = document.getElementById('myChart').getContext('2d');
+
+                    var win = result.win;
+                    var lose = result.lose;
+                    var kills = result.kills;
+                    var deaths = result.deaths;
+                    var assists = result.assists;
+                    var teamTotalKill = result.teamTotalKill;
+
+                    var killPercent = Math.round((kills + assists)/teamTotalKill *100);
+                    $('#killPercent').text("킬관여 " + killPercent + "%") ;
+
+                    var title = (win+lose) + "전 " + win + "승 "+ lose + "패"
+                    $('#chart-title').text(title);
+
+                    var avgKills = Math.round(((kills / (win+lose)) + Number.EPSILON) * 10) / 10;
+                    var avgDeaths = Math.round(((deaths / (win+lose)) + Number.EPSILON) * 10) / 10;
+                    var avgAssists = Math.round(((assists / (win+lose)) + Number.EPSILON) * 10) / 10;
+
+                    $('#avgKills').text(avgKills);
+                    $('#avgDeaths').text(avgDeaths);
+                    $('#avgAssists').text(avgAssists);
+
+                    var totalKDA = Math.round((((avgKills + avgAssists) / avgDeaths) + Number.EPSILON) * 100) / 100 + " : " + "1";
+                    $('#totalKDA').text(totalKDA);
+
 
                     var myChart = new Chart(ctx, {
                       type: 'doughnut',
                         data: {
                           datasets: [{
-                            data: [40, 60], // 승,패
+                            data: [win, lose], // 승,패
                             backgroundColor: [
-                              '#9DCEFF',
-                              '#F2F3F6'
+                              '#5383e8',
+                              '#e84057'
                             ],
                             borderWidth: 0,
                             scaleBeginAtZero: true,
                           }]
                         },
                           options: {
-                             responsive: false,
-                             title: {
-                                display: true,
-                                text: 'Chart.js Doughnut Chart'
-                             }
+                             responsive: false
                           }
                     });
                 },
@@ -171,12 +287,13 @@
                 },
                 dataType : 'json',
                 success : function(result) { // 결과 성공 콜백함수
+                    $('.rankInfo-spinner').css("display","none");
+                    $('.rankInfo').css("display","block");
                     if(result != null){
                         $('#rankImg').attr("src","/img/"+result.tier+".png")
                         $('#tier-rank').text(result.tier + " " + result.rank)
                         $('#win-lose').text(result.wins+"승 "+result.losses+"패")
                         $('#win-rate').text("승률 " + (Math.round((result.wins / (result.wins+result.losses))*100)) + "%")
-
                     }
                 },
                 error : function(request, status, error) { // 결과 에러 콜백함수
