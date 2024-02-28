@@ -45,13 +45,13 @@ public class DuoArticleController {
         if (this.riotApiService.getLeague(summonerId) != null) {
             LeagueDTO leagueDTO = this.riotApiService.getLeague(summonerId);
             tier = leagueDTO.getTier();
-            rank = tier.charAt(0) + leagueDTO.getRank();
+            rank = tier.charAt(0) + "" + this.getNum(leagueDTO.getRank());
             wins = leagueDTO.getWins();
             losses = leagueDTO.getLosses();
         }
-        for (String matchId : this.riotApiService.getMatchIds(siteUser.getPuuid())) {
-            this.riotApiService.getMatchInfo(matchId).getInfo().getParticipants();
-        }
+//        for (String matchId : this.riotApiService.getMatchIds(siteUser.getPuuid())) {
+//            this.riotApiService.getMatchInfo(matchId).getInfo().getParticipants();
+//        }
         this.duoArticleService.createDuoArticle(myLine, findLine, microphoneCheck, content, siteUser.getUsername(),
                 siteUser.getPuuid(), summonerDTO.getName(), tier, rank, wins, losses);
         return "redirect:/duo/list";
@@ -67,6 +67,16 @@ public class DuoArticleController {
     @GetMapping("/api/create")
     public String apiCreate() {
         return "duo/api_test_form";
+    }
+
+    public Integer getNum(String rank) {
+        return switch (rank) {
+            case "I" -> 1;
+            case "II" -> 2;
+            case "III" -> 3;
+            case "IV" -> 4;
+            default -> null;
+        };
     }
 
 
