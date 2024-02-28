@@ -65,30 +65,30 @@ public class RiotApiController {
         int lose = 0;
         int teamTotalKill = 0;
 
-//        for (String matchId : riotApiService.getMatchIds(puuid)) {
-//            MatchInfoDTO info = this.riotApiService.getMatchInfo(matchId);
-//
-//            ParticipantDTO participantDTO = this.riotApiService.getParticipant(info , puuid);
-//
-//            kills += participantDTO.getKills();
-//            deaths += participantDTO.getDeaths();
-//            assists += participantDTO.getAssists();
-//
-//            if(participantDTO.isWin()){
-//                win +=1;
-//                int teamKill = info.getInfo().getTeams().get(0).isWin() ?
-//                        info.getInfo().getTeams().get(0).getObjectives().getChampion().getKills() :
-//                        info.getInfo().getTeams().get(1).getObjectives().getChampion().getKills();
-//
-//                teamTotalKill += teamKill;
-//            }else{
-//                lose +=1;
-//                int teamKill = !info.getInfo().getTeams().get(0).isWin() ?
-//                        info.getInfo().getTeams().get(0).getObjectives().getChampion().getKills() :
-//                        info.getInfo().getTeams().get(1).getObjectives().getChampion().getKills();
-//                teamTotalKill += teamKill;
-//            }
-//        }
+        for (String matchId : riotApiService.getMatchIds(puuid)) {
+            MatchInfoDTO info = this.riotApiService.getMatchInfo(matchId);
+
+            ParticipantDTO participantDTO = this.riotApiService.getParticipant(info , puuid);
+
+            kills += participantDTO.getKills();
+            deaths += participantDTO.getDeaths();
+            assists += participantDTO.getAssists();
+
+            if(participantDTO.isWin()){
+                win +=1;
+                int teamKill = info.getInfo().getTeams().get(0).isWin() ?
+                        info.getInfo().getTeams().get(0).getObjectives().getChampion().getKills() :
+                        info.getInfo().getTeams().get(1).getObjectives().getChampion().getKills();
+
+                teamTotalKill += teamKill;
+            }else{
+                lose +=1;
+                int teamKill = !info.getInfo().getTeams().get(0).isWin() ?
+                        info.getInfo().getTeams().get(0).getObjectives().getChampion().getKills() :
+                        info.getInfo().getTeams().get(1).getObjectives().getChampion().getKills();
+                teamTotalKill += teamKill;
+            }
+        }
 
         return new ResponseData(kills, deaths, assists, win, lose,teamTotalKill);
     }
