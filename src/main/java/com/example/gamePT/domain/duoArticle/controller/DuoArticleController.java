@@ -53,7 +53,7 @@ public class DuoArticleController {
 //            this.riotApiService.getMatchInfo(matchId).getInfo().getParticipants();
 //        }
         this.duoArticleService.createDuoArticle(myLine, findLine, microphoneCheck, content, siteUser.getUsername(),
-                siteUser.getPuuid(), siteUser.getGameName(), siteUser.getTag(), tier, rank, wins, losses);
+                siteUser.getPuuid(), siteUser.getGameName(), siteUser.getTag(), summonerDTO.getProfileIconId(), tier, rank, wins, losses);
         return "redirect:/duo/list";
     }
 

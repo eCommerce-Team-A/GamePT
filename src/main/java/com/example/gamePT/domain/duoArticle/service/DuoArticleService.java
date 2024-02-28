@@ -31,7 +31,7 @@ public class DuoArticleService {
     }
 
     public DuoArticle createDuoArticle(String myLine, String findLine, Boolean microphoneCheck, String content, String username,
-                                       String puuid, String gameName, String tag, String tier, String rank, int wins, int losses) {
+                                       String puuid, String gameName, String tag, int profileIconId, String tier, String rank, int wins, int losses) {
         DuoArticle duoArticle = DuoArticle.builder()
                 .myLine(myLine)
                 .findLine(findLine)
@@ -41,6 +41,7 @@ public class DuoArticleService {
                 .puuid(puuid)
                 .gameName(gameName)
                 .tag(tag)
+                .profileIconId(profileIconId)
                 .tier(tier)
                 .rank(rank)
                 .wins(wins)

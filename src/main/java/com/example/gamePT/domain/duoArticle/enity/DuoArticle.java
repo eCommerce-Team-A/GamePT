@@ -23,6 +23,7 @@ public class DuoArticle extends BaseEntity {
     private String content;
     private String gameName;
     private String tag;
+    private int profileIconId;
     private String tier;
     private String rank;
     private int wins;
@@ -32,15 +33,15 @@ public class DuoArticle extends BaseEntity {
 //    private double avgAssists;
 
     public double getWinRate() {
-        if (wins == 0) {
-            return 0.0;
+        if (losses == 0) {
+            return 100.0;
         }
         return ((double) wins / (wins + losses)) * 100.0;
     }
 
     public double getLossRate() {
-        if (losses == 0) {
-            return 0.0;
+        if (wins == 0) {
+            return 100.0;
         }
         return ((double) losses / (wins + losses)) * 100.0;
     }
