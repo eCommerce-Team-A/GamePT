@@ -25,21 +25,19 @@ public class DuoArticleService {
         return duoArticle.get();
     }
 
-    public DuoArticle createDuoArticle(String myLine, String findLine, Boolean microphoneCheck,
-                                       String content, String gameName, String tier, int wins, int losses,
-                                       double avgKills, double avgDeaths, double avgAssists) {
+    public DuoArticle createDuoArticle(String myLine, String findLine, Boolean microphoneCheck, String content,
+                                       String puuid, String gameName, String tier, String rank, int wins, int losses) {
         DuoArticle duoArticle = DuoArticle.builder()
                 .myLine(myLine)
                 .findLine(findLine)
                 .microphoneCheck(microphoneCheck)
                 .content(content)
+                .puuid(puuid)
                 .gameName(gameName)
                 .tier(tier)
+                .rank(rank)
                 .wins(wins)
                 .losses(losses)
-                .avgKills(avgKills)
-                .avgDeaths(avgDeaths)
-                .avgAssists(avgAssists)
                 .build();
         this.duoArticleRepository.save(duoArticle);
         return duoArticle;
