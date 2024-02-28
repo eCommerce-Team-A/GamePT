@@ -38,7 +38,7 @@
 }
 
 .custom-dropend .dropdown-menu{
-    width: 100px !important;
+    width: 100px;
 }
 .custom-dropend .dropdown-menu a:hover{
     background-color: darkgray;

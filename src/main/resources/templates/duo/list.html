@@ -15,7 +15,7 @@
     <div style="margin-top: 2rem; display: flex; justify-content: center; flex-wrap: wrap;">
 
         <!-- Article Header Start-->
-        <div style="width:1084px; margin-bottom: 15px; display: flex; justify-content: space-between;">
+        <div style="width:1084px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
             <div id="left" style="display: flex">
                 <div>
                     <div class="btn-group" role="group" aria-label="position Group" style="border: 2px solid;">
@@ -54,7 +54,7 @@
             </div>
 
             <div id="right" class="Nanum" sec:authorize="isAuthenticated()">
-                <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
+                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
                         data-bs-target="#createModalDuo">
                     등록
                 </button>
@@ -172,18 +172,19 @@
     <!-- Article Modal Start-->
     <div class="modal fade" id="createModalDuo" tabindex="-1" aria-labelledby="createDuoModal" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content" style="background-color: #333333; border: 2px solid white;">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createDuoModal">듀오찾기</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title Nanum" id="createDuoModal" style="color: white;">듀오찾기</h5>
+                    <button type="button" class="btn-close custom-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                 </div>
 
                 <form th:action="@{/duo/create}" method="post">
                     <div class="modal-body">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div style="display: flex; justify-content: flex-start; align-items: flex-start;">
                             <div>
-                                <h6>내라인</h6>
+                                <h6 style="color: white;">내라인</h6>
                                 <div class="btn-group" role="group" aria-label="position Group">
                                     <input type="radio" class="btn-check" name="myLine" id="ALL1" autocomplete="off"
                                            value="fill" checked>
@@ -223,16 +224,16 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                       id="flexSwitchCheckDefault"
-                                       name="microphoneCheck" value="true">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">마이크</label>
+                            <div class="form-check form-switch"
+                                 style="display: flex; flex-direction: column; align-items: center;;">
+                                    <span class="form-check-label" for="flexSwitchCheckDefault" style="color: white; margin-right: 30px;">마이크</span>
+                                    <input class="form-check-input" type="checkbox" role="switch" style="margin-top: 8px;"
+                                           id="flexSwitchCheckDefault" name="microphoneCheck" value="true">
                             </div>
                         </div>
 
                         <div style="margin-top: 15px;">
-                            <h6>찾는라인</h6>
+                            <h6 style="color: white;">찾는라인</h6>
                             <div class="btn-group" role="group" aria-label="position Group">
                                 <input type="radio" class="btn-check" name="findLine" id="ALL2" autocomplete="off"
                                        value="fill" checked>
@@ -274,7 +275,8 @@
                         </div>
 
                         <div class="mb-3" style="margin-top: 10px;">
-                            <label class="col-form-label" for="validationTextareaArticle">내용</label>
+                            <label class="col-form-label" for="validationTextareaArticle"
+                                   style="color: white;">내용</label>
                             <textarea class="form-control" id="validationTextareaArticle" name="content"
                                       placeholder="내용을 입력해주세요." required></textarea>
                         </div>
