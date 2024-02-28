@@ -107,15 +107,20 @@
                              style="width:25px; height:auto;"/>
                     </td>
                     <td>
-                        <div class="progress-stacked" >
-                            <div class="progress" role="progressbar" aria-label="Segment one"
-                                 aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-                                <div class="progress-bar" th:text="|${duoArticle.wins}승|"></div>
+                        <div>
+                            <div class="progress-stacked">
+                                <div class="progress" role="progressbar" aria-label="Segment one"
+                                     aria-valuemin="0" aria-valuemax="100"
+                                     th:style="'width: '+ ${duoArticle.getWinRate()} +'%'">
+                                    <div class="progress-bar" th:text="|${duoArticle.wins}승|"></div>
+                                </div>
+                                <div class="progress" role="progressbar" aria-label="Segment two"
+                                     aria-valuemin="0" aria-valuemax="100"
+                                     th:style="'width: '+ ${duoArticle.getLossRate()} +'%'">
+                                    <div class="progress-bar bg-danger" th:text="|${duoArticle.losses}패|"></div>
+                                </div>
                             </div>
-                            <div class="progress" role="progressbar" aria-label="Segment two"
-                                 aria-valuemin="0" aria-valuemax="100" th:style="'width: '+ ${duoArticle.} +">
-                                <div class="progress-bar bg-success" th:text="|${duoArticle.losses}패|"></div>
-                            </div>
+                            <span th:text="|${duoArticle.getWinRate()}%|" style="font-size: small"></span>
                         </div>
                     </td>
                     <td th:text="${duoArticle.content}"></td>
@@ -141,7 +146,7 @@
                     <h5 class="modal-title" id="createDuoModal">듀오찾기</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form th:action="@{/duo/create}" method="post" th:object="${duoArticleForm}">
+                <form th:action="@{/duo/create}" method="post">
                     <div class="modal-body">
                         <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                             <div>
@@ -256,22 +261,6 @@
             </div>
         </div>
     </div>
-    <script>
-        function selectedMyLine(button) {
-            document.querySelectorAll('.btn').forEach(function (btn) {
-                btn.classList.remove('btn-primary')
-            });
-
-            button.classList.add('btn-primary');
-
-            document.getElementById('myLine').value = button.value;
-        }
-
-
-        function selectedFindLine(value) {
-            document.getElementById('findLine').value = value;
-        }
-    </script>
 </div>
 
 </html>

@@ -53,7 +53,7 @@ public class DuoArticleController {
             this.riotApiService.getMatchInfo(matchId).getInfo().getParticipants();
         }
         this.duoArticleService.createDuoArticle(myLine, findLine, microphoneCheck, content, siteUser.getPuuid(),
-                summonerDTO.getName(), tier, rank, wins, losses, wins+losses);
+                summonerDTO.getName(), tier, rank, wins, losses);
         return "redirect:/duo/list";
     }
 

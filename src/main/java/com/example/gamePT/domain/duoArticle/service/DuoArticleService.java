@@ -26,7 +26,7 @@ public class DuoArticleService {
     }
 
     public DuoArticle createDuoArticle(String myLine, String findLine, Boolean microphoneCheck, String content,
-                                       String puuid, String gameName, String tier, String rank, int wins, int losses, int total) {
+                                       String puuid, String gameName, String tier, String rank, int wins, int losses) {
         DuoArticle duoArticle = DuoArticle.builder()
                 .myLine(myLine)
                 .findLine(findLine)
@@ -38,7 +38,6 @@ public class DuoArticleService {
                 .rank(rank)
                 .wins(wins)
                 .losses(losses)
-                .total(total)
                 .build();
         this.duoArticleRepository.save(duoArticle);
         return duoArticle;
