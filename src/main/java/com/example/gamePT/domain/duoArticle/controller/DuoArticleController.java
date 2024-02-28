@@ -52,8 +52,8 @@ public class DuoArticleController {
         for (String matchId : this.riotApiService.getMatchIds(siteUser.getPuuid())) {
             this.riotApiService.getMatchInfo(matchId).getInfo().getParticipants();
         }
-        this.duoArticleService.createDuoArticle(myLine, findLine, microphoneCheck, content, siteUser.getPuuid(),
-                summonerDTO.getName(), tier, rank, wins, losses);
+        this.duoArticleService.createDuoArticle(myLine, findLine, microphoneCheck, content, siteUser.getUsername(),
+                siteUser.getPuuid(), summonerDTO.getName(), tier, rank, wins, losses);
         return "redirect:/duo/list";
     }
 

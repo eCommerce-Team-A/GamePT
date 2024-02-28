@@ -11,3 +11,24 @@
     border-radius: 4px;
     background-color: #f8f9fa;
 }
+.form-check-input {
+    background-color: white;
+    border-color: #333333;
+    box-shadow: 0 0 0 .25rem rgba(0, 123, 255, 0);
+}
+.form-check-input:checked {
+    background-color: black;
+    border-color: black;
+    box-shadow: 0 0 0 .25rem rgba(0, 123, 255, 0);
+}
+.Nanum {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+.article-element {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

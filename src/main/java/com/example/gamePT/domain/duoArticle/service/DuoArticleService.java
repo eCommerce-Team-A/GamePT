@@ -25,13 +25,14 @@ public class DuoArticleService {
         return duoArticle.get();
     }
 
-    public DuoArticle createDuoArticle(String myLine, String findLine, Boolean microphoneCheck, String content,
+    public DuoArticle createDuoArticle(String myLine, String findLine, Boolean microphoneCheck, String content, String username,
                                        String puuid, String gameName, String tier, String rank, int wins, int losses) {
         DuoArticle duoArticle = DuoArticle.builder()
                 .myLine(myLine)
                 .findLine(findLine)
                 .microphoneCheck(microphoneCheck)
                 .content(content)
+                .username(username)
                 .puuid(puuid)
                 .gameName(gameName)
                 .tier(tier)

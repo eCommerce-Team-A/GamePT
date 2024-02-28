@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RiotApiService {
 
-    @Value("${custom.myKey}")
+    @Value("${secret.myKey}")
     private String myKey;
 
 
