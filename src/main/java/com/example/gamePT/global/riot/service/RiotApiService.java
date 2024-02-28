@@ -17,7 +17,7 @@ import java.util.List;
 public class RiotApiService {
 
 
-    private String myKey = "RGAPI-016ec826-c6e3-4170-a2d8-213d40b64c49";
+    private String myKey = "RGAPI-9cb65474-fc43-4cbc-b4f6-5714859da0d0";
 
 
     //닉네임 입력 시, PuuId 반환
