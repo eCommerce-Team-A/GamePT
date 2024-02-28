@@ -3,8 +3,10 @@ package com.example.gamePT.domain.duoArticle.service;
 import com.example.gamePT.domain.duoArticle.enity.DuoArticle;
 import com.example.gamePT.domain.duoArticle.repository.DuoArticleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +16,10 @@ public class DuoArticleService {
     private final DuoArticleRepository duoArticleRepository;
 
     public List<DuoArticle> getAllDuoArticles() {
-        return duoArticleRepository.findAll();
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Sort sort = Sort.by(sorts);
+        return duoArticleRepository.findAll(sort);
     }
 
     public DuoArticle getDuoArticleById(Long id) {
