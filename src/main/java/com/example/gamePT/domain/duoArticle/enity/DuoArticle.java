@@ -17,5 +17,11 @@ public class DuoArticle extends BaseEntity {
     private String findLine;
     private Boolean microphoneCheck;
     private String content;
-
+    private String gameName;
+    private String tier;
+    private int wins;
+    private int losses;
+    private double avgKills;
+    private double avgDeaths;
+    private double avgAssists;
 }
