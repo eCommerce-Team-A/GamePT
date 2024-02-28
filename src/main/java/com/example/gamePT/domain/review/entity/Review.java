@@ -20,6 +20,6 @@ public class Review extends BaseEntity {
     private SiteUser author;
     @ManyToOne
     private Course course;
-    private int score;
+    private Integer score;
     private String content;
 }

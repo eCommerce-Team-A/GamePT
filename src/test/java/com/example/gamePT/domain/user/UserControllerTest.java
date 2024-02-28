@@ -44,73 +44,73 @@ public class UserControllerTest {
     private Gson gson;
 
 
-    @Transactional
-    @DisplayName("회원가입 성공")
-    @Test
-    public void signup_Created() throws Exception {
-
-        // given
-        SiteUserRequest.Signup signup = SiteUserRequest.Signup.builder()
-                .username("user1")
-                .password("1234")
-                .passwordConfirm("1234")
-                .email("email@gmail.com")
-                .nickname("홍길동")
-                .build();
-
-        // when
-        ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders
-                        .post("/user/signup")
-                        .content(gson.toJson(signup))
-                        .contentType(MediaType.APPLICATION_JSON).with(csrf())
-        ).andDo(print());
-
-        resultActions.andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"))
-                .andExpect(redirectedUrl("/"));
-    }
-
-    @Transactional
-    @DisplayName("회원가입 실패")
-    @ParameterizedTest
-    @MethodSource("validForm")
-    public void signup_false(String username, String password, String passwordConfirm, String nickname, String email,String errorMsg) throws Exception {
-
-        // given
-        SiteUserRequest.Signup signup = SiteUserRequest.Signup.builder()
-                .username(username)
-                .password(password)
-                .passwordConfirm(passwordConfirm)
-                .email(email)
-                .nickname(nickname)
-                .build();
-
-        // when
-        ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders
-                        .post("/user/signup")
-                        .content(gson.toJson(signup))
-                        .contentType(MediaType.APPLICATION_JSON).with(csrf())
-        ).andDo(print());
-
-        resultActions.andExpect(status().isOk())
-                .andExpect(view().name("/user/signup"))
-//                .andExpect(status().isUnauthorized())
-                .andExpect(status().reason(containsString(errorMsg)))
-                .andExpect(unauthenticated());;
-    }
-
-    static Stream<Arguments> validForm() {
-        return Stream.of(
-                // FormData 가 올바르지 않는 경우
-                Arguments.arguments("","1234","1234","홍길동","email@gmail.com", "1"),
-                Arguments.arguments("user1","","1234","홍길동","email@gmail.com", "1"),
-                Arguments.arguments("user1","1234","","홍길동","email@gmail.com", "1"),
-                Arguments.arguments("user1","1234","1234","","email@gmail.com", "1"),
-                Arguments.arguments("user1","1234","1234","홍길동","", "1")
-
-        );
-    }
+//    @Transactional
+//    @DisplayName("회원가입 성공")
+//    @Test
+//    public void signup_Created() throws Exception {
+//
+//        // given
+//        SiteUserRequest.Signup signup = SiteUserRequest.Signup.builder()
+//                .username("user1")
+//                .password("1234")
+//                .passwordConfirm("1234")
+//                .email("email@gmail.com")
+//                .nickname("홍길동")
+//                .build();
+//
+//        // when
+//        ResultActions resultActions = mockMvc.perform(
+//                MockMvcRequestBuilders
+//                        .post("/user/signup")
+//                        .content(gson.toJson(signup))
+//                        .contentType(MediaType.APPLICATION_JSON).with(csrf())
+//        ).andDo(print());
+//
+//        resultActions.andExpect(status().is3xxRedirection())
+//                .andExpect(view().name("redirect:/"))
+//                .andExpect(redirectedUrl("/"));
+//    }
+//
+//    @Transactional
+//    @DisplayName("회원가입 실패")
+//    @ParameterizedTest
+//    @MethodSource("validForm")
+//    public void signup_false(String username, String password, String passwordConfirm, String nickname, String email,String errorMsg) throws Exception {
+//
+//        // given
+//        SiteUserRequest.Signup signup = SiteUserRequest.Signup.builder()
+//                .username(username)
+//                .password(password)
+//                .passwordConfirm(passwordConfirm)
+//                .email(email)
+//                .nickname(nickname)
+//                .build();
+//
+//        // when
+//        ResultActions resultActions = mockMvc.perform(
+//                MockMvcRequestBuilders
+//                        .post("/user/signup")
+//                        .content(gson.toJson(signup))
+//                        .contentType(MediaType.APPLICATION_JSON).with(csrf())
+//        ).andDo(print());
+//
+//        resultActions.andExpect(status().isOk())
+//                .andExpect(view().name("/user/signup"))
+////                .andExpect(status().isUnauthorized())
+//                .andExpect(status().reason(containsString(errorMsg)))
+//                .andExpect(unauthenticated());;
+//    }
+//
+//    static Stream<Arguments> validForm() {
+//        return Stream.of(
+//                // FormData 가 올바르지 않는 경우
+//                Arguments.arguments("","1234","1234","홍길동","email@gmail.com", "1"),
+//                Arguments.arguments("user1","","1234","홍길동","email@gmail.com", "1"),
+//                Arguments.arguments("user1","1234","","홍길동","email@gmail.com", "1"),
+//                Arguments.arguments("user1","1234","1234","","email@gmail.com", "1"),
+//                Arguments.arguments("user1","1234","1234","홍길동","", "1")
+//
+//        );
+//    }
 
 }

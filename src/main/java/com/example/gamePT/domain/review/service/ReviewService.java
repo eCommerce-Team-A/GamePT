@@ -16,4 +16,15 @@ public class ReviewService {
     public List<Review> FindByCourse(Course course) {
         return this.reviewRepository.findByCourse(course);
     }
+
+    public void create(String content, Integer score){
+        Review review = Review.builder()
+                .author(null)
+                .course(null)
+                .content(content)
+                .score(score)
+                .build();
+
+        this.reviewRepository.save(review);
+    }
 }

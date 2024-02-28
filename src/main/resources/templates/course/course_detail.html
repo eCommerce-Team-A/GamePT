@@ -1,4 +1,7 @@
 <html layout:decorate="~{layout}">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 <div layout:fragment="content" class="mb-3">
 
     <!-- Single Page Header start -->
@@ -56,11 +59,11 @@
                                 </div>
                                 <div class="tab-pane" id="nav-review" role="tabpanel"
                                      aria-labelledby="nav-review-tab">
-                                    <div class="d-flex">
-                                        <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"
-                                             style="width: 100px; height: 100px;" alt="">
-                                        <div>
-                                            <p class="mb-2" style="font-size: 14px;">리뷰 작성일 표시 부분</p>
+                                    <div id="reviews" class="d-flex">
+<!--                                        <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"-->
+<!--                                             style="width: 100px; height: 100px;" alt="">-->
+                                        <div th:each="review : ${reviewList}">
+                                            <p class="mb-2" style="font-size: 14px;"></p>
                                             <div class="d-flex justify-content-between">
                                                 <h5>리뷰 작성자 이름</h5>
                                             </div>
@@ -72,28 +75,27 @@
                                         <h4 class="fw-bold">리뷰 작성하기</h4>
                                         <div class="row g-4">
                                             <div class="col-lg-12">
+                                                <div class="rating">
+                                                    <i id="i" class="rating__star far fa-star"></i>
+                                                    <i class="rating__star far fa-star"></i>
+                                                    <i class="rating__star far fa-star"></i>
+                                                    <i class="rating__star far fa-star"></i>
+                                                    <i class="rating__star far fa-star"></i>
+                                                </div>
                                                 <div class="border-bottom rounded my-4">
-                                        <textarea name="" id="" class="form-control" cols="30" rows="4"
-                                                  style="resize:none"
-                                                  placeholder="리뷰 내용을 작성해주세요. *" spellcheck="false"></textarea>
+                                                    <textarea name="reviewContent" id="reviewContent"
+                                                              class="form-control" cols="30" rows="4"
+                                                              style="resize:none"
+                                                              placeholder="리뷰 내용을 작성해주세요. *"
+                                                              spellcheck="false"></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="d-flex justify-content-between py-3 mb-5">
-                                                    <div class="d-flex align-items-center">
-                                                        <p class="mb-0 me-3">Please rate:</p>
-                                                        <div class="d-flex align-items-center" style="font-size: 12px;">
-                                                            <i class="fa fa-star text-muted"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    </div>
-                                                    <a href="#"
-                                                       class="btn border border-secondary text-primary rounded-pill px-4 py-3">
-                                                        Post
-                                                        Comment</a>
+                                                    <button id="postReview"
+                                                            class="btn border border-secondary text-primary rounded-pill px-4 py-3">
+                                                        작성 완료
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -160,4 +162,73 @@
 <!-- Back to Top -->
 <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
         class="fa fa-arrow-up"></i></a>
+<script>
+    $('#postReview').on("click", function(){
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    $.ajax({
+                 type : 'post',              // 타입 (get, post, put 등등)
+                 url : '/review/create',     // 요청할 서버url
+                 async : true,               // 비동기화 여부 (default : true)
+                 beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                     xhr.setRequestHeader(header, token);
+                 },
+                 headers : {                 // Http header
+                     "Content-Type" : "application/json",
+                     "X-HTTP-Method-Override" : "POST"
+                 },
+                 dataType : 'json',          // 데이터 타입 (html, xml, json, text 등등)
+                 data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                     "content" : $('#content').val().trim(),
+                     "score" : $('#score').val()
+                 }),
+                 success : function(result) { // 결과 성공 콜백함수
+                        console.log(result)
+                   },
+                 error : function(request, status, error) { // 결과 에러 콜백함수
+                         alert("리뷰 작성 실패");
+                 }
+             })
+    });
+
+
+
+    $(function() {
+        $('.rating__star').on("click", function(){
+            console.log("1");
+        });
+        const ratingStars = $('.rating__star');
+
+
+
+
+<!--        const ratingStars = [...document.getElementsByClassName("rating__star")];-->
+<!--        const ratingStars = [...document.getElementsByClassName("rating__star")];-->
+
+        function executeRating(stars) {
+            const starClassActive = "rating__star fas fa-star";
+            const starClassUnactive = "rating__star far fa-star";
+            const starsLength = stars.length;
+            let i;
+            stars.map((star) => {
+                star.onclick = () => {
+
+                    i = stars.indexOf(star);
+                    console.log(i);
+                    if (star.className.indexOf(starClassUnactive) !== -1) {
+                        for (i; i >= 0; --i) stars[i].className = starClassActive;
+                    } else {
+                        for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
+                    }
+                  };
+            });
+        }
+
+        executeRating(ratingStars);
+
+    });
+
+
+</script>
 </html>
