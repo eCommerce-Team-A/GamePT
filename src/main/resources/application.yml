@@ -6,6 +6,8 @@ spring:
     cache: false
   thymeleaf:
     cache: false
+    servlet:
+      produce-partial-output-while-processing: false
   profiles:
     active: dev
     include: secret

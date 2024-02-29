@@ -4,6 +4,8 @@ import com.example.gamePT.domain.duoArticle.enity.DuoArticle;
 import com.example.gamePT.domain.duoArticle.service.DuoArticleService;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.service.UserService;
+import com.example.gamePT.global.riot.entity.LeagueDTO;
+import com.example.gamePT.global.riot.entity.SummonerDTO;
 import com.example.gamePT.global.riot.service.RiotApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -34,27 +36,24 @@ public class DuoArticleController {
                          @RequestParam(name = "microphoneCheck", defaultValue = "false") boolean microphoneCheck,
                          @RequestParam("content") String content, Principal principal) {
         SiteUser siteUser = this.userService.findByUsername(principal.getName());
-        String summonerId = this.riotApiService.getSummoner(siteUser.getPuuid()).getId();
-        String gameName = this.riotApiService.getSummoner(siteUser.getPuuid()).getName();
-        String tier = "";
+        SummonerDTO summonerDTO = this.riotApiService.getSummoner(siteUser.getPuuid());
+        String summonerId = summonerDTO.getId();
+        String tier = "UNRANKED";
+        String rank = "UR";
         int wins = 0;
         int losses = 0;
-        if (this.riotApiService.getLeague(summonerId) == null) {
-            tier = "unranked";
-        } else {
-            tier = this.riotApiService.getLeague(summonerId).getTier() + this.riotApiService.getLeague(summonerId).getRank();
-            wins = this.riotApiService.getLeague(summonerId).getWins();
-            losses = this.riotApiService.getLeague(summonerId).getLosses();
+        if (this.riotApiService.getLeague(summonerId) != null) {
+            LeagueDTO leagueDTO = this.riotApiService.getLeague(summonerId);
+            tier = leagueDTO.getTier();
+            rank = tier.charAt(0) + "" + this.getNum(leagueDTO.getRank());
+            wins = leagueDTO.getWins();
+            losses = leagueDTO.getLosses();
         }
-        double avgKills = 0;
-        double avgDeaths = 0;
-        double avgAssists = 0;
-        for (String matchId : this.riotApiService.getMatchIds(siteUser.getPuuid())) {
-            avgKills += this.riotApiService.getParticipant(this.riotApiService.getMatchInfo(matchId), siteUser.getPuuid()).getKills();
-            avgDeaths += this.riotApiService.getParticipant(this.riotApiService.getMatchInfo(matchId), siteUser.getPuuid()).getDeaths();
-            avgAssists += this.riotApiService.getParticipant(this.riotApiService.getMatchInfo(matchId), siteUser.getPuuid()).getAssists();
-        }
-        this.duoArticleService.createDuoArticle(myLine, findLine, microphoneCheck, content, gameName, tier, wins, losses, avgKills, avgDeaths, avgAssists);
+//        for (String matchId : this.riotApiService.getMatchIds(siteUser.getPuuid())) {
+//            this.riotApiService.getMatchInfo(matchId).getInfo().getParticipants();
+//        }
+        this.duoArticleService.createDuoArticle(myLine, findLine, microphoneCheck, content, siteUser.getUsername(),
+                siteUser.getPuuid(), siteUser.getGameName(), siteUser.getTag(), summonerDTO.getProfileIconId(), tier, rank, wins, losses);
         return "redirect:/duo/list";
     }
 
@@ -68,6 +67,16 @@ public class DuoArticleController {
     @GetMapping("/api/create")
     public String apiCreate() {
         return "duo/api_test_form";
+    }
+
+    public Integer getNum(String rank) {
+        return switch (rank) {
+            case "I" -> 1;
+            case "II" -> 2;
+            case "III" -> 3;
+            case "IV" -> 4;
+            default -> null;
+        };
     }
 
 

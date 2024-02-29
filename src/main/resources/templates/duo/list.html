@@ -1,30 +1,72 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <div layout:fragment="content" class="mb-3">
     <link rel="stylesheet" href="/css/duoArticle.css" type="text/css">
-    <div style="margin-top: 10rem; display: flex; justify-content: center; flex-wrap: wrap;">
-        <div style="width:1084px; display: flex; justify-content: space-between;">
-            <div id="left" style="display: flex">
-                <ul class="positions">
-                    <li class="position-button">all</li>
-                    <li class="position-button">top</li>
-                    <li class="position-button">jug</li>
-                    <li class="position-button">mid</li>
-                    <li class="position-button">adc</li>
-                    <li class="position-button">sup</li>
-                </ul>
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5 Nanum">
+        <h1 class="text-center text-white display-6">듀오찾기</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item active text-white">홈</li>
+            <li class="breadcrumb-item active text-white">듀오찾기</li>
+        </ol>
+    </div>
+    <!-- Single Page Header End -->
 
+
+    <div style="margin-top: 2rem; display: flex; justify-content: center; flex-wrap: wrap;">
+
+        <!-- Article Header Start-->
+        <div style="width:1084px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div id="left" style="display: flex">
+                <div>
+                    <div class="btn-group" role="group" aria-label="position Group" style="border: 2px solid;">
+                        <input type="radio" class="btn-check" name="sortByLine" id="ALL" autocomplete="off" value="ALL">
+                        <label class="btn btn-sm btn-outline-dark" for="ALL" style="border: 2px solid;">
+                            <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-fill.png}"
+                                 style="width:25px; height:auto;"/>
+                        </label>
+                        <input type="radio" class="btn-check" name="sortByLine" id="TOP" autocomplete="off" value="TOP">
+                        <label class="btn btn-sm btn-outline-dark" for="TOP" style="border: 2px solid;">
+                            <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-top.png}"
+                                 style="width:25px; height:auto;"/>
+                        </label>
+                        <input type="radio" class="btn-check" name="sortByLine" id="JUG" autocomplete="off" value="JUG">
+                        <label class="btn btn-sm btn-outline-dark" for="JUG" style="border: 2px solid;">
+                            <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-jungle.png}"
+                                 style="width:25px; height:auto;"/>
+                        </label>
+                        <input type="radio" class="btn-check" name="sortByLine" id="MID" autocomplete="off" value="MID">
+                        <label class="btn btn-sm btn-outline-dark" for="MID" style="border: 2px solid;">
+                            <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-middle.png}"
+                                 style="width:25px; height:auto;"/>
+                        </label>
+                        <input type="radio" class="btn-check" name="sortByLine" id="ADC" autocomplete="off" value="ADC">
+                        <label class="btn btn-sm btn-outline-dark" for="ADC" style="border: 2px solid;">
+                            <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-bottom.png}"
+                                 style="width:25px; height:auto;"/>
+                        </label>
+                        <input type="radio" class="btn-check" name="sortByLine" id="SUP" autocomplete="off" value="SUP">
+                        <label class="btn btn-sm btn-outline-dark" for="SUP" style="border: 2px solid;">
+                            <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-utility.png}"
+                                 style="width:25px; height:auto;"/>
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div id="right">
-                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+
+            <div id="right" class="Nanum" sec:authorize="isAuthenticated()">
+                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
                         data-bs-target="#createModalDuo">
-                    듀오 찾기
+                    등록
                 </button>
             </div>
+
         </div>
-        <div id="bottom" style="width: 1084px;">
-            <table class="table">
-                <thead>
-                <tr>
+        <!-- Article Header End-->
+        <!-- Article Body Start-->
+        <div id="bottom" style="border-radius: 5px; width: 1084px; border: 6px solid gray;">
+            <table class="table table-dark table-hover Nanum" style="border-radius: 3px; height: 100%;">
+                <thead style="border: darkgray; text-align: center; border-radius: 3px;">
+                <tr style="font-size: 13px;">
                     <th scope="col">소환사명</th>
                     <th scope="col">주 포지션</th>
                     <th scope="col">티어</th>
@@ -35,113 +77,253 @@
                     <th scope="col"></th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody style="text-align: center">
                 <tr th:each="duoArticle, loop : ${duoArticleList}">
-                    <td th:text="${duoArticle.gameName}"></td>
-                    <td th:text="${duoArticle.myLine}"></td>
-                    <td th:text="${duoArticle.tier}"></td>
-                    <td th:text="${duoArticle.findLine}"></td>
-                    <td>
-                        <span th:text="|${duoArticle.wins}승 ${duoArticle.losses}패|"></span>
+                    <!-- GameName/Microphone Start-->
+                    <td style="width: 12%">
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            <img th:src="@{|https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${duoArticle.profileIconId}.jpg|}"
+                                 style="width:30px; height:auto; border-radius: 50%; overflow: hidden;"/>
+                            <div class="article-element"
+                                 style="flex-direction: column; margin-left: 8px; align-items: flex-start;">
+                                <div style="white-space: nowrap;">
+                                    <span style="font-size: 15px;" th:text="${duoArticle.gameName}"></span>
+                                    <i class="fa-solid fa-microphone" th:if="${duoArticle.getMicrophoneCheck()}"
+                                       style="width: 20px; font-size: 12px;"></i>
+                                    <i class="fa-solid fa-microphone-slash" th:if="${!duoArticle.getMicrophoneCheck()}"
+                                       style="width: 20px; font-size: 12px;"></i>
+                                </div>
+                                <span th:text="|#${duoArticle.tag}|" style="font-size: 13px; color: grey;"></span>
+                            </div>
+                        </div>
                     </td>
-                    <td th:text="${duoArticle.content}"></td>
-                    <td th:id="|result${loop.index + 1}|"></td>
+                    <!-- GameName/Microphone End-->
+                    <td style="width: 6%">
+                        <div class="article-element">
+                            <img th:src="@{|https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-${duoArticle.myLine}.png|}"
+                                 style="width:32px; height:auto;"/>
+                        </div>
+                    </td>
+                    <td style="width: 6%">
+                        <div class="article-element">
+                            <img th:src="@{|/img/${duoArticle.tier}.png|}" style="height: 40px;">
+                            <span style="font-size: 13px;" th:text="${duoArticle.rank}"></span>
+                        </div>
+                    </td>
+                    <td style="width: 6%">
+                        <div class="article-element">
+                            <img th:src="@{|https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-${duoArticle.findLine}.png|}"
+                                 style="width:32px; height:auto;"/>
+                        </div>
+                    </td>
+                    <!-- WinRate Start-->
+                    <td style="width: 9%">
+                        <div class="article-element" style="flex-direction: column;"
+                             th:if="!(${duoArticle.wins == 0 and duoArticle.losses == 0})">
+                            <div class="progress-stacked" style="border: 1px solid darkgray; width: 100%;">
+                                <div class="progress" role="progressbar" aria-label="Segment one"
+                                     aria-valuemin="0" aria-valuemax="100"
+                                     th:style="'width: '+ ${duoArticle.getWinRate()} +'%; font-size: x-small;'">
+                                    <div class="progress-bar" th:text="|${duoArticle.wins}승|"></div>
+                                </div>
+                                <div class="progress" role="progressbar" aria-label="Segment two"
+                                     aria-valuemin="0" aria-valuemax="100"
+                                     th:style="'width: '+ ${duoArticle.getLossRate()} +'%; font-size: x-small;'">
+                                    <div class="progress-bar bg-danger" th:text="|${duoArticle.losses}패|"></div>
+                                </div>
+                            </div>
+                            <span th:text="|${#numbers.formatDecimal(duoArticle.getWinRate(), 2, 0)}%|"
+                                  style="font-size: 12px;"></span>
+                        </div>
+                        <div class="article-element" style="flex-direction: column;"
+                             th:if="${duoArticle.wins == 0 and duoArticle.losses == 0}">
+                            <div class="progress-stacked" style="border: 1px solid darkgray; width: 100%;">
+                                <div class="progress" role="progressbar" aria-label="Segment one"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 50%; font-size: x-small;'">
+                                    <div class="progress-bar" style="background-color: gray;">0승</div>
+                                </div>
+                                <div class="progress" role="progressbar" aria-label="Segment two"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 50%; font-size: x-small;'">
+                                    <div class="progress-bar" style="background-color: darkgray;">0패</div>
+                                </div>
+                            </div>
+                            <span style="font-size: 12px;">0%</span>
+                        </div>
+                    </td>
+                    <!-- WinRate End-->
+                    <td style="width: 13%">
+                        <div class="article-element"
+                             style="border: 1px solid darkgray; border-radius: 3px; background-color: #333333;">
+                            <span th:text="${duoArticle.content}" style="font-size: small;"></span>
+                        </div>
+                    </td>
+                    <td style="width: 5%">
+                        <div class="article-element">
+                            <span th:id="|result${loop.index + 1}|" style="font-size: 13px;"></span>
+                        </div>
+                    </td>
                     <script th:src="@{/js/calculateDate.js}"></script>
                     <script th:inline="javascript">
                         calculateDate(/*[[${duoArticle.createDate}]]*/, 'result' + /*[[${loop.index + 1}]]*/);
                     </script>
-                    <td>
-                        <a th:href="@{|/duo/delete/${duoArticle.id}|}" class="btn btn-sm btn-outline-secondary"
-                           th:text="삭제"></a>
+                    <td class="article_element" style="width: 3%">
+                        <div class="btn-group dropend custom-dropend" sec:authorize="isAuthenticated()"
+                             th:if="${#authentication.getPrincipal().getUsername() == duoArticle.username}">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <i class="fa-solid fa-bars"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="background-color: #333333; border: 2px solid darkgray;">
+                                <li><a th:href="@{/}" class="dropdown-item"
+                                       style="font-size: 15px; color: white;">
+                                    <i class="fa-solid fa-pen-to-square"></i><span class="Nanum"
+                                                                                   style="margin-left: 6px;">수정</span>
+                                </a></li>
+                                <li><a th:href="@{|/duo/delete/${duoArticle.id}|}" class="dropdown-item"
+                                       style="font-size: 15px; color: white;">
+                                    <i class="fa-solid fa-eraser"></i><span style="margin-left: 6px;">삭제</span>
+                                </a></li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
+        <!-- Article Body End-->
     </div>
-
+    <!-- Article Modal Start-->
     <div class="modal fade" id="createModalDuo" tabindex="-1" aria-labelledby="createDuoModal" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content" style="background-color: #333333; border: 2px solid white;">
+
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createDuoModal">듀오찾기</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title Nanum" id="createDuoModal" style="color: white;">듀오찾기</h5>
+                    <button type="button" class="btn-close custom-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                 </div>
-                <form th:action="@{/duo/create}" method="post" th:object="${duoArticleForm}">
+
+                <form th:action="@{/duo/create}" method="post">
                     <div class="modal-body">
-                        <div>
-                            <p>내라인</p>
-                            <div class="btn-group" role="group" aria-label="position Group">
-                                <input type="radio" class="btn-check" name="myLine" id="ALL1" autocomplete="off" checked value="ALL">
-                                <label class="btn btn-outline-primary" for="ALL1">ALL</label>
-                                <input type="radio" class="btn-check" name="myLine" id="TOP1" autocomplete="off" checked value="TOP" >
-                                <label class="btn btn-outline-primary" for="TOP1">TOP</label>
-                                <input type="radio" class="btn-check" name="myLine" id="JUG1" autocomplete="off" checked value="JUG">
-                                <label class="btn btn-outline-primary" for="JUG1">JUG</label>
-                                <input type="radio" class="btn-check" name="myLine" id="MID1" autocomplete="off" checked value="MID">
-                                <label class="btn btn-outline-primary" for="MID1">MID</label>
-                                <input type="radio" class="btn-check" name="myLine" id="ADC1" autocomplete="off" checked value="ADC">
-                                <label class="btn btn-outline-primary" for="ADC1">ADC</label>
-                                <input type="radio" class="btn-check" name="myLine" id="SUP1" autocomplete="off" checked value="SUP">
-                                <label class="btn btn-outline-primary" for="SUP1">SUP</label>
+                        <div style="display: flex; justify-content: flex-start; align-items: flex-start;">
+                            <div>
+                                <h6 style="color: white;">내라인</h6>
+                                <div class="btn-group" role="group" aria-label="position Group">
+                                    <input type="radio" class="btn-check" name="myLine" id="ALL1" autocomplete="off"
+                                           value="fill" checked>
+                                    <label class="btn btn-sm btn-outline-dark" for="ALL1">
+                                        <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-fill.png}"
+                                             style="width:25px; height:auto;"/>
+                                    </label>
+                                    <input type="radio" class="btn-check" name="myLine" id="TOP1" autocomplete="off"
+                                           value="top">
+                                    <label class="btn btn-sm btn-outline-dark" for="TOP1">
+                                        <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-top.png}"
+                                             style="width:25px; height:auto;"/>
+                                    </label>
+                                    <input type="radio" class="btn-check" name="myLine" id="JUG1" autocomplete="off"
+                                           value="jungle">
+                                    <label class="btn btn-sm btn-outline-dark" for="JUG1">
+                                        <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-jungle.png}"
+                                             style="width:25px; height:auto;"/>
+                                    </label>
+                                    <input type="radio" class="btn-check" name="myLine" id="MID1" autocomplete="off"
+                                           value="middle">
+                                    <label class="btn btn-sm btn-outline-dark" for="MID1">
+                                        <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-middle.png}"
+                                             style="width:25px; height:auto;"/>
+                                    </label>
+                                    <input type="radio" class="btn-check" name="myLine" id="ADC1" autocomplete="off"
+                                           value="bottom">
+                                    <label class="btn btn-sm btn-outline-dark" for="ADC1">
+                                        <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-bottom.png}"
+                                             style="width:25px; height:auto;"/>
+                                    </label>
+                                    <input type="radio" class="btn-check" name="myLine" id="SUP1" autocomplete="off"
+                                           value="utility">
+                                    <label class="btn btn-sm btn-outline-dark" for="SUP1">
+                                        <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-utility.png}"
+                                             style="width:25px; height:auto;"/>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input class="form-check-input" type="checkbox" role="switch" id="microphoneCheck"
-                                   name="microphoneCheck"
-                                   value="true">마이크
-                            <label class="form-check-label" for="microphoneCheck"></label>
-                        </div>
-                        <div>
-                            <p>찾는라인</p>
-                            <div class="btn-group" role="group" aria-label="position Group">
-                                <input type="radio" class="btn-check" name="findLine" id="ALL2" autocomplete="off" checked value="ALL">
-                                <label class="btn btn-outline-primary" for="ALL2">ALL</label>
-                                <input type="radio" class="btn-check" name="findLine" id="TOP2" autocomplete="off" checked value="TOP" >
-                                <label class="btn btn-outline-primary" for="TOP2">TOP</label>
-                                <input type="radio" class="btn-check" name="findLine" id="JUG2" autocomplete="off" checked value="JUG">
-                                <label class="btn btn-outline-primary" for="JUG2">JUG</label>
-                                <input type="radio" class="btn-check" name="findLine" id="MID2" autocomplete="off" checked value="MID">
-                                <label class="btn btn-outline-primary" for="MID2">MID</label>
-                                <input type="radio" class="btn-check" name="findLine" id="ADC2" autocomplete="off" checked value="ADC">
-                                <label class="btn btn-outline-primary" for="ADC2">ADC</label>
-                                <input type="radio" class="btn-check" name="findLine" id="SUP2" autocomplete="off" checked value="SUP">
-                                <label class="btn btn-outline-primary" for="SUP2">SUP</label>
+                            <div class="form-check form-switch"
+                                 style="display: flex; flex-direction: column; align-items: center;;">
+                                <span class="form-check-label" for="flexSwitchCheckDefault"
+                                      style="color: white; margin-right: 30px;">마이크</span>
+                                <input class="form-check-input" type="checkbox" role="switch" style="margin-top: 8px;"
+                                       id="flexSwitchCheckDefault" name="microphoneCheck" value="true">
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="col-form-label" for="content">내용</label>
-                            <textarea class="form-control" id="content" name="content"
+                        <div style="margin-top: 15px;">
+                            <h6 style="color: white;">찾는라인</h6>
+                            <div class="btn-group" role="group" aria-label="position Group">
+                                <input type="radio" class="btn-check" name="findLine" id="ALL2" autocomplete="off"
+                                       value="fill" checked>
+                                <label class="btn btn-sm btn-outline-dark" for="ALL2">
+                                    <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-fill.png}"
+                                         style="width:25px; height:auto;"/>
+                                </label>
+                                <input type="radio" class="btn-check" name="findLine" id="TOP2" autocomplete="off"
+                                       value="top">
+                                <label class="btn btn-sm btn-outline-dark" for="TOP2">
+                                    <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-top.png}"
+                                         style="width:25px; height:auto;"/>
+                                </label>
+                                <input type="radio" class="btn-check" name="findLine" id="JUG2" autocomplete="off"
+                                       value="jungle">
+                                <label class="btn btn-sm btn-outline-dark" for="JUG2">
+                                    <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-jungle.png}"
+                                         style="width:25px; height:auto;"/>
+                                </label>
+                                <input type="radio" class="btn-check" name="findLine" id="MID2" autocomplete="off"
+                                       value="middle">
+                                <label class="btn btn-sm btn-outline-dark" for="MID2">
+                                    <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-middle.png}"
+                                         style="width:25px; height:auto;"/>
+                                </label>
+                                <input type="radio" class="btn-check" name="findLine" id="ADC2" autocomplete="off"
+                                       value="bottom">
+                                <label class="btn btn-sm btn-outline-dark" for="ADC2">
+                                    <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-bottom.png}"
+                                         style="width:25px; height:auto;"/>
+                                </label>
+                                <input type="radio" class="btn-check" name="findLine" id="SUP2" autocomplete="off"
+                                       value="utility">
+                                <label class="btn btn-sm btn-outline-dark" for="SUP2">
+                                    <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-utility.png}"
+                                         style="width:25px; height:auto;"/>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3" style="margin-top: 10px;">
+                            <label class="col-form-label" for="validationTextareaArticle"
+                                   style="color: white;">내용</label>
+                            <textarea class="form-control" id="validationTextareaArticle" name="content"
                                       placeholder="내용을 입력해주세요." required></textarea>
                         </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                        <button type="submit" class="btn btn-primary">등록</button>
+                        <button type="submit" class="btn btn-primary" onclick="submitForm()">
+                            <span id="buttonText">등록</span>
+                        </button>
                     </div>
-                </form>
 
+                </form>
             </div>
         </div>
     </div>
+    <!-- Article Modal End-->
     <script>
-        function selectedMyLine(button) {
-            document.querySelectorAll('.btn').forEach(function (btn) {
-                btn.classList.remove('btn-primary')
-            });
-
-            button.classList.add('btn-primary');
-
-            document.getElementById('myLine').value = button.value;
-        }
-
-
-        function selectedFindLine(value) {
-            document.getElementById('findLine').value = value;
+        function submitForm() {
+            document.getElementById("buttonText").innerText = "등록중..";
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </div>
-
 </html>
 
