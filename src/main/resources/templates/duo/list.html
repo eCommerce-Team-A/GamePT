@@ -15,36 +15,42 @@
     <div style="margin-top: 2rem; display: flex; justify-content: center; flex-wrap: wrap;">
 
         <!-- Article Header Start-->
-        <div style="width:1084px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div style="width:1320px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
             <div id="left" style="display: flex">
                 <div>
                     <div class="btn-group" role="group" aria-label="position Group" style="border: 2px solid;">
-                        <input type="radio" class="btn-check" name="sortByLine" id="ALL" autocomplete="off" value="ALL">
+                        <input type="radio" class="btn-check" name="sortByLine" id="ALL" autocomplete="off" value="fill"
+                               onchange="findByLine()">
                         <label class="btn btn-sm btn-outline-dark" for="ALL" style="border: 2px solid;">
                             <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-fill.png}"
                                  style="width:25px; height:auto;"/>
                         </label>
-                        <input type="radio" class="btn-check" name="sortByLine" id="TOP" autocomplete="off" value="TOP">
+                        <input type="radio" class="btn-check" name="sortByLine" id="TOP" autocomplete="off" value="top"
+                               onchange="findByLine()">
                         <label class="btn btn-sm btn-outline-dark" for="TOP" style="border: 2px solid;">
                             <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-top.png}"
                                  style="width:25px; height:auto;"/>
                         </label>
-                        <input type="radio" class="btn-check" name="sortByLine" id="JUG" autocomplete="off" value="JUG">
+                        <input type="radio" class="btn-check" name="sortByLine" id="JUG" autocomplete="off"
+                               value="jungle" onchange="findByLine()">
                         <label class="btn btn-sm btn-outline-dark" for="JUG" style="border: 2px solid;">
                             <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-jungle.png}"
                                  style="width:25px; height:auto;"/>
                         </label>
-                        <input type="radio" class="btn-check" name="sortByLine" id="MID" autocomplete="off" value="MID">
+                        <input type="radio" class="btn-check" name="sortByLine" id="MID" autocomplete="off"
+                               value="middle" onchange="findByLine()">
                         <label class="btn btn-sm btn-outline-dark" for="MID" style="border: 2px solid;">
                             <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-middle.png}"
                                  style="width:25px; height:auto;"/>
                         </label>
-                        <input type="radio" class="btn-check" name="sortByLine" id="ADC" autocomplete="off" value="ADC">
+                        <input type="radio" class="btn-check" name="sortByLine" id="ADC" autocomplete="off"
+                               value="bottom" onchange="findByLine()">
                         <label class="btn btn-sm btn-outline-dark" for="ADC" style="border: 2px solid;">
                             <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-bottom.png}"
                                  style="width:25px; height:auto;"/>
                         </label>
-                        <input type="radio" class="btn-check" name="sortByLine" id="SUP" autocomplete="off" value="SUP">
+                        <input type="radio" class="btn-check" name="sortByLine" id="SUP" autocomplete="off"
+                               value="utility" onchange="findByLine()">
                         <label class="btn btn-sm btn-outline-dark" for="SUP" style="border: 2px solid;">
                             <img th:src="@{https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-utility.png}"
                                  style="width:25px; height:auto;"/>
@@ -63,7 +69,7 @@
         </div>
         <!-- Article Header End-->
         <!-- Article Body Start-->
-        <div id="bottom" style="border-radius: 5px; width: 1084px; border: 6px solid gray;">
+        <div id="bottom" style="border-radius: 5px; width: 1320px; border: 6px solid gray;">
             <table class="table table-dark table-hover Nanum" style="border-radius: 3px; height: 100%;">
                 <thead style="border: darkgray; text-align: center; border-radius: 3px;">
                 <tr style="font-size: 13px;">
@@ -77,8 +83,8 @@
                     <th scope="col"></th>
                 </tr>
                 </thead>
-                <tbody style="text-align: center">
-                <tr th:each="duoArticle, loop : ${duoArticleList}">
+                <tbody id="duoArticle1" style="text-align: center">
+                <tr id="duoArticle" th:each="duoArticle, loop : ${duoArticleList}">
                     <!-- GameName/Microphone Start-->
                     <td style="width: 12%">
                         <div style="display: flex; justify-content: center; align-items: center;">
@@ -118,7 +124,7 @@
                     </td>
                     <!-- WinRate Start-->
                     <td style="width: 9%">
-                        <div class="article-element" style="flex-direction: column;"
+                        <div class="article-element" style="flex-direction: column; margin-top: 8px;"
                              th:if="!(${duoArticle.wins == 0 and duoArticle.losses == 0})">
                             <div class="progress-stacked" style="border: 1px solid darkgray; width: 100%;">
                                 <div class="progress" role="progressbar" aria-label="Segment one"
@@ -135,7 +141,7 @@
                             <span th:text="|${#numbers.formatDecimal(duoArticle.getWinRate(), 2, 0)}%|"
                                   style="font-size: 12px;"></span>
                         </div>
-                        <div class="article-element" style="flex-direction: column;"
+                        <div class="article-element" style="flex-direction: column; margin-top: 8px;"
                              th:if="${duoArticle.wins == 0 and duoArticle.losses == 0}">
                             <div class="progress-stacked" style="border: 1px solid darkgray; width: 100%;">
                                 <div class="progress" role="progressbar" aria-label="Segment one"
@@ -167,23 +173,27 @@
                         calculateDate(/*[[${duoArticle.createDate}]]*/, 'result' + /*[[${loop.index + 1}]]*/);
                     </script>
                     <td class="article_element" style="width: 3%">
-                        <div class="btn-group dropend custom-dropend" sec:authorize="isAuthenticated()"
-                             th:if="${#authentication.getPrincipal().getUsername() == duoArticle.username}">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                <i class="fa-solid fa-bars"></i>
-                            </button>
-                            <ul class="dropdown-menu" style="background-color: #333333; border: 2px solid darkgray;">
-                                <li><a th:href="@{/}" class="dropdown-item"
-                                       style="font-size: 15px; color: white;">
-                                    <i class="fa-solid fa-pen-to-square"></i><span class="Nanum"
-                                                                                   style="margin-left: 6px;">수정</span>
-                                </a></li>
-                                <li><a th:href="@{|/duo/delete/${duoArticle.id}|}" class="dropdown-item"
-                                       style="font-size: 15px; color: white;">
-                                    <i class="fa-solid fa-eraser"></i><span style="margin-left: 6px;">삭제</span>
-                                </a></li>
-                            </ul>
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                            <div class="btn-group dropend custom-dropend" sec:authorize="isAuthenticated()"
+                                 th:if="${#authentication.getPrincipal().getUsername() == duoArticle.username}">
+                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    <i class="fa-solid fa-bars"></i>
+                                </button>
+                                <ul class="dropdown-menu"
+                                    style="background-color: #333333; border: 2px solid darkgray;">
+                                    <li><a th:href="@{/}" class="dropdown-item"
+                                           style="font-size: 15px; color: white;">
+                                        <i class="fa-solid fa-pen-to-square"></i><span class="Nanum"
+                                                                                       style="margin-left: 6px;">수정</span>
+                                    </a></li>
+                                    <li><a th:href="@{|/duo/delete/${duoArticle.id}|}" class="dropdown-item"
+                                           style="font-size: 15px; color: white;">
+                                        <i class="fa-solid fa-eraser"></i><span style="margin-left: 6px;">삭제</span>
+                                    </a></li>
+                                </ul>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -321,6 +331,22 @@
     <script>
         function submitForm() {
             document.getElementById("buttonText").innerText = "등록중..";
+        }
+    </script>
+    <script>
+        function findByLine() {
+            var selectedLine = $("input[name='sortByLine']:checked").val();
+            console.log(selectedLine);
+            $.ajax({
+                type: 'GET',              // 타입 (get, post, put 등등)
+                url: '/api/duo/' + selectedLine,     // 요청할 서버url
+                success : function(result) { // 결과 성공 콜백함수
+                    $("#duoArticle1").replaceWith(result)
+                },
+                error : function(request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
+                }
+            })
         }
     </script>
 </div>
