@@ -3,8 +3,10 @@ package com.example.gamePT.domain.duoArticle.service;
 import com.example.gamePT.domain.duoArticle.enity.DuoArticle;
 import com.example.gamePT.domain.duoArticle.repository.DuoArticleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +16,10 @@ public class DuoArticleService {
     private final DuoArticleRepository duoArticleRepository;
 
     public List<DuoArticle> getAllDuoArticles() {
-        return duoArticleRepository.findAll();
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Sort sort = Sort.by(sorts);
+        return duoArticleRepository.findAll(sort);
     }
 
     public DuoArticle getDuoArticleById(Long id) {
@@ -25,21 +30,22 @@ public class DuoArticleService {
         return duoArticle.get();
     }
 
-    public DuoArticle createDuoArticle(String myLine, String findLine, Boolean microphoneCheck,
-                                       String content, String gameName, String tier, int wins, int losses,
-                                       double avgKills, double avgDeaths, double avgAssists) {
+    public DuoArticle createDuoArticle(String myLine, String findLine, Boolean microphoneCheck, String content, String username,
+                                       String puuid, String gameName, String tag, int profileIconId, String tier, String rank, int wins, int losses) {
         DuoArticle duoArticle = DuoArticle.builder()
                 .myLine(myLine)
                 .findLine(findLine)
                 .microphoneCheck(microphoneCheck)
                 .content(content)
+                .username(username)
+                .puuid(puuid)
                 .gameName(gameName)
+                .tag(tag)
+                .profileIconId(profileIconId)
                 .tier(tier)
+                .rank(rank)
                 .wins(wins)
                 .losses(losses)
-                .avgKills(avgKills)
-                .avgDeaths(avgDeaths)
-                .avgAssists(avgAssists)
                 .build();
         this.duoArticleRepository.save(duoArticle);
         return duoArticle;
