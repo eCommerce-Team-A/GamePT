@@ -3,6 +3,8 @@ package com.example.gamePT.domain.course.controller;
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.entity.CourseCreateForm;
 import com.example.gamePT.domain.course.service.CourseService;
+import com.example.gamePT.domain.review.entity.Review;
+import com.example.gamePT.domain.review.service.ReviewService;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.repository.UserRepository;
 import com.example.gamePT.domain.user.service.UserService;
@@ -23,7 +25,7 @@ import java.util.Optional;
 public class CourseController {
     private final CourseService courseService;
     private final UserRepository userRepository; // User 불러오기용 임시 의존성 주입. (createCourse 메서드에서 추후 작업 필요)
-
+    private final ReviewService reviewService;
     @GetMapping("/create")
     public String createCourse() {
         return "course/course_create_form";
@@ -53,7 +55,9 @@ public class CourseController {
     public String showCourseDetail(@PathVariable(value = "id") Long id, Model model) {
         Course course = this.courseService.findCourseById(id);
         List<Course> courseList = this.courseService.findAllCourse();
+        List<Review> reviewList = this.reviewService.findByCourseId(id);
 
+        model.addAttribute("reviewList",reviewList);
         model.addAttribute("courseList", courseList);
         model.addAttribute("course", course);
 
