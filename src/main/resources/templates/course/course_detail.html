@@ -59,18 +59,6 @@
                                 </div>
                                 <div class="tab-pane" id="nav-review" role="tabpanel"
                                      aria-labelledby="nav-review-tab">
-                                    <div id="reviews" class="d-flex">
-<!--                                        <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"-->
-<!--                                             style="width: 100px; height: 100px;" alt="">-->
-                                        <div th:each="review : ${reviewList}">
-                                            <p class="mb-2" style="font-size: 14px;"></p>
-                                            <div class="d-flex justify-content-between">
-                                                <h5>리뷰 작성자 이름</h5>
-                                            </div>
-                                            <p>리뷰 내용입니다.</p>
-                                        </div>
-                                    </div>
-                                    <hr>
                                     <form action="#">
                                         <h4 class="fw-bold">리뷰 작성하기</h4>
                                         <div class="row g-4">
@@ -100,6 +88,20 @@
                                             </div>
                                         </div>
                                     </form>
+                                    <hr>
+
+                                    <div th:each="review : ${reviewList}" id="reviews" class="d-flex">
+                                        <!--                                        <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"-->
+                                        <!--                                             style="width: 100px; height: 100px;" alt="">-->
+                                        <div>
+                                            <p class="mb-2" style="font-size: 14px;"></p>
+                                            <div class="d-flex justify-content-between">
+                                                <h5 th:text="@{|작성자 : ${review.author.username}|}"></h5>
+                                            </div>
+                                            <p th:text="${review.content}"></p>
+                                        </div>
+                                        <hr>
+                                    </div>
                                 </div>
                             </div>
                         </div>

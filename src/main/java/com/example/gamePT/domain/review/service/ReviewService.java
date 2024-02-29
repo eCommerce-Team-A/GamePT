@@ -13,10 +13,6 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
 
-    public List<Review> FindByCourse(Course course) {
-        return this.reviewRepository.findByCourse(course);
-    }
-
     public void create(String content, Integer score){
         Review review = Review.builder()
                 .author(null)
@@ -26,5 +22,9 @@ public class ReviewService {
                 .build();
 
         this.reviewRepository.save(review);
+    }
+
+    public List<Review> findByCourseId(Long id){
+        return this.reviewRepository.findByCourseId(id);
     }
 }
