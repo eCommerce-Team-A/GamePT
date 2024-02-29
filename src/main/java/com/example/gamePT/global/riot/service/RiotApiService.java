@@ -4,6 +4,7 @@ import com.example.gamePT.global.riot.entity.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,8 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RiotApiService {
 
-
-    private String myKey = "RGAPI-e2e3bb64-d6e1-4ec2-bea4-377ef9e89b53";
+    @Value("${secret.myKey}")
+    private String myKey;
 
 
     //닉네임 입력 시, PuuId 반환
