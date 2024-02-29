@@ -73,7 +73,7 @@ a {
 }
 
 .btn.border-secondary:hover {
-    background: var(--bs-secondary) !important;
+    background: var(--bs-primary) !important;
     color: var(--bs-white) !important;
 }
 
@@ -432,7 +432,7 @@ a {
 }
 
 .testimonial .owl-nav .owl-prev:hover {
-    background: var(--bs-secondary);
+    background: var(--bs-primary);
     color: var(--bs-white);
 }
 
@@ -448,7 +448,7 @@ a {
 }
 
 .testimonial .owl-nav .owl-next:hover {
-    background: var(--bs-secondary);
+    background: var(--bs-primary);
     color: var(--bs-white);
 }
 /*** testimonial End ***/

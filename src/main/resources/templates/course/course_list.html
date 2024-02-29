@@ -14,8 +14,12 @@
 
     <!-- Fruits Shop Start-->
     <div class="container-fluid fruite py-5">
-        <div class="container py-5">
-            <div class="row row-cols-4 g-4 justify-content-center">
+        <div class="container d-flex justify-content-end">
+            <a href="/course/create" class="btn btn-primary btn-sm">강의 등록</a>
+        </div>
+        <div class="container mt-4 pb-5">
+
+            <div class="row row-cols-4 g-4 justify-content-start">
                 <div class="col" th:each="course : ${courseList}">
                     <div class="rounded position-relative fruite-item">
                         <a th:href="@{|/course/detail/${course.id}|}">
@@ -24,7 +28,7 @@
                                      class="img-fluid w-100 rounded-top" alt="">
                             </div>
                         </a>
-                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                              style="top: 10px; left: 10px;" th:text="${course.gameCategoryname}">
                         </div>
                         <div class="p-4 border border-top-0 rounded-bottom">
