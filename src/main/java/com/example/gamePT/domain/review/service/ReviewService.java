@@ -1,6 +1,7 @@
 package com.example.gamePT.domain.review.service;
 
 import com.example.gamePT.domain.course.entity.Course;
+import com.example.gamePT.domain.course.repository.CourseRepository;
 import com.example.gamePT.domain.review.entity.Review;
 import com.example.gamePT.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +13,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final CourseRepository courseRepository; // 임시
 
     public void create(String content, Integer score){
+        Course course = this.courseRepository.getById(2L);
         Review review = Review.builder()
                 .author(null)
-                .course(null)
+                .course(course)
                 .content(content)
                 .score(score)
                 .build();
