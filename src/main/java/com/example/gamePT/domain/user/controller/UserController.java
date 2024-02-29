@@ -22,6 +22,14 @@ public class UserController {
     private final UserService userService;
     private final Gson gson;
 
+    // update
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/update")
+    public String update(SiteUserRequest.Signup signup){
+
+        return "/user/update";
+    }
+
     // mypage
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")

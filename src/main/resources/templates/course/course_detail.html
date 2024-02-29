@@ -72,7 +72,7 @@
                                         <div class="row g-1">
                                             <div class="col-lg-12">
                                                 <div class="rating">
-                                                    <i id="i" class="rating__star far fa-star"></i>
+                                                    <i class="rating__star far fa-star"></i>
                                                     <i class="rating__star far fa-star"></i>
                                                     <i class="rating__star far fa-star"></i>
                                                     <i class="rating__star far fa-star"></i>
@@ -260,78 +260,62 @@
 
 
     </div>
-</div>
-<!-- Single Product End -->
-<!-- Back to Top -->
-<a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
-        class="fa fa-arrow-up"></i></a>
-<script>
-    $('#postReview').on("click", function(){
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
 
-    $.ajax({
-                 type : 'post',              // 타입 (get, post, put 등등)
-                 url : '/review/create',     // 요청할 서버url
-                 async : true,               // 비동기화 여부 (default : true)
-                 beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                     xhr.setRequestHeader(header, token);
-                 },
-                 headers : {                 // Http header
-                     "Content-Type" : "application/json",
-                     "X-HTTP-Method-Override" : "POST"
-                 },
-                 dataType : 'json',          // 데이터 타입 (html, xml, json, text 등등)
-                 data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
-                     "content" : $('#content').val().trim(),
-                     "score" : $('#score').val()
-                 }),
-                 success : function(result) { // 결과 성공 콜백함수
-                        console.log(result)
-                   },
-                 error : function(request, status, error) { // 결과 에러 콜백함수
-                         alert("리뷰 작성 실패");
-                 }
-             })
-    });
+    <script>
+        $(function() {
+            $('#postReview').on("click", function(){
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
 
-
-
-    $(function() {
-        $('.rating__star').on("click", function(){
-            console.log("1");
-        });
-        const ratingStars = $('.rating__star');
-
-
-
-
-<!--        const ratingStars = [...document.getElementsByClassName("rating__star")];-->
-<!--        const ratingStars = [...document.getElementsByClassName("rating__star")];-->
-
-        function executeRating(stars) {
-            const starClassActive = "rating__star fas fa-star";
-            const starClassUnactive = "rating__star far fa-star";
-            const starsLength = stars.length;
-            let i;
-            stars.map((star) => {
-                star.onclick = () => {
-
-                    i = stars.indexOf(star);
-                    console.log(i);
-                    if (star.className.indexOf(starClassUnactive) !== -1) {
-                        for (i; i >= 0; --i) stars[i].className = starClassActive;
-                    } else {
-                        for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
-                    }
-                  };
+                $.ajax({
+                     type : 'post',              // 타입 (get, post, put 등등)
+                     url : '/review/create',     // 요청할 서버url
+                     async : true,               // 비동기화 여부 (default : true)
+                     beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                         xhr.setRequestHeader(header, token);
+                     },
+                     headers : {                 // Http header
+                         "Content-Type" : "application/json",
+                         "X-HTTP-Method-Override" : "POST"
+                     },
+                     dataType : 'json',          // 데이터 타입 (html, xml, json, text 등등)
+                     data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                         "content" : $('#content').val().trim(),
+                         "score" : $('#score').val()
+                     }),
+                     success : function(result) { // 결과 성공 콜백함수
+                            console.log(result)
+                       },
+                     error : function(request, status, error) { // 결과 에러 콜백함수
+                             alert("리뷰 작성 실패");
+                     }
+                 });
             });
-        }
 
-        executeRating(ratingStars);
+            const ratingStars = [...document.getElementsByClassName("rating__star")];
 
+            function executeRating(stars) {
+                const starClassActive = "rating__star fas fa-star";
+                const starClassUnactive = "rating__star far fa-star";
+                const starsLength = stars.length;
+                let i;
+                stars.map((star) => {
+                    star.onclick = () => {
+
+                        i = stars.indexOf(star);
+                        console.log(i);
+                        if (star.className.indexOf(starClassUnactive) !== -1) {
+                            for (i; i >= 0; --i) stars[i].className = starClassActive;
+                        } else {
+                            for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
+                        }
+                      };
+                });
+            }
+            executeRating(ratingStars);
     });
 
+    </script>
 
-</script>
+</div>
 </html>
