@@ -17,17 +17,25 @@
 
 
     <!-- Single Product Start -->
-    <div class="container-fluid py-5 mt-5">
-        <div class="container py-5">
+    <div class="container-fluid mt-3">
+        <div class="container pt-5">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center">
+                    <h2 class="fw-bold" th:text="${course.name}"></h2>
+                    <div class="badge rounded-pill text-bg-primary ms-2">[[${course.gameCategoryname}]]</div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <a class="btn btn-primary" th:href="@{/course/list}" role="button">강의 목록</a>
+                </div>
+            </div>
+
             <div class="row g-5 mb-5">
+
                 <div class="col-lg-8 col-xl-9">
-                    <div class="row g-4">
-                        <div class="col-lg-6 d-flex align-items-center">
-                            <h2 class="fw-bold mb-3" th:text="${course.name}"></h2>
-                            <br>
-                        </div>
-                        <h4 class="mb-3" th:text="${course.gameCategoryname}"></h4>
-                        <div class="card p-0">
+
+                    <div class="row">
+
+                        <div class="card p-0 border-0 shadow">
                             <nav>
                                 <div class="nav nav-tabs" style="display:flex;justify-content: space-around;">
                                     <button class="nav-link active border-white border-bottom-0" style="width:33%;"
@@ -61,7 +69,7 @@
                                      aria-labelledby="nav-review-tab">
                                     <form action="#">
                                         <h4 class="fw-bold">리뷰 작성하기</h4>
-                                        <div class="row g-4">
+                                        <div class="row g-1">
                                             <div class="col-lg-12">
                                                 <div class="rating">
                                                     <i id="i" class="rating__star far fa-star"></i>
@@ -70,7 +78,7 @@
                                                     <i class="rating__star far fa-star"></i>
                                                     <i class="rating__star far fa-star"></i>
                                                 </div>
-                                                <div class="border-bottom rounded my-4">
+                                                <div class="border-bottom rounded mt-4 mb-2">
                                                     <textarea name="reviewContent" id="reviewContent"
                                                               class="form-control" cols="30" rows="4"
                                                               style="resize:none"
@@ -79,9 +87,9 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
-                                                <div class="d-flex justify-content-between py-3 mb-5">
+                                                <div class="d-flex justify-content-end py-1">
                                                     <button id="postReview"
-                                                            class="btn border border-secondary text-primary rounded-pill px-4 py-3">
+                                                            class="btn border border-secondary text-primary rounded-pill px-3 py-2">
                                                         작성 완료
                                                     </button>
                                                 </div>
@@ -106,11 +114,10 @@
                             </div>
                         </div>
                     </div>
-                    <a class="btn btn-primary mt-3" th:href="@{/course/list}" role="button">강의 목록</a>
                 </div>
 
                 <div class="col-lg-4 col-xl-3 p-0">
-                    <div class="card col-lg-12">
+                    <div class="card border-0 shadow col-lg-12">
                         <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
                             담당 전문가님 이력
                         </div>
@@ -123,7 +130,7 @@
                             <div>5번째 줄</div>
                         </div>
                     </div>
-                    <div class="card col-lg-12">
+                    <div class="card border-0 shadow mt-3 col-lg-12">
                         <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
                             구매 정보
                         </div>
@@ -135,29 +142,123 @@
                 </div>
             </div>
         </div>
-        <h1 class="fw-bold mb-0">관련 강의</h1>
-        <div class="vesitable">
-            <div class="owl-carousel vegetable-carousel justify-content-center">
-                <div class="border border-primary rounded position-relative vesitable-item">
-                    <div class="vesitable-img">
-                        <img src="https://i.ibb.co/w7yw4kK/image.jpg" class="img-fluid w-100 rounded-top" alt="">
-                    </div>
-                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                         style="top: 10px; right: 10px;">Vegetable
-                    </div>
-                    <div class="p-4 pb-0 rounded-bottom">
-                        <h4>Parsely</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                        <div class="d-flex justify-content-between flex-lg-wrap">
-                            <p class="text-dark fs-5 fw-bold">$4.99 / kg</p>
-                            <a href="#"
-                               class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i
-                                    class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+
+        <div class="container">
+            <h1 class="fw-bold">관련 강의</h1>
+            <div class="vesitable">
+                <div class="owl-carousel vegetable-carousel justify-content-center">
+
+                    <a href="#">
+                        <div class="border border-primary rounded position-relative vesitable-item">
+                            <div class="vesitable-img">
+                                <img src="https://i.namu.wiki/i/30whaqjessttAI0WYfI4EUeLMpBsch-usaIxU4jd3GJlKj1WSMwTDR8CODkb7dGvhi4PNfYcawLB-scDXOl4QmsFMJpQMTtPhKXUy9DCBdg1_hgm38L9MbXVlRGqDi8KbOwkouNYVtX5NDvT9L3vbA.webp" class="img-fluid w-100 rounded-top" alt="">
+                            </div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                 style="top: 10px; right: 10px;">
+                                대장 강사
+                            </div>
+                            <div class="p-4 rounded-bottom">
+                                <h4>신광식</h4>
+                                <div>
+                                    개발자 연구소장
+                                </div>
+                                <div>
+                                    넷카라쿠배당 드가자~
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </a>
+
+                    <a href="#">
+                        <div class="border border-primary rounded position-relative vesitable-item">
+                            <div class="vesitable-img">
+                                <img src="https://i.namu.wiki/i/UpBemT9FWEQLTEy2mr1UOfdHKI5falKCBX5HTEAbmgayHHadrmDCk559aG8UeovO2P1NZPuJSuM31vpw1edOaN3fWzLBRfihJoudSPjSDPy6gpieLFfFNoO5CkSUrmZv-76S29qAdaptK9OvyRmQAA.webp" class="img-fluid w-100 rounded-top" alt="">
+                            </div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                 style="top: 10px; right: 10px;">
+                                우수 학생
+                            </div>
+                            <div class="p-4 rounded-bottom">
+                                <h4>김두한</h4>
+                                <div>
+                                    개발자 연구소 반장
+                                </div>
+                                <div>
+                                    넷카라쿠배당 드가자~
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#">
+                        <div class="border border-primary rounded position-relative vesitable-item">
+                            <div class="vesitable-img">
+                                <img src="https://i.namu.wiki/i/RGkr0udf66wY1Qht4nAo6mBS0PRoDKzGMkfz7BSyZ1a6WCWSMizfXwvUzfYj6ty0WeIV-ZUeY_6T6ltPlkgVUdf1y86v3i5jEuSoepTrBMAuujn-U40ZnLezXGWRYgUFKkvYrMVH-9hVypVzEFkrHw.webp" class="img-fluid w-100 rounded-top" alt="">
+                            </div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                 style="top: 10px; right: 10px;">
+                                우수 학생
+                            </div>
+                            <div class="p-4 rounded-bottom">
+                                <h4>김대호</h4>
+                                <div>
+                                    개발자 연구소 우수 학생
+                                </div>
+                                <div>
+                                    넷카라쿠배당 드가자~
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#">
+                        <div class="border border-primary rounded position-relative vesitable-item">
+                            <div class="vesitable-img">
+                                <img src="https://i.namu.wiki/i/NfoLir0aEVQURPb0RFGD1u-G2YVFOD-8SaLuPZuZ7PAeWIsPMGGlO_kS6575Qs_QKvs9gwtyi5cLjQURSdbVlnwA9XN_XYPyJ3QHt61iNwdvpmHFkWDU-huYsGbPA0Qe5pLMrzQIaNPu2PK-XRTelw.webp" class="img-fluid w-100 rounded-top" alt="">
+                            </div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                 style="top: 10px; right: 10px;">
+                                그냥 학생
+                            </div>
+                            <div class="p-4 rounded-bottom">
+                                <h4>전오빈</h4>
+                                <div>
+                                    개발자 연구소 연구원
+                                </div>
+                                <div>
+                                    넷카라쿠배당 드가자~
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#">
+                        <div class="border border-primary rounded position-relative vesitable-item">
+                            <div class="vesitable-img">
+                                <img src="https://i.namu.wiki/i/blVyIGCxGdHoC24pHBc_S92-_VizSaRvsFlfvCCR9YlheDcmbbZ45QRSLn1aKBgzexWUGFz7fa8qCyru6yCfA7Rdbbo9Z2ZxhzdoB9peLXlobdxP2-gfdcMHAB0xuUGfzrluOb6GQeUmu0vHblEaHQ.webp" class="img-fluid w-100 rounded-top" alt="">
+                            </div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                 style="top: 10px; right: 10px;">
+                                그냥 학생
+                            </div>
+                            <div class="p-4 rounded-bottom">
+                                <h4>양희동</h4>
+                                <div>
+                                    개발자 연구소 연구원
+                                </div>
+                                <div>
+                                    넷카라쿠배당 드가자~
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+
                 </div>
             </div>
         </div>
+
+
     </div>
 </div>
 <!-- Single Product End -->
