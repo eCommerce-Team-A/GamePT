@@ -282,11 +282,14 @@
                      },
                      dataType : 'json',          // 데이터 타입 (html, xml, json, text 등등)
                      data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                         "courseId" : [[${course.id}]],
                          "content" : $('#reviewContent').val().trim(),
                          "score" : $('.rating__star.fas.fa-star').length
                      }),
                      success : function(result) { // 결과 성공 콜백함수
-                            console.log(result)
+                            $(result).each(function(){
+				            console.log(this.author.username + " " + this.content + " " + this.score);
+				            });
                      },
                      error : function(request, status, error) { // 결과 에러 콜백함수
                              alert("리뷰 작성 실패");
