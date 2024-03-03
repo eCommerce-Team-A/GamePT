@@ -10,12 +10,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/review")
 public class ReviewController {
@@ -23,11 +24,14 @@ public class ReviewController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public List<Review> create(@RequestBody ReviewCreateForm reviewCreateForm, Principal principal) {
+    public String create(@RequestBody ReviewCreateForm reviewCreateForm, Principal principal,
+                         Model model) {
         SiteUser author = this.userService.findByUsername(principal.getName());
-        List<Review> reviewList = this.reviewService.create(author,reviewCreateForm.getCourseId(), reviewCreateForm.getContent(),
+        List<Review> reviewList = this.reviewService.findByCourseId(reviewCreateForm.getCourseId());
+        model.addAttribute("reviewList", reviewList);
+        this.reviewService.create(author, reviewCreateForm.getCourseId(), reviewCreateForm.getContent(),
                 reviewCreateForm.getScore());
 
-        return reviewList;
+        return "course/course_detail::#nav-review";
     }
 }

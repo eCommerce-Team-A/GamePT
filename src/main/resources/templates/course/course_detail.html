@@ -97,8 +97,6 @@
                                     <hr>
 
                                     <div th:each="review : ${reviewList}" id="reviews" class="d-flex">
-                                        <!--                                        <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"-->
-                                        <!--                                             style="width: 100px; height: 100px;" alt="">-->
                                         <div>
                                             <p class="mb-2" style="font-size: 14px;"></p>
                                             <div class="d-flex justify-content-between">
@@ -280,19 +278,17 @@
                          "Content-Type" : "application/json",
                          "X-HTTP-Method-Override" : "POST"
                      },
-                     dataType : 'json',          // 데이터 타입 (html, xml, json, text 등등)
+                     dataType : 'text',          // 데이터 타입 (html, xml, json, text 등등)
                      data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
                          "courseId" : [[${course.id}]],
                          "content" : $('#reviewContent').val().trim(),
                          "score" : $('.rating__star.fas.fa-star').length
                      }),
                      success : function(result) { // 결과 성공 콜백함수
-                            $(result).each(function(){
-				            console.log(this.author.username + " " + this.content + " " + this.score);
-				            });
+                            $('#nav-review').load(window.location.href+' #nav-review');
                      },
                      error : function(request, status, error) { // 결과 에러 콜백함수
-                             alert("리뷰 작성 실패");
+                             console.log(error);
                      }
                  })
         });

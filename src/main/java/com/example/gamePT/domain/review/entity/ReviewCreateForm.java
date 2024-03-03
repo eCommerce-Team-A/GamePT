@@ -10,8 +10,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReviewCreateForm {
+    private Long courseId;
     @NotEmpty
     private String content;
     @NotNull
-    private Integer score;
+    private int score;
 }
