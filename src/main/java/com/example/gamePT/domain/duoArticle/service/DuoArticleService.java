@@ -22,6 +22,13 @@ public class DuoArticleService {
         return duoArticleRepository.findAll(sort);
     }
 
+    public List<DuoArticle> getDulArticlesByMyLine(String line) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Sort sort = Sort.by(sorts);
+        return duoArticleRepository.findByMyLine(line, sort);
+    }
+
     public DuoArticle getDuoArticleById(Long id) {
         Optional<DuoArticle> duoArticle = this.duoArticleRepository.findById(id);
         if (duoArticle.isEmpty()) {
@@ -55,5 +62,14 @@ public class DuoArticleService {
         this.duoArticleRepository.delete(duoArticle);
     }
 
+    public void modifyDuoArticle(DuoArticle duoArticle, String myLine, String findLine, Boolean microphoneCheck, String content) {
+        DuoArticle modifyDuoArticle = duoArticle.toBuilder()
+                .myLine(myLine)
+                .findLine(findLine)
+                .microphoneCheck(microphoneCheck)
+                .content(content)
+                .build();
+        this.duoArticleRepository.save(modifyDuoArticle);
+    }
 
 }
