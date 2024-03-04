@@ -60,7 +60,7 @@
             </div>
 
             <div id="right" class="Nanum" sec:authorize="isAuthenticated()">
-                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
+                <button onclick="createArticle()" type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
                         data-bs-target="#createModalDuo">
                     등록
                 </button>
@@ -183,10 +183,11 @@
                                 </button>
                                 <ul class="dropdown-menu"
                                     style="background-color: #333333; border: 2px solid darkgray;">
-                                    <li><a th:href="@{/}" class="dropdown-item"
-                                           style="font-size: 15px; color: white;">
-                                        <i class="fa-solid fa-pen-to-square"></i><span class="Nanum"
-                                                                                       style="margin-left: 6px;">수정</span>
+                                    <li><a type="button" class="dropdown-item" style="font-size: 15px; color: white;"
+                                           th:onclick="getArticleById([[${duoArticle.id}]])" data-bs-toggle="modal"
+                                           data-bs-target="#createModalDuo">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <span class="Nanum" style="margin-left: 6px;">수정</span>
                                     </a></li>
                                     <li><a th:href="@{|/duo/delete/${duoArticle.id}|}" class="dropdown-item"
                                            style="font-size: 15px; color: white;">
@@ -213,7 +214,7 @@
                             aria-label="Close"></button>
                 </div>
 
-                <form th:action="@{/duo/create}" method="post">
+                <form name="createForm" th:action="@{/duo/create}" method="post">
                     <div class="modal-body">
                         <div style="display: flex; justify-content: flex-start; align-items: flex-start;">
                             <div>
@@ -318,8 +319,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                        <button type="submit" class="btn btn-primary" onclick="submitForm()">
+                        <button name="createButton" type="submit" class="btn btn-primary" onclick="submitForm()">
                             <span id="buttonText">등록</span>
+                        </button>
+                        <button name="modifyButton" class="btn btn-primary" onclick="modifyForm()">
+                            <span id="modifyText">수정</span>
                         </button>
                     </div>
 
@@ -329,25 +333,57 @@
     </div>
     <!-- Article Modal End-->
     <script>
+        function createArticle() {
+            $("input[name='myLine'][value='fill']").prop("checked", true);
+            $("input[name='findLine'][value='fill']").prop("checked", true);
+            $("input[name='microphoneCheck']").prop("checked", false);
+            $("textarea[name='content']").val('');
+            $("button[name='modifyButton']").hide();
+            $("button[name='createButton']").show();
+            $("form[name='createForm']").attr("action", "/duo/create");
+        }
+
         function submitForm() {
             document.getElementById("buttonText").innerText = "등록중..";
         }
-    </script>
-    <script>
+
         function findByLine() {
             var selectedLine = $("input[name='sortByLine']:checked").val();
-            console.log(selectedLine);
             $.ajax({
                 type: 'GET',              // 타입 (get, post, put 등등)
-                url: '/api/duo/' + selectedLine,     // 요청할 서버url
-                success : function(result) { // 결과 성공 콜백함수
+                url: '/api/getDuoArticleList/' + selectedLine,     // 요청할 서버url
+                success: function (result) { // 결과 성공 콜백함수
                     $("#duoArticle1").replaceWith(result)
                 },
-                error : function(request, status, error) { // 결과 에러 콜백함수
+                error: function (request, status, error) { // 결과 에러 콜백함수
                     console.log(error)
                 }
             })
         }
+
+        function getArticleById(duoArticleId) {
+            console.log(duoArticleId);
+            $.ajax({
+                type: 'GET',
+                url: '/api/getDouArticle/' + duoArticleId,
+                dataType: 'json',
+                success: function (result) {
+                    let duoArticle = result;
+                    console.log(duoArticle);
+                    $("input[name='myLine'][value='" + duoArticle.myLine + "']").prop("checked", true);
+                    $("input[name='findLine'][value='" + duoArticle.findLine + "']").prop("checked", true);
+                    $("input[name='microphoneCheck']").prop("checked", duoArticle.microphoneCheck);
+                    $("textarea[name='content']").val(duoArticle.content);
+                    $("button[name='createButton']").hide();
+                    $("button[name='modifyButton']").show();
+                    $("form[name='createForm']").attr("action", "/duo/modify/" + duoArticleId);
+                },
+                error: function (request, status, error) {
+                    console.log(error);
+                }
+            })
+        }
+
     </script>
 </div>
 </html>

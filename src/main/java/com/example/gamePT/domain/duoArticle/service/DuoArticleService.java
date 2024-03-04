@@ -62,4 +62,14 @@ public class DuoArticleService {
         this.duoArticleRepository.delete(duoArticle);
     }
 
+    public void modifyDuoArticle(DuoArticle duoArticle, String myLine, String findLine, Boolean microphoneCheck, String content) {
+        DuoArticle modifyDuoArticle = duoArticle.toBuilder()
+                .myLine(myLine)
+                .findLine(findLine)
+                .microphoneCheck(microphoneCheck)
+                .content(content)
+                .build();
+        this.duoArticleRepository.save(modifyDuoArticle);
+    }
+
 }
