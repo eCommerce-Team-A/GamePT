@@ -22,6 +22,26 @@ public class ImageService {
     @Value("${custom.fileDirPath}")
     private String fileDirPath;
 
+    public void updateUserProfile(SiteUser loginedUser, MultipartFile profileImg) throws IOException {
+
+        Image image = findByUser(loginedUser);
+
+        String originalFileName = profileImg.getOriginalFilename();
+        String filePath = "user/" + UUID.randomUUID().toString() +"."+ originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        File profileImgFile = new File(fileDirPath +"/"+ filePath);
+        profileImg.transferTo(profileImgFile);
+        filePath =  "/file/" + filePath;
+
+        image = image.toBuilder().path(filePath).originalFileName(originalFileName).relationId(loginedUser.getId()).build();
+
+        imageRepository.save(image);
+    }
+
+    public Image findByUser(SiteUser siteUser) {
+
+        return imageRepository.findByRelationEntityAndRelationId("siteUser",siteUser.getId()).get();
+    }
+
     public void saveUserProfile(SiteUser siteUser, MultipartFile profileImg) throws IOException {
 
         String filePath = "";
@@ -67,4 +87,6 @@ public class ImageService {
 
         return profileImg.get().getPath();
     }
+
+
 }

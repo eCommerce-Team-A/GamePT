@@ -24,8 +24,19 @@ public class UserController {
 
     // update
     @PreAuthorize("isAuthenticated()")
+    @PostMapping("/update")
+    public String update(SiteUserRequest.Update updateForm, BindingResult bindingResult, @RequestParam(value = "profileImg") MultipartFile profileImg) throws IOException {
+
+        if(!userService.update(updateForm,bindingResult,profileImg)){
+            return "/user/update";
+        }
+
+        return "redirect:/user/mypage";
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/update")
-    public String update(SiteUserRequest.Signup signup){
+    public String update(SiteUserRequest.Update updateForm){
 
         return "/user/update";
     }
