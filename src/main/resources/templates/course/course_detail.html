@@ -95,16 +95,17 @@
                                             </div>
                                         </div>
                                     <hr>
-
-                                    <div th:each="review : ${reviewList}" id="reviews" class="d-flex">
-                                        <div>
-                                            <p class="mb-2" style="font-size: 14px;"></p>
-                                            <div class="d-flex justify-content-between">
-                                                <h5 th:text="@{|작성자 : ${review.author.username}|}"></h5>
+                                    <div id="reviews">
+                                        <div th:each="review : ${reviewList}" class="d-flex">
+                                            <div>
+                                                <p class="mb-2" style="font-size: 14px;"></p>
+                                                <div class="d-flex justify-content-between">
+                                                    <h5 th:text="@{|작성자 : ${review.author.username}|}"></h5>
+                                                </div>
+                                                <p th:text="${review.content}"></p>
                                             </div>
-                                            <p th:text="${review.content}"></p>
+                                            <hr>
                                         </div>
-                                        <hr>
                                     </div>
                                 </div>
                             </div>
@@ -253,20 +254,16 @@
                             </div>
                         </div>
                     </a>
-
-
                 </div>
             </div>
         </div>
-
-
     </div>
     <script>
         $(function() {
             $('#postReview').on("click", function(){
                 var token = $("meta[name='_csrf']").attr("content");
                 var header = $("meta[name='_csrf_header']").attr("content");
-
+                console.log(1)
                 $.ajax({
                      type : 'post',              // 타입 (get, post, put 등등)
                      url : '/review/create',     // 요청할 서버url
@@ -285,33 +282,36 @@
                          "score" : $('.rating__star.fas.fa-star').length
                      }),
                      success : function(result) { // 결과 성공 콜백함수
-                            $('#nav-review').load(window.location.href+' #nav-review');
+                            $('#reviews').load(window.location.href+' #reviews');
+                            $('.rating__star.fas.fa-star').removeClass('fas fa-star').addClass('far fa-star');
+                            $('#reviewContent').val('');
+
                      },
                      error : function(request, status, error) { // 결과 에러 콜백함수
                              console.log(error);
                      }
                 })
             });
-        const ratingStars = [...document.getElementsByClassName("rating__star")];
-        function executeRating(stars) {
-            const starClassActive = "rating__star fas fa-star";
-            const starClassUnactive = "rating__star far fa-star";
-            const starsLength = stars.length;
-            let i;
-            stars.map((star) => {
-                star.onclick = () => {
+            const ratingStars = [...document.getElementsByClassName("rating__star")];
+            function executeRating(stars) {
+                const starClassActive = "rating__star fas fa-star";
+                const starClassUnactive = "rating__star far fa-star";
+                const starsLength = stars.length;
+                let i;
+                stars.map((star) => {
+                    star.onclick = () => {
 
-                    i = stars.indexOf(star);
-                    if (star.className.indexOf(starClassUnactive) !== -1) {
-                        for (i; i >= 0; --i) stars[i].className = starClassActive;
-                    } else {
-                        for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
-                    }
-                };
-            });
-        }
+                        i = stars.indexOf(star);
+                        if (star.className.indexOf(starClassUnactive) !== -1) {
+                            for (i; i >= 0; --i) stars[i].className = starClassActive;
+                        } else {
+                            for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
+                        }
+                    };
+                });
+            }
 
-        executeRating(ratingStars);
+            executeRating(ratingStars);
 
         });
     </script>

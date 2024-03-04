@@ -8,6 +8,7 @@ import com.example.gamePT.domain.user.entity.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -25,10 +26,11 @@ public class ReviewService {
                 .score(score)
                 .build();
         this.reviewRepository.save(review);
-        return this.reviewRepository.findByCourseId(courseId);
+        return this.reviewRepository.findByCourseIdOrderByCreateDateDesc(courseId);
     }
 
     public List<Review> findByCourseId(Long id) {
-        return this.reviewRepository.findByCourseId(id);
+        return this.reviewRepository.findByCourseIdOrderByCreateDateDesc(id);
+
     }
 }

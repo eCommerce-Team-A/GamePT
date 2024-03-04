@@ -32,6 +32,6 @@ public class ReviewController {
         this.reviewService.create(author, reviewCreateForm.getCourseId(), reviewCreateForm.getContent(),
                 reviewCreateForm.getScore());
 
-        return "course/course_detail::#nav-review";
+        return "course/course_detail::#reviews";
     }
 }
