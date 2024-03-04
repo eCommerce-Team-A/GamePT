@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class Course extends BaseEntity {
     @ManyToOne
-    private SiteUser siteUser;
+    private SiteUser author;
     private String gameCategoryname; // 임시로 (카테고리 이름) 삽입 추후 gameCategory 객체추가 필요
     private String name;
     private String introduce;

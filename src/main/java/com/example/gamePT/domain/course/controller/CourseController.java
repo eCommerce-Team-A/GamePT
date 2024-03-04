@@ -6,7 +6,6 @@ import com.example.gamePT.domain.course.service.CourseService;
 import com.example.gamePT.domain.review.entity.Review;
 import com.example.gamePT.domain.review.service.ReviewService;
 import com.example.gamePT.domain.user.entity.SiteUser;
-import com.example.gamePT.domain.user.repository.UserRepository;
 import com.example.gamePT.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,11 +34,11 @@ public class CourseController {
     // 강의 등록
     @PostMapping("/create")
     public String createCourse(@Valid CourseCreateForm courseCreateForm, BindingResult bindingResult, Principal principal) {
-        SiteUser siteUser = this.userService.findByUsername(principal.getName());
+        SiteUser author = this.userService.findByUsername(principal.getName());
         if (bindingResult.hasErrors()) {
             return "course/course_create_form";
         }
-        Course course = this.courseService.createCourse(siteUser, courseCreateForm.getGameCategoryname(), courseCreateForm.getName(),
+        Course course = this.courseService.createCourse(author, courseCreateForm.getGameCategoryname(), courseCreateForm.getName(),
                 courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice());
 
         return String.format("redirect:/course/detail/%s", course.getId());

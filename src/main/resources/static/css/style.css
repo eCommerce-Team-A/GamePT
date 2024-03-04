@@ -534,4 +534,9 @@ a {
 .rating__star:hover {
    filter: drop-shadow(1px 1px 4px gold);
 }
+.review__rating {
+    font-size: 1.1em;
+    color: #dabd18b2;
+    transition: filter linear .3s;
+}
 /*** Rate Star End ***/
