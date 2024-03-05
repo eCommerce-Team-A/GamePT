@@ -48,11 +48,11 @@ public class CourseController {
     @GetMapping("/detail/{id}")
     public String showCourseDetail(@PathVariable(value = "id") Long id, Model model) {
         Course course = this.courseService.findCourseById(id);
-        List<Course> courseList = this.courseService.findAllCourse();
+        List<Course> courseListByAuthor = this.courseService.findCourseByAuthorId(course.getAuthor().getId());
         List<Review> reviewList = this.reviewService.findByCourseId(id);
 
         model.addAttribute("reviewList", reviewList);
-        model.addAttribute("courseList", courseList);
+        model.addAttribute("courseListByAuthor", courseListByAuthor);
         model.addAttribute("course", course);
 
         return "course/course_detail";
