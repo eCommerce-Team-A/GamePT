@@ -353,7 +353,7 @@ a {
     position: relative;
 }
 
-.vesitable .owl-nav .owl-prev {
+.vesitable .owl-nav .owl-next {
     position: absolute;
     top: -8px;
     right: 0;
@@ -365,12 +365,12 @@ a {
 
 }
 
-.vesitable .owl-nav .owl-prev:hover {
+.vesitable .owl-nav .owl-next:hover {
     background: var(--bs-secondary);
     color: var(--bs-white);
 }
 
-.vesitable .owl-nav .owl-next {
+.vesitable .owl-nav .owl-prev {
     position: absolute;
     top: -8px;
     right: 88px;
@@ -381,7 +381,7 @@ a {
     transition: 0.5s;
 }
 
-.vesitable .owl-nav .owl-next:hover {
+.vesitable .owl-nav .owl-prev:hover {
     background: var(--bs-secondary);
     color: var(--bs-white);
 }

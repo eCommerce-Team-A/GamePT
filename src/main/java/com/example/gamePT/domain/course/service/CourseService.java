@@ -40,4 +40,7 @@ public class CourseService {
     public List<Course> findAllCourse(){
         return this.courseRepository.findAll();
     }
+    public List<Course> findCourseByAuthorId(Long id){
+        return this.courseRepository.findCourseByAuthorId(id);
+    }
 }
