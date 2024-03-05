@@ -50,11 +50,11 @@
                     <div class="col-8 h-100" >
                         <div class="card-body h-100">
                             <div id="unClick">
-                                채팅방을 선택해 주세요
+                                 채팅방을 선택해 주세요
                             </div>
-                            <div id="chattingArea" class="h-100" style="display:none; position:relative;">
-                                <div>
-                                   1234
+                            <div id="chat" class="h-100" style="display:none; position:relative;">
+                                <div id="chattingArea" style="height:520px; overflow: auto;">
+
                                 </div>
                                 <div class="w-100" style="position: absolute; bottom:0;">
                                     <div class="input-group">
@@ -75,15 +75,29 @@
 
         $(function() {
 
-            var websocket = ""
+            var websocket = "";
             var roomNum = "";
 
             $(".list-group-item").click(function(){
                 $("#unClick").hide();
-                $("#chattingArea").show();
+                $("#chat").show();
                 roomNum = $(this).attr("value");
 
-                websocket = new WebSocket("ws://localhost:8010/wss/chat/"+roomNum);
+                var url = "ws://localhost:8010/wss/chat/"+roomNum;
+
+                if(url == websocket.url){
+                    return;
+                }
+
+                $("#chattingArea").empty();
+
+                getChattingRoom(roomNum);
+
+                if(websocket != ""){
+                    websocket.close();
+                }
+
+                websocket = new WebSocket(url);
                 websocket.onmessage = onMessage;
 
             });
@@ -93,7 +107,9 @@
                 var data = {
                     "roomNumber" : roomNum,
                     "content" : $("#msg").val(),
-                    "username" : [[${@rq.getSiteUser().username}]]
+                    "username" : [[${@rq.getSiteUser().username}]],
+                    "nickname" : [[${@rq.getSiteUser().nickname}]],
+                    "profile" : [[${@rq.getProfileImg()}]]
                 };
 
                 websocket.send(JSON.stringify(data));
@@ -106,97 +122,117 @@
             });
 
             function onMessage(msg) {
-                console.log(JSON.stringify(msg.data));
+
+                var temp = JSON.parse(msg.data);
+
+                if(temp.hasOwnProperty('sessionId')){
+                    return;
+                }
+
+                var htmlCode = "";
+
+                if(temp.username != [[${@rq.getSiteUser().username}]]){
+
+                    htmlCode += leftBox(temp.profile, temp.nickname, temp.content)
+                }
+                else{
+                    htmlCode += rightBox(temp.profile, temp.nickname, temp.content)
+                }
+
+                $("#chattingArea").append(htmlCode);
+
+                $("#chattingArea").scrollTop($("#chattingArea")[0].scrollHeight);
+
             }
 
-            <!-- 최근 20 경기 -->
-<!--            $.ajax({-->
-<!--                type : 'get',              // 타입 (get, post, put 등등)-->
-<!--                url : '/riotApiController/getMatchesByPuuid/' + puuid,     // 요청할 서버url-->
-<!--                async : true,               // 비동기화 여부 (default : true)-->
-<!--                headers : {                 // Http header-->
-<!--                    "Content-Type" : "application/json",-->
-<!--                    "X-HTTP-Method-Override" : "GET"-->
-<!--                },-->
-<!--                dataType : 'json',-->
-<!--                success : function(result) { // 결과 성공 콜백함수-->
-<!--                    $('.games-spinner').css("display","none");-->
-<!--                    $('.games').css("display","block");-->
+            function leftBox(src, nickname, content) {
 
-<!--                    const ctx = document.getElementById('myChart').getContext('2d');-->
+                var htmlCode = '<div class="left-box mb-4">' +
+                    '<div class="d-flex align-items-center">' +
+                        '<div class="bg-white rounded-circle shadow" style=" width:30px; height:30px; overflow: hidden;">' +
+                            '<img src="'+src+'" alt="..." style="width:100%; height:100%; object-fit:contain;">' +
+                        '</div>' +
+                        '<div class="ms-1 text-secondary">' +
+                            nickname +
+                        '</div>'+
+                    '</div>' +
+                    '<div class="card mt-2 border-primary shadow">' +
+                        '<div class="card-body px-3 py-2">' +
+                            content +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
 
-<!--                    var win = result.win;-->
-<!--                    var lose = result.lose;-->
-<!--                    var kills = result.kills;-->
-<!--                    var deaths = result.deaths;-->
-<!--                    var assists = result.assists;-->
-<!--                    var teamTotalKill = result.teamTotalKill;-->
+                return htmlCode;
+            }
 
-<!--                    var killPercent = Math.round((kills + assists)/teamTotalKill *100);-->
-<!--                    $('#killPercent').text("킬관여 " + killPercent + "%") ;-->
+            function rightBox(src, nickname, content) {
 
-<!--                    var title = (win+lose) + "전 " + win + "승 "+ lose + "패"-->
-<!--                    $('#chart-title').text(title);-->
+                var htmlCode = '<div class="right-box mb-4">' +
+                        '<div class="d-flex justify-content-end align-items-center">' +
+                            '<div class="me-1 text-secondary">' +
+                                nickname +
+                            '</div>' +
+                            '<div class="bg-white rounded-circle shadow" style=" width:30px; height:30px; overflow: hidden;">' +
+                                '<img src="'+src+'" alt="..." style="width:100%; height:100%; object-fit:contain;">' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="card mt-2 border-success text-end shadow">'+
+                            '<div class="card-body px-3 py-2">' +
+                                content +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
 
-<!--                    var avgKills = Math.round(((kills / (win+lose)) + Number.EPSILON) * 10) / 10;-->
-<!--                    var avgDeaths = Math.round(((deaths / (win+lose)) + Number.EPSILON) * 10) / 10;-->
-<!--                    var avgAssists = Math.round(((assists / (win+lose)) + Number.EPSILON) * 10) / 10;-->
+                return htmlCode;
+            }
 
-<!--                    $('#avgKills').text(avgKills);-->
-<!--                    $('#avgDeaths').text(avgDeaths);-->
-<!--                    $('#avgAssists').text(avgAssists);-->
+            <!--  엔터 누를시 클릭  -->
+            $("#msg").keyup(function(event) {
+                if (event.which === 13) {
+                    $("#button-send").trigger("click");
+                }
+            });
 
-<!--                    var totalKDA = Math.round((((avgKills + avgAssists) / avgDeaths) + Number.EPSILON) * 100) / 100 + " : " + "1";-->
-<!--                    $('#totalKDA').text(totalKDA);-->
+            <!--  지난 대화 불러오기 -->
+            function getChattingRoom(roomNum) {
+                $.ajax({
+                    type : 'get',              // 타입 (get, post, put 등등)
+                    url : '/chattingRoom/getChattingRoomById/' + roomNum,     // 요청할 서버url
+                    async : true,               // 비동기화 여부 (default : true)
+                    headers : {                 // Http header
+                        "Content-Type" : "application/json",
+                        "X-HTTP-Method-Override" : "GET"
+                    },
+                    dataType : 'json',
+                    success : function(result) { // 결과 성공 콜백함수
 
+                        var chatLogs = result.chattingRoom.chatLogs
 
-<!--                    var myChart = new Chart(ctx, {-->
-<!--                      type: 'doughnut',-->
-<!--                        data: {-->
-<!--                          datasets: [{-->
-<!--                            data: [win, lose], // 승,패-->
-<!--                            backgroundColor: [-->
-<!--                              '#5383e8',-->
-<!--                              '#e84057'-->
-<!--                            ],-->
-<!--                            borderWidth: 0,-->
-<!--                            scaleBeginAtZero: true,-->
-<!--                          }]-->
-<!--                        },-->
-<!--                          options: {-->
-<!--                             responsive: false-->
-<!--                          }-->
-<!--                    });-->
-<!--                },-->
-<!--                error : function(request, status, error) { // 결과 에러 콜백함수-->
-<!--                        console.log(error)-->
-<!--                }-->
-<!--            })-->
+                        var htmlCode = "";
 
-<!--            &lt;!&ndash; 소환사 정보 요청 &ndash;&gt;-->
-<!--            $.ajax({-->
-<!--                type : 'get',              // 타입 (get, post, put 등등)-->
-<!--                url : '/riotApiController/getLeagueDataByPuuid/' + puuid,     // 요청할 서버url-->
-<!--                async : true,               // 비동기화 여부 (default : true)-->
-<!--                headers : {                 // Http header-->
-<!--                    "Content-Type" : "application/json",-->
-<!--                    "X-HTTP-Method-Override" : "GET"-->
-<!--                },-->
-<!--                dataType : 'json',-->
-<!--                success : function(result) { // 결과 성공 콜백함수-->
-<!--                    $('.rankInfo-spinner').css("display","none");-->
-<!--                    $('.rankInfo').css("display","block");-->
-<!--                    if(result != null){-->
-<!--                        $('#rankImg').attr("src","/img/"+result.tier+".png")-->
-<!--                        $('#tier-rank').text(result.tier + " " + result.rank)-->
-<!--                        $('#win-lose').text(result.wins+"승 "+result.losses+"패")-->
-<!--                        $('#win-rate').text("승률 " + (Math.round((result.wins / (result.wins+result.losses))*100)) + "%")-->
-<!--                    }-->
-<!--                },-->
-<!--                error : function(request, status, error) { // 결과 에러 콜백함수-->
-<!--                        console.log(error)-->
-<!--                }-->
-<!--            })-->
+                        for( var chat of chatLogs ){
+                            if(chat.sender.nickname == [[${@rq.getSiteUser().nickname}]]){
+                                htmlCode += rightBox([[${@rq.getProfileImg()}]], chat.sender.nickname, chat.content)
+
+                            }else{
+                                if(chat.sender.nickname == result.chattingRoom.siteUser.nickname){
+                                    htmlCode += leftBox(result.siteUserImgPath, chat.sender.nickname, chat.content)
+                                }else{
+                                    htmlCode += leftBox(result.expertImgPath, chat.sender.nickname, chat.content)
+                                }
+                            }
+                        }
+
+                        $("#chattingArea").append(htmlCode);
+                        $("#chattingArea").scrollTop($("#chattingArea")[0].scrollHeight);
+
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                    }
+                })
+            }
 
         });
     </script>

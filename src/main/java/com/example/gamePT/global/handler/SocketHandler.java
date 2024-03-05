@@ -74,7 +74,7 @@ public class SocketHandler extends TextWebSocketHandler {
                 WebSocketSession wss = (WebSocketSession) temp.get(k);
                 if(wss != null) {
                     try {
-                        TextMessage textMessage = new TextMessage(obj.toString());
+                        TextMessage textMessage = new TextMessage(gson.toJson(obj));
                         wss.sendMessage(textMessage);
 
                     } catch (IOException e) {
