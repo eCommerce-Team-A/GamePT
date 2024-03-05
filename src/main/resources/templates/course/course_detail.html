@@ -123,17 +123,14 @@
                 </div>
 
                 <div class="col-lg-4 col-xl-3 p-0">
-                    <div class="card border-0 shadow col-lg-12">
+                    <div class="card border-0 shadow col-lg-12 sticky-sm-top" style="top:115px;">
                         <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
                             담당 전문가 이력
                         </div>
                         <hr class="w-100 m-0">
                         <div class="m-2">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
+                            <div th:text="@{|인게임명 : ${course.author.gameName} #${course.author.tag}|}"></div>
+                            <div>경력 ~</div>
                         </div>
                         <hr class="w-100 m-0">
                         <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
@@ -142,7 +139,8 @@
                         <hr class="w-100 p-0 m-0">
                         <div class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
                         <a href="#" class="btn mx-4" style="background-color: #0D6EFD; color:white;">구매하기</a>
-                        <a href="#" class="btn my-1 mb-3 mx-4" style="background-color: #0D6EFD; color:white;">장바구니 넣기</a>
+                        <a href="#" class="btn my-1 mb-3 mx-4" style="background-color: #0D6EFD; color:white;">장바구니
+                            넣기</a>
                     </div>
                 </div>
             </div>
@@ -152,113 +150,18 @@
             <h1 class="fw-bold">관련 강의</h1>
             <div class="vesitable">
                 <div class="owl-carousel vegetable-carousel justify-content-center">
-
-                    <a href="#">
+                    <a th:each="relateCourse : ${courseListByAuthor}" th:href="@{|/course/detail/${relateCourse.id}|}">
                         <div class="border border-primary rounded position-relative vesitable-item">
-                            <div class="vesitable-img">
+                            <div>
                                 <img src="https://i.namu.wiki/i/30whaqjessttAI0WYfI4EUeLMpBsch-usaIxU4jd3GJlKj1WSMwTDR8CODkb7dGvhi4PNfYcawLB-scDXOl4QmsFMJpQMTtPhKXUy9DCBdg1_hgm38L9MbXVlRGqDi8KbOwkouNYVtX5NDvT9L3vbA.webp"
-                                     class="img-fluid w-100 rounded-top" alt="">
+                                     class="vesitable-img w-100 rounded-top" alt="">
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                 style="top: 10px; right: 10px;">
-                                대장 강사
+                                 style="top: 10px; right: 10px;" th:text="${relateCourse.gameCategoryname}">
                             </div>
                             <div class="p-4 rounded-bottom">
-                                <h4>신광식</h4>
-                                <div>
-                                    개발자 연구소장
-                                </div>
-                                <div>
-                                    넷카라쿠배당 드가자~
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="#">
-                        <div class="border border-primary rounded position-relative vesitable-item">
-                            <div class="vesitable-img">
-                                <img src="https://i.namu.wiki/i/UpBemT9FWEQLTEy2mr1UOfdHKI5falKCBX5HTEAbmgayHHadrmDCk559aG8UeovO2P1NZPuJSuM31vpw1edOaN3fWzLBRfihJoudSPjSDPy6gpieLFfFNoO5CkSUrmZv-76S29qAdaptK9OvyRmQAA.webp"
-                                     class="img-fluid w-100 rounded-top" alt="">
-                            </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                 style="top: 10px; right: 10px;">
-                                우수 학생
-                            </div>
-                            <div class="p-4 rounded-bottom">
-                                <h4>김두한</h4>
-                                <div>
-                                    개발자 연구소 반장
-                                </div>
-                                <div>
-                                    넷카라쿠배당 드가자~
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="#">
-                        <div class="border border-primary rounded position-relative vesitable-item">
-                            <div class="vesitable-img">
-                                <img src="https://i.namu.wiki/i/RGkr0udf66wY1Qht4nAo6mBS0PRoDKzGMkfz7BSyZ1a6WCWSMizfXwvUzfYj6ty0WeIV-ZUeY_6T6ltPlkgVUdf1y86v3i5jEuSoepTrBMAuujn-U40ZnLezXGWRYgUFKkvYrMVH-9hVypVzEFkrHw.webp"
-                                     class="img-fluid w-100 rounded-top" alt="">
-                            </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                 style="top: 10px; right: 10px;">
-                                우수 학생
-                            </div>
-                            <div class="p-4 rounded-bottom">
-                                <h4>김대호</h4>
-                                <div>
-                                    개발자 연구소 우수 학생
-                                </div>
-                                <div>
-                                    넷카라쿠배당 드가자~
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="#">
-                        <div class="border border-primary rounded position-relative vesitable-item">
-                            <div class="vesitable-img">
-                                <img src="https://i.namu.wiki/i/NfoLir0aEVQURPb0RFGD1u-G2YVFOD-8SaLuPZuZ7PAeWIsPMGGlO_kS6575Qs_QKvs9gwtyi5cLjQURSdbVlnwA9XN_XYPyJ3QHt61iNwdvpmHFkWDU-huYsGbPA0Qe5pLMrzQIaNPu2PK-XRTelw.webp"
-                                     class="img-fluid w-100 rounded-top" alt="">
-                            </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                 style="top: 10px; right: 10px;">
-                                그냥 학생
-                            </div>
-                            <div class="p-4 rounded-bottom">
-                                <h4>전오빈</h4>
-                                <div>
-                                    개발자 연구소 연구원
-                                </div>
-                                <div>
-                                    넷카라쿠배당 드가자~
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="#">
-                        <div class="border border-primary rounded position-relative vesitable-item">
-                            <div class="vesitable-img">
-                                <img src="https://i.namu.wiki/i/blVyIGCxGdHoC24pHBc_S92-_VizSaRvsFlfvCCR9YlheDcmbbZ45QRSLn1aKBgzexWUGFz7fa8qCyru6yCfA7Rdbbo9Z2ZxhzdoB9peLXlobdxP2-gfdcMHAB0xuUGfzrluOb6GQeUmu0vHblEaHQ.webp"
-                                     class="img-fluid w-100 rounded-top" alt="">
-                            </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                 style="top: 10px; right: 10px;">
-                                그냥 학생
-                            </div>
-                            <div class="p-4 rounded-bottom">
-                                <h4>양희동</h4>
-                                <div>
-                                    개발자 연구소 연구원
-                                </div>
-                                <div>
-                                    넷카라쿠배당 드가자~
-                                </div>
+                                <h4 th:text="${relateCourse.author.nickname}">신광식</h4>
+                                <div th:text="${relateCourse.introduce}"></div>
                             </div>
                         </div>
                     </a>
@@ -266,62 +169,63 @@
             </div>
         </div>
     </div>
-    <script>
-        $(function() {
-            $('#postReview').on("click", function(){
-                var token = $("meta[name='_csrf']").attr("content");
-                var header = $("meta[name='_csrf_header']").attr("content");
-                console.log(1)
-                $.ajax({
-                     type : 'post',              // 타입 (get, post, put 등등)
-                     url : '/review/create',     // 요청할 서버url
-                     async : true,               // 비동기화 여부 (default : true)
-                     beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                         xhr.setRequestHeader(header, token);
-                     },
-                     headers : {                 // Http header
-                         "Content-Type" : "application/json",
-                         "X-HTTP-Method-Override" : "POST"
-                     },
-                     dataType : 'text',          // 데이터 타입 (html, xml, json, text 등등)
-                     data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
-                         "courseId" : [[${course.id}]],
-                         "content" : $('#reviewContent').val().trim(),
-                         "score" : $('.rating__star.fas.fa-star').length
-                     }),
-                     success : function(result) { // 결과 성공 콜백함수
-                            $('#reviews').replaceWith(result);
-                            $('.rating__star.fas.fa-star').removeClass('fas fa-star').addClass('far fa-star');
-                            $('#reviewContent').val('');
+</div>
+<script>
+    $(function() {
+        $('#postReview').on("click", function(){
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            console.log(1)
+            $.ajax({
+                 type : 'post',              // 타입 (get, post, put 등등)
+                 url : '/review/create',     // 요청할 서버url
+                 async : true,               // 비동기화 여부 (default : true)
+                 beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                     xhr.setRequestHeader(header, token);
+                 },
+                 headers : {                 // Http header
+                     "Content-Type" : "application/json",
+                     "X-HTTP-Method-Override" : "POST"
+                 },
+                 dataType : 'text',          // 데이터 타입 (html, xml, json, text 등등)
+                 data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                     "courseId" : [[${course.id}]],
+                     "content" : $('#reviewContent').val().trim(),
+                     "score" : $('.rating__star.fas.fa-star').length
+                 }),
+                 success : function(result) { // 결과 성공 콜백함수
+                        $('#reviews').replaceWith(result);
+                        $('.rating__star.fas.fa-star').removeClass('fas fa-star').addClass('far fa-star');
+                        $('#reviewContent').val('');
 
-                     },
-                     error : function(request, status, error) { // 결과 에러 콜백함수
-                             console.log(error);
-                     }
-                })
-            });
-            const ratingStars = [...document.getElementsByClassName("rating__star")];
-            function executeRating(stars) {
-                const starClassActive = "rating__star fas fa-star";
-                const starClassUnactive = "rating__star far fa-star";
-                const starsLength = stars.length;
-                let i;
-                stars.map((star) => {
-                    star.onclick = () => {
-
-                        i = stars.indexOf(star);
-                        if (star.className.indexOf(starClassUnactive) !== -1) {
-                            for (i; i >= 0; --i) stars[i].className = starClassActive;
-                        } else {
-                            for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
-                        }
-                    };
-                });
-            }
-
-            executeRating(ratingStars);
-
+                 },
+                 error : function(request, status, error) { // 결과 에러 콜백함수
+                         console.log(error);
+                 }
+            })
         });
-    </script>
+        const ratingStars = [...document.getElementsByClassName("rating__star")];
+        function executeRating(stars) {
+            const starClassActive = "rating__star fas fa-star";
+            const starClassUnactive = "rating__star far fa-star";
+            const starsLength = stars.length;
+            let i;
+            stars.map((star) => {
+                star.onclick = () => {
+
+                    i = stars.indexOf(star);
+                    if (star.className.indexOf(starClassUnactive) !== -1) {
+                        for (i; i >= 0; --i) stars[i].className = starClassActive;
+                    } else {
+                        for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
+                    }
+                };
+            });
+        }
+
+        executeRating(ratingStars);
+
+    });
+</script>
 </div>
 </html>
