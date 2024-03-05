@@ -64,10 +64,15 @@ public class DuoArticleController {
         return "redirect:/duo/list";
     }
 
-    @GetMapping("/api/create")
-    public String apiCreate() {
-        return "duo/api_test_form";
+    @PostMapping("/modify/{id}")
+    public String modify(@PathVariable("id") Long id,@RequestParam("myLine") String myLine, @RequestParam("findLine") String findLine,
+                         @RequestParam(name = "microphoneCheck", defaultValue = "false") boolean microphoneCheck,
+                         @RequestParam("content") String content) {
+        DuoArticle duoArticle = this.duoArticleService.getDuoArticleById(id);
+        this.duoArticleService.modifyDuoArticle(duoArticle, myLine, findLine, microphoneCheck, content);
+        return "redirect:/duo/list";
     }
+
 
     public Integer getNum(String rank) {
         return switch (rank) {

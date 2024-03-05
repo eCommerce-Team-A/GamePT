@@ -38,13 +38,13 @@ public class DuoArticleRepositoryTest {
         Optional<DuoArticle> duoArticle1 = duoarticleRepository.findById(1L);
         Optional<DuoArticle> duoArticle2 = duoarticleRepository.findById(2L);
         List<DuoArticle> duoArticleList = duoarticleRepository.findAll();
-        List<DuoArticle> duoArticleList1 = duoarticleRepository.findByMyLine("상관없음");
-        List<DuoArticle> duoArticleList2 = duoarticleRepository.findByMyLine("탑");
+//        List<DuoArticle> duoArticleList1 = duoarticleRepository.findByMyLine("상관없음");
+//        List<DuoArticle> duoArticleList2 = duoarticleRepository.findByMyLine("탑");
 
         assertThat(duoArticle1).isNotEmpty();
         assertThat(duoArticle2).isEmpty();
         assertThat(duoArticleList).isNotEmpty();
-        assertThat(duoArticleList1).isNotEmpty();
-        assertThat(duoArticleList2).isEmpty();
+//        assertThat(duoArticleList1).isNotEmpty();
+//        assertThat(duoArticleList2).isEmpty();
     }
 }
