@@ -9,6 +9,17 @@ public class SiteUserRequest {
 
     @Getter
     @Setter
+    public static class Update {
+
+        private String password;
+        private String passwordConfirm;
+
+        @NotEmpty(message = "닉네임을 입력해 주세요")
+        private String nickname;
+    }
+
+    @Getter
+    @Setter
     public static class Signup {
 
         @NotEmpty(message = "로그인 아이디를 입력해 주세요")

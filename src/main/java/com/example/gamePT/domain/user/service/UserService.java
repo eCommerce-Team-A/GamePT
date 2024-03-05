@@ -8,6 +8,7 @@ import com.example.gamePT.domain.user.response.SiteUserResponse;
 import com.example.gamePT.global.email.EmailService;
 import com.example.gamePT.global.riot.service.RiotApiService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,47 @@ public class UserService {
     private final RiotApiService riotApiService;
 
     private final ImageService imageService;
+
+    public boolean update(SiteUserRequest.Update updateForm, BindingResult br, MultipartFile profileImg) throws IOException {
+
+        if(br.hasErrors()){
+            return false;
+        }
+
+        SiteUser loginedUser = findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        // 가입된 닉네임이 있는 경우
+        if(userRepository.existsByNickname(updateForm.getNickname())){
+
+            // 현재 내 닉네임과 다른데 아이디가 있는 경우
+            if(!loginedUser.getNickname().equals(updateForm.getNickname())){
+                br.rejectValue("nickname", "unique violation", "가입되어 있는 nickname 입니다.");
+                return false;
+            }
+        }else{
+            loginedUser = loginedUser.toBuilder().nickname(updateForm.getNickname()).build();
+            userRepository.save(loginedUser);
+        }
+
+
+        if(!updateForm.getPassword().equals("") || !updateForm.getPasswordConfirm().equals("")){
+            if(!updateForm.getPassword().equals(updateForm.getPasswordConfirm())){
+                br.rejectValue("passwordConfirm", "not matched", "passwordConfirm does not matched with password");
+                return false;
+            }
+
+            loginedUser = loginedUser.toBuilder().password(passwordEncoder.encode(updateForm.getPassword())).build();
+
+            userRepository.save(loginedUser);
+        }
+
+
+        if(!profileImg.isEmpty()){
+            imageService.updateUserProfile(loginedUser,profileImg);
+        }
+
+        return true;
+    }
 
     public SiteUserResponse.AjaxRes findUserInfoAjax(SiteUserRequest.FindUserInfoAjax data) {
 
@@ -196,4 +238,5 @@ public class UserService {
     public String getProfileImg(Long id) {
         return imageService.getSiteUserImg(id);
     }
+
 }

@@ -1,0 +1,217 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="mb-3">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">마이페이지</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item active text-white">홈</li>
+            <li class="breadcrumb-item active text-white">마이페이지</li>
+            <li class="breadcrumb-item active text-white">정보수정</li>
+        </ol>
+    </div>
+    <!-- Single Page Header End -->
+
+    <div class="container-fluid mt-5">
+        <div class="container mx-auto">
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-center my-4">정보수정</h4>
+                    <form class="needs-validation" th:action="@{/user/update}" th:object="${update}" method="post"
+                          enctype="multipart/form-data">
+
+                        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+
+                        <div>
+                            <div class="input-group has-validation">
+                                <div class="form-floating">
+                                    <input name="username" type="text" class="form-control"
+                                           id="username" placeholder="Login Id" aria-describedby="inputGroupPrepend"
+                                           required disabled>
+                                    <label for="username">Login Id</label>
+                                </div>
+                            </div>
+
+                            <div class="form-floating mt-3">
+                                <input name="password" type="password" th:field="*{password}"
+                                       class="form-control pwInput" id="password" placeholder="Password"
+                                       aria-describedby="inputGroupPrepend">
+                                <label for="password">Password</label>
+                            </div>
+                            <div class="form-floating mt-2">
+                                <input name="passwordConfirm" type="password" th:field="*{passwordConfirm}"
+                                       class="form-control pwInput" id="passwordConfirm" placeholder="Password"
+                                       aria-describedby="inputGroupPrepend">
+                                <label for="passwordConfirm">Password Confirm</label>
+                            </div>
+
+                            <div class="input-group mt-3 has-validation">
+                                <div class="form-floating">
+                                    <input name="email" type="email" class="form-control" id="email"
+                                           placeholder="Email" aria-describedby="inputGroupPrepend" required disabled>
+                                    <label for="email">Email</label>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 input-group has-validation">
+
+                                <div class="form-floating">
+                                    <input name="nickname" type="text" class="form-control" th:field="*{nickname}"
+                                           id="nickname" placeholder="Password" aria-describedby="inputGroupPrepend"
+                                           required>
+                                    <label for="nickname">Nickname</label>
+                                </div>
+
+                                <button class="btn btn-outline-secondary isUnique" type="button" value="nickname">중복확인
+                                </button>
+                            </div>
+
+                            <div class="mt-3 input-group has-validation">
+
+                                <div class="form-floating">
+                                    <input name="gameName" type="text" class="form-control"
+                                           id="gameName" placeholder="소환사명" aria-describedby="inputGroupPrepend"
+                                           required disabled>
+                                    <label for="nickname">소환사명</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input name="tag" type="text" class="form-control"
+                                           placeholder="tag" aria-describedby="inputGroupPrepend" required disabled>
+                                    <label for="nickname">태그 ex)KR1 </label>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 row">
+                                <div class="col-2 text-center">
+                                    <img style="width:50px; height:50px; object-fit:scale-down;" id="preview"
+                                         class="preview" th:src="${@rq.getProfileImg()}">
+                                </div>
+                                <div class="col-10">
+                                    <input class="form-control form-control-lg profileImg" name="profileImg"
+                                           id="profileImg" type="file" accept="image/gif,image/jpeg,image/png">
+                                </div>
+                            </div>
+
+                            <button class="btn btn-outline-primary my-3 w-100" id="submit" type="submit">정보수정</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function(){
+
+            var username = "[[${@rq.getSiteUser().username}]]";
+            var email = "[[${@rq.getSiteUser().email}]]";
+            var nickname = "[[${@rq.getSiteUser().nickname}]]";
+            var gameName = "[[${@rq.getSiteUser().gameName}]]";
+            var tag = "[[${@rq.getSiteUser().tag}]]";
+
+            $("#username").val(username);
+            $("#email").val(email);
+            $("#nickname").val(nickname);
+            $("#gameName").val(gameName);
+            $("#tag").val(tag);
+
+            $("#profileImg").on("change", function(event) {
+
+                var file = event.target.files[0];
+
+                var reader = new FileReader();
+                reader.onload = function(e) {
+
+                    $("#preview").attr("src", e.target.result);
+                }
+                reader.readAsDataURL(file);
+            });
+
+
+            $( '.pwInput' ).change( function() {
+                if($('#password').val().trim() != $('#passwordConfirm').val().trim()){
+                    $('.pwInput').removeClass("is-valid");
+                    $('.pwInput').addClass("is-invalid");
+                }else{
+                    $('.pwInput').removeClass("is-invalid");
+                    $('.pwInput').addClass("is-valid");
+                }
+            } );
+<!--            if($("#password").val().trim() != "" || $("#passwordConfirm").val().trim() != ""){-->
+<!--                if($("#password").val().trim() = "" || $("#passwordConfirm").val().trim() = ""){-->
+<!--                    alert("비밀번호 또는 비밀번호 확인을 입력해 주세요")-->
+<!--                    return;-->
+<!--                }-->
+<!--                -->
+<!--                if($("#password").val().trim() != $("#passwordConfirm").val().trim()){-->
+<!--                    alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.")-->
+<!--                    return;-->
+<!--                }-->
+<!--            }-->
+
+
+            $( ".isUnique" ).on( "click", function() {
+
+
+
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                var name = $(this).val();
+                var value = $('#'+name).val().trim();
+
+                $.ajax({
+                    type : 'post',              // 타입 (get, post, put 등등)
+                    url : '/user/isUnique',     // 요청할 서버url
+                    async : true,               // 비동기화 여부 (default : true)
+                    beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                        xhr.setRequestHeader(header, token);
+                    },
+                    headers : {                 // Http header
+                        "Content-Type" : "application/json",
+                        "X-HTTP-Method-Override" : "POST"
+                    },
+                    dataType : 'text',          // 데이터 타입 (html, xml, json, text 등등)
+                    data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                        "name" : name,
+                        "value" : value
+                    }),
+                    success : function(result) { // 결과 성공 콜백함수
+                        let data = JSON.parse(result)
+                        alert(data.message);
+
+                        if(name == "gameName-tag"){
+                            if(data.isSuccess){
+                                $('#gameName').addClass("is-valid");
+                                $('#tag').addClass("is-valid");
+                            }else{
+                                $('#gameName').addClass("is-invalid");
+                                $('#tag').addClass("is-invalid");
+                            }
+                        }else{
+                            if(data.isSuccess){
+                                $('#'+name).addClass("is-valid");
+                            }else{
+                                $('#'+name).addClass("is-invalid");
+                            }
+                        }
+
+
+                      },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                    }
+                })
+
+            } );
+
+        });
+
+
+    </script>
+
+
+</div>
+</html>
