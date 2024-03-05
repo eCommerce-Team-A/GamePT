@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/chat")
+@RequestMapping("/chattingRoom")
 public class ChattingRoomController {
 
     private final ChattingRoomService chattingRoomService;
@@ -28,7 +28,7 @@ public class ChattingRoomController {
 
         model.addAttribute("chattingRooms",chattingRooms);
 
-        return "/chat/list";
+        return "/chattingRoom/list";
     }
 
 }

@@ -1,0 +1,205 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="mb-3">
+
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">마이페이지</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item active text-white">홈</li>
+            <li class="breadcrumb-item active text-white">채팅</li>
+        </ol>
+    </div>
+    <!-- Single Page Header End -->
+
+    <div class="container-fluid my-5">
+        <div class="container mx-auto">
+            <div class="row">
+                <div class="col-1 text-center">
+                    <div class="bg-white rounded-circle shadow" style=" width:100px; height:100px; overflow: hidden;">
+                        <img th:src="${@rq.getProfileImg()}" alt="..."
+                             style="width:100%; height:100%; object-fit:contain;">
+                    </div>
+                </div>
+                <div class="col-11 d-flex flex-column justify-content-center">
+                    <div class="ms-2 fw-bold">
+                        <h4>
+                            안녕하세요 [[${@rq.getSiteUser().nickname}]] 님!
+                        </h4>
+                        <div>
+                            <span class="badge rounded-pill text-bg-primary ">[[${@rq.getSiteUser().tag}]]</span>
+                            [[${@rq.getSiteUser().gameName}]]
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card mt-4 border-0 shadow" style="height: 600px;">
+                <div class="row g-0 h-100">
+                    <div class="col-4 border-end h-100">
+                        <div class="text-center py-3">
+                            <i class="fa-regular fa-comments"></i> 채팅 리스트
+                        </div>
+                        <div class="list-group text-center rounded-0" id="list-tab" role="tablist">
+                            <div th:each="room : ${chattingRooms}">
+                                <a th:if="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" ><i class="fa-regular fa-comment"></i> [[${room.expert.username}]] 님</a>
+                                <a th:unless="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" ><i class="fa-regular fa-comment"></i>  [[${room.siteUser.username}]] 님</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8 h-100" >
+                        <div class="card-body h-100">
+                            <div id="unClick">
+                                채팅방을 선택해 주세요
+                            </div>
+                            <div id="chattingArea" class="h-100" style="display:none; position:relative;">
+                                <div>
+                                   1234
+                                </div>
+                                <div class="w-100" style="position: absolute; bottom:0;">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="msg" placeholder="채팅채팅" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                        <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+
+        $(function() {
+
+            var websocket = ""
+            var roomNum = "";
+
+            $(".list-group-item").click(function(){
+                $("#unClick").hide();
+                $("#chattingArea").show();
+                roomNum = $(this).attr("value");
+
+                websocket = new WebSocket("ws://localhost:8010/wss/chat/"+roomNum);
+                websocket.onmessage = onMessage;
+
+            });
+
+            function send(){
+
+                var data = {
+                    "roomNumber" : roomNum,
+                    "content" : $("#msg").val(),
+                    "username" : [[${@rq.getSiteUser().username}]]
+                };
+
+                websocket.send(JSON.stringify(data));
+
+                msg.value = '';
+            }
+
+            $("#button-send").on("click", (e) => {
+                send();
+            });
+
+            function onMessage(msg) {
+                console.log(JSON.stringify(msg.data));
+            }
+
+            <!-- 최근 20 경기 -->
+<!--            $.ajax({-->
+<!--                type : 'get',              // 타입 (get, post, put 등등)-->
+<!--                url : '/riotApiController/getMatchesByPuuid/' + puuid,     // 요청할 서버url-->
+<!--                async : true,               // 비동기화 여부 (default : true)-->
+<!--                headers : {                 // Http header-->
+<!--                    "Content-Type" : "application/json",-->
+<!--                    "X-HTTP-Method-Override" : "GET"-->
+<!--                },-->
+<!--                dataType : 'json',-->
+<!--                success : function(result) { // 결과 성공 콜백함수-->
+<!--                    $('.games-spinner').css("display","none");-->
+<!--                    $('.games').css("display","block");-->
+
+<!--                    const ctx = document.getElementById('myChart').getContext('2d');-->
+
+<!--                    var win = result.win;-->
+<!--                    var lose = result.lose;-->
+<!--                    var kills = result.kills;-->
+<!--                    var deaths = result.deaths;-->
+<!--                    var assists = result.assists;-->
+<!--                    var teamTotalKill = result.teamTotalKill;-->
+
+<!--                    var killPercent = Math.round((kills + assists)/teamTotalKill *100);-->
+<!--                    $('#killPercent').text("킬관여 " + killPercent + "%") ;-->
+
+<!--                    var title = (win+lose) + "전 " + win + "승 "+ lose + "패"-->
+<!--                    $('#chart-title').text(title);-->
+
+<!--                    var avgKills = Math.round(((kills / (win+lose)) + Number.EPSILON) * 10) / 10;-->
+<!--                    var avgDeaths = Math.round(((deaths / (win+lose)) + Number.EPSILON) * 10) / 10;-->
+<!--                    var avgAssists = Math.round(((assists / (win+lose)) + Number.EPSILON) * 10) / 10;-->
+
+<!--                    $('#avgKills').text(avgKills);-->
+<!--                    $('#avgDeaths').text(avgDeaths);-->
+<!--                    $('#avgAssists').text(avgAssists);-->
+
+<!--                    var totalKDA = Math.round((((avgKills + avgAssists) / avgDeaths) + Number.EPSILON) * 100) / 100 + " : " + "1";-->
+<!--                    $('#totalKDA').text(totalKDA);-->
+
+
+<!--                    var myChart = new Chart(ctx, {-->
+<!--                      type: 'doughnut',-->
+<!--                        data: {-->
+<!--                          datasets: [{-->
+<!--                            data: [win, lose], // 승,패-->
+<!--                            backgroundColor: [-->
+<!--                              '#5383e8',-->
+<!--                              '#e84057'-->
+<!--                            ],-->
+<!--                            borderWidth: 0,-->
+<!--                            scaleBeginAtZero: true,-->
+<!--                          }]-->
+<!--                        },-->
+<!--                          options: {-->
+<!--                             responsive: false-->
+<!--                          }-->
+<!--                    });-->
+<!--                },-->
+<!--                error : function(request, status, error) { // 결과 에러 콜백함수-->
+<!--                        console.log(error)-->
+<!--                }-->
+<!--            })-->
+
+<!--            &lt;!&ndash; 소환사 정보 요청 &ndash;&gt;-->
+<!--            $.ajax({-->
+<!--                type : 'get',              // 타입 (get, post, put 등등)-->
+<!--                url : '/riotApiController/getLeagueDataByPuuid/' + puuid,     // 요청할 서버url-->
+<!--                async : true,               // 비동기화 여부 (default : true)-->
+<!--                headers : {                 // Http header-->
+<!--                    "Content-Type" : "application/json",-->
+<!--                    "X-HTTP-Method-Override" : "GET"-->
+<!--                },-->
+<!--                dataType : 'json',-->
+<!--                success : function(result) { // 결과 성공 콜백함수-->
+<!--                    $('.rankInfo-spinner').css("display","none");-->
+<!--                    $('.rankInfo').css("display","block");-->
+<!--                    if(result != null){-->
+<!--                        $('#rankImg').attr("src","/img/"+result.tier+".png")-->
+<!--                        $('#tier-rank').text(result.tier + " " + result.rank)-->
+<!--                        $('#win-lose').text(result.wins+"승 "+result.losses+"패")-->
+<!--                        $('#win-rate').text("승률 " + (Math.round((result.wins / (result.wins+result.losses))*100)) + "%")-->
+<!--                    }-->
+<!--                },-->
+<!--                error : function(request, status, error) { // 결과 에러 콜백함수-->
+<!--                        console.log(error)-->
+<!--                }-->
+<!--            })-->
+
+        });
+    </script>
+
+</div>
+</html>
