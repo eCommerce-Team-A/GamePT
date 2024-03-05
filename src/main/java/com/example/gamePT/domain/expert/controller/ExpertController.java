@@ -42,7 +42,7 @@ public class ExpertController {
     }
 
     @GetMapping("/approve/{id}")
-    public String approve(@PathVariable("id") Long id, Model model) {
+    public String approve(@PathVariable("id") Long id) {
         Expert expert = this.expertService.getExpertById(id);
         SiteUser siteUser = this.userService.findByUsername(expert.getUserName());
         this.userService.approveExpert(siteUser, "Expert");
@@ -52,7 +52,7 @@ public class ExpertController {
     }
 
     @GetMapping("/reject/{id}")
-    public String reject(@PathVariable("id") Long id, Model model) {
+    public String reject(@PathVariable("id") Long id) {
         Expert expert = this.expertService.getExpertById(id);
         SiteUser siteUser = this.userService.findByUsername(expert.getUserName());
         this.userService.approveExpert(siteUser, "Member");
