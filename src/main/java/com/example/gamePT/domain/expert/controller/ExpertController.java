@@ -4,6 +4,7 @@ import com.example.gamePT.domain.expert.entity.Expert;
 import com.example.gamePT.domain.expert.service.ExpertService;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.service.UserService;
+import com.example.gamePT.global.email.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ExpertController {
     private final ExpertService expertService;
     private final UserService userService;
+    private final EmailService emailService;
 
     @GetMapping("/request")
     public String request() {
@@ -45,6 +47,7 @@ public class ExpertController {
         SiteUser siteUser = this.userService.findByUsername(expert.getUserName());
         this.userService.approveExpert(siteUser, "Expert");
         this.expertService.deleteExpert(expert);
+        this.emailService.sendApprove(siteUser.getEmail(), true, siteUser);
         return "redirect:/expert/list";
     }
 
@@ -52,7 +55,9 @@ public class ExpertController {
     public String reject(@PathVariable("id") Long id, Model model) {
         Expert expert = this.expertService.getExpertById(id);
         SiteUser siteUser = this.userService.findByUsername(expert.getUserName());
+        this.userService.approveExpert(siteUser, "Member");
         this.expertService.deleteExpert(expert);
+        this.emailService.sendApprove(siteUser.getEmail(), false, siteUser);
         return "redirect:/expert/list";
     }
 

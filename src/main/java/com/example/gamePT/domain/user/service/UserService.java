@@ -170,18 +170,15 @@ public class UserService {
                 .puuid(puuid)
                 .build();
 
+        //admin 권한
         if (signup.getUsername().equals("admin")) {
             signUp = signUp.toBuilder()
                     .authorization("Admin")
                     .build();
         }
 
-
         SiteUser siteUser = userRepository.save(signUp);
         this.imageService.saveUserProfile(siteUser, profileImg);
-
-
-
 
         return true;
     }
