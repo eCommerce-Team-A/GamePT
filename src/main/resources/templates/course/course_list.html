@@ -15,7 +15,8 @@
     <!-- Fruits Shop Start-->
     <div class="container-fluid fruite py-5">
         <div class="container d-flex justify-content-end">
-            <a href="/course/create" class="btn btn-primary btn-sm">강의 등록</a>
+            <a th:if="${@rq.isLogin() and @rq.getSiteUser().authorization == 'Expert'}"
+                    href="/course/create" class="btn btn-primary btn-sm">강의 등록</a>
         </div>
         <div class="container mt-4 pb-5">
 

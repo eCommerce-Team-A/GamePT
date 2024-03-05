@@ -1,0 +1,57 @@
+<html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div layout:fragment="content" class="mb-3">
+    <link rel="stylesheet" href="/css/duoArticle.css" type="text/css">
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5 Nanum">
+        <h1 class="text-center text-white display-6">듀오찾기</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item active text-white">홈</li>
+            <li class="breadcrumb-item active text-white">듀오찾기</li>
+        </ol>
+    </div>
+    <!-- Single Page Header End -->
+
+
+    <div style="margin-top: 2rem; display: flex; justify-content: center; flex-wrap: wrap;">
+
+        <div id="bottom" style="border-radius:1px; width: 1320px; border: 1px solid gray;">
+            <table class="table table-hover Nanum" style="border-radius: 3px; height: 100%;">
+                <thead style="border: darkgray; text-align: center; border-radius: 3px;">
+                <tr style="font-size: 13px;">
+                    <th scope="col">번호</th>
+                    <th scope="col">ID</th>
+                    <th scope="col" style="width: 50%">소개</th>
+                    <th scope="col">등록일</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody style="text-align: center">
+                <tr th:each="expert, loop : ${expertList}">
+                    <td >
+                        <div class="article-element"><span th:text="${loop.count}"></span></div>
+                    </td>
+                    <td style="width: 20%">
+                        <div class="article-element"><a href="/" th:text="${expert.userName}"></a></div>
+                    </td>
+                    <td style="width: 50%">
+                        <div class="article-element"><span th:text="${expert.introduce}" ></span></div>
+                    </td>
+                    <td>
+                        <div class="article-element"><span th:text="${#temporals.format(expert.createDate, 'yyyy-MM-dd')}"></span></div>
+                    </td>
+                    <td style="width: 10%">
+                        <div class="article-element">
+                            <a class="btn btn-sm btn-outline-primary" th:href="@{|/expert/approve/${expert.id}|}" style="margin-right: 6px;">승인</a>
+                            <a class="btn btn-sm btn-outline-secondary" th:href="@{|/expert/reject/${expert.id}|}">거부</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+</html>
+
