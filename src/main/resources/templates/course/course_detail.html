@@ -1,8 +1,8 @@
 <html layout:decorate="~{layout}">
-<meta name="_csrf" th:content="${_csrf.token}"/>
-<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 <div layout:fragment="content" class="mb-3">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
@@ -67,48 +67,54 @@
                                 </div>
                                 <div class="tab-pane" id="nav-review" role="tabpanel"
                                      aria-labelledby="nav-review-tab">
-                                    <form action="#">
-                                        <h4 class="fw-bold">리뷰 작성하기</h4>
-                                        <div class="row g-1">
-                                            <div class="col-lg-12">
-                                                <div class="rating">
-                                                    <i class="rating__star far fa-star"></i>
-                                                    <i class="rating__star far fa-star"></i>
-                                                    <i class="rating__star far fa-star"></i>
-                                                    <i class="rating__star far fa-star"></i>
-                                                    <i class="rating__star far fa-star"></i>
-                                                </div>
-                                                <div class="border-bottom rounded mt-4 mb-2">
+                                    <h4 class="fw-bold">리뷰 작성하기</h4>
+                                    <div class="row g-1">
+                                        <div class="col-lg-12">
+                                            <div class="rating">
+                                                <i class="rating__star far fa-star"></i>
+                                                <i class="rating__star far fa-star"></i>
+                                                <i class="rating__star far fa-star"></i>
+                                                <i class="rating__star far fa-star"></i>
+                                                <i class="rating__star far fa-star"></i>
+                                            </div>
+                                            <div class="border-bottom rounded mt-4 mb-2">
                                                     <textarea name="reviewContent" id="reviewContent"
                                                               class="form-control" cols="30" rows="4"
                                                               style="resize:none"
                                                               placeholder="리뷰 내용을 작성해주세요. *"
                                                               spellcheck="false"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="d-flex justify-content-end py-1">
-                                                    <button id="postReview"
-                                                            class="btn border border-secondary text-primary rounded-pill px-3 py-2">
-                                                        작성 완료
-                                                    </button>
-                                                </div>
                                             </div>
                                         </div>
-                                    </form>
+                                        <div class="col-lg-12">
+                                            <div class="d-flex justify-content-end py-1">
+                                                <button id="postReview"
+                                                        class="btn border border-secondary text-primary rounded-pill px-3 py-2">
+                                                    작성 완료
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <hr>
-
-                                    <div th:each="review : ${reviewList}" id="reviews" class="d-flex">
-                                        <!--                                        <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"-->
-                                        <!--                                             style="width: 100px; height: 100px;" alt="">-->
-                                        <div>
-                                            <p class="mb-2" style="font-size: 14px;"></p>
+                                    <div id="reviews">
+                                        <div th:each="review : ${reviewList}">
                                             <div class="d-flex justify-content-between">
-                                                <h5 th:text="@{|작성자 : ${review.author.username}|}"></h5>
+                                                <div>
+                                                    <i th:if="${review.score}!=0"
+                                                       th:each="num : ${#numbers.sequence(1,review.score)}"
+                                                       class="review__rating fas fa-star"></i><i
+                                                        th:if="    ${review.score}!=5"
+                                                        th:each="num : ${#numbers.sequence(review.score+1,5)}"
+                                                        class="review__rating far fa-star"></i>
+                                                </div>
+                                                <div>
+                                                    <span th:text="@{|${review.author.username}|}"></span>
+                                                    <span class="mb-1">|</span>
+                                                    <span th:text="@{|${#temporals.format(review.createDate, 'yy-MM-dd HH:mm')}|}"></span>
+                                                </div>
                                             </div>
-                                            <p th:text="${review.content}"></p>
+                                            <p class="mt-4" th:text="${review.content}"></p>
+                                            <hr>
                                         </div>
-                                        <hr>
                                     </div>
                                 </div>
                             </div>
@@ -119,25 +125,24 @@
                 <div class="col-lg-4 col-xl-3 p-0">
                     <div class="card border-0 shadow col-lg-12">
                         <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
-                            담당 전문가님 이력
+                            담당 전문가 이력
                         </div>
                         <hr class="w-100 m-0">
                         <div class="m-2">
-                            <div>1번째 줄</div>
-                            <div>2번째 줄</div>
-                            <div>3번째 줄</div>
-                            <div>4번째 줄</div>
-                            <div>5번째 줄</div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
                         </div>
-                    </div>
-                    <div class="card border-0 shadow mt-3 col-lg-12">
+                        <hr class="w-100 m-0">
                         <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
                             구매 정보
                         </div>
                         <hr class="w-100 p-0 m-0">
-                        <div class="m-2 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
-                        <button class="btn" style="background-color: #0D6EFD; color:white;">구매하기</button>
-                        <button class="btn">장바구니 넣기</button>
+                        <div class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
+                        <a href="#" class="btn mx-4" style="background-color: #0D6EFD; color:white;">구매하기</a>
+                        <a href="#" class="btn my-1 mb-3 mx-4" style="background-color: #0D6EFD; color:white;">장바구니 넣기</a>
                     </div>
                 </div>
             </div>
@@ -151,7 +156,8 @@
                     <a href="#">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="https://i.namu.wiki/i/30whaqjessttAI0WYfI4EUeLMpBsch-usaIxU4jd3GJlKj1WSMwTDR8CODkb7dGvhi4PNfYcawLB-scDXOl4QmsFMJpQMTtPhKXUy9DCBdg1_hgm38L9MbXVlRGqDi8KbOwkouNYVtX5NDvT9L3vbA.webp" class="img-fluid w-100 rounded-top" alt="">
+                                <img src="https://i.namu.wiki/i/30whaqjessttAI0WYfI4EUeLMpBsch-usaIxU4jd3GJlKj1WSMwTDR8CODkb7dGvhi4PNfYcawLB-scDXOl4QmsFMJpQMTtPhKXUy9DCBdg1_hgm38L9MbXVlRGqDi8KbOwkouNYVtX5NDvT9L3vbA.webp"
+                                     class="img-fluid w-100 rounded-top" alt="">
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                                  style="top: 10px; right: 10px;">
@@ -172,7 +178,8 @@
                     <a href="#">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="https://i.namu.wiki/i/UpBemT9FWEQLTEy2mr1UOfdHKI5falKCBX5HTEAbmgayHHadrmDCk559aG8UeovO2P1NZPuJSuM31vpw1edOaN3fWzLBRfihJoudSPjSDPy6gpieLFfFNoO5CkSUrmZv-76S29qAdaptK9OvyRmQAA.webp" class="img-fluid w-100 rounded-top" alt="">
+                                <img src="https://i.namu.wiki/i/UpBemT9FWEQLTEy2mr1UOfdHKI5falKCBX5HTEAbmgayHHadrmDCk559aG8UeovO2P1NZPuJSuM31vpw1edOaN3fWzLBRfihJoudSPjSDPy6gpieLFfFNoO5CkSUrmZv-76S29qAdaptK9OvyRmQAA.webp"
+                                     class="img-fluid w-100 rounded-top" alt="">
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                                  style="top: 10px; right: 10px;">
@@ -193,7 +200,8 @@
                     <a href="#">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="https://i.namu.wiki/i/RGkr0udf66wY1Qht4nAo6mBS0PRoDKzGMkfz7BSyZ1a6WCWSMizfXwvUzfYj6ty0WeIV-ZUeY_6T6ltPlkgVUdf1y86v3i5jEuSoepTrBMAuujn-U40ZnLezXGWRYgUFKkvYrMVH-9hVypVzEFkrHw.webp" class="img-fluid w-100 rounded-top" alt="">
+                                <img src="https://i.namu.wiki/i/RGkr0udf66wY1Qht4nAo6mBS0PRoDKzGMkfz7BSyZ1a6WCWSMizfXwvUzfYj6ty0WeIV-ZUeY_6T6ltPlkgVUdf1y86v3i5jEuSoepTrBMAuujn-U40ZnLezXGWRYgUFKkvYrMVH-9hVypVzEFkrHw.webp"
+                                     class="img-fluid w-100 rounded-top" alt="">
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                                  style="top: 10px; right: 10px;">
@@ -214,7 +222,8 @@
                     <a href="#">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="https://i.namu.wiki/i/NfoLir0aEVQURPb0RFGD1u-G2YVFOD-8SaLuPZuZ7PAeWIsPMGGlO_kS6575Qs_QKvs9gwtyi5cLjQURSdbVlnwA9XN_XYPyJ3QHt61iNwdvpmHFkWDU-huYsGbPA0Qe5pLMrzQIaNPu2PK-XRTelw.webp" class="img-fluid w-100 rounded-top" alt="">
+                                <img src="https://i.namu.wiki/i/NfoLir0aEVQURPb0RFGD1u-G2YVFOD-8SaLuPZuZ7PAeWIsPMGGlO_kS6575Qs_QKvs9gwtyi5cLjQURSdbVlnwA9XN_XYPyJ3QHt61iNwdvpmHFkWDU-huYsGbPA0Qe5pLMrzQIaNPu2PK-XRTelw.webp"
+                                     class="img-fluid w-100 rounded-top" alt="">
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                                  style="top: 10px; right: 10px;">
@@ -235,7 +244,8 @@
                     <a href="#">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="https://i.namu.wiki/i/blVyIGCxGdHoC24pHBc_S92-_VizSaRvsFlfvCCR9YlheDcmbbZ45QRSLn1aKBgzexWUGFz7fa8qCyru6yCfA7Rdbbo9Z2ZxhzdoB9peLXlobdxP2-gfdcMHAB0xuUGfzrluOb6GQeUmu0vHblEaHQ.webp" class="img-fluid w-100 rounded-top" alt="">
+                                <img src="https://i.namu.wiki/i/blVyIGCxGdHoC24pHBc_S92-_VizSaRvsFlfvCCR9YlheDcmbbZ45QRSLn1aKBgzexWUGFz7fa8qCyru6yCfA7Rdbbo9Z2ZxhzdoB9peLXlobdxP2-gfdcMHAB0xuUGfzrluOb6GQeUmu0vHblEaHQ.webp"
+                                     class="img-fluid w-100 rounded-top" alt="">
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                                  style="top: 10px; right: 10px;">
@@ -252,21 +262,16 @@
                             </div>
                         </div>
                     </a>
-
-
                 </div>
             </div>
         </div>
-
-
     </div>
-
     <script>
         $(function() {
             $('#postReview').on("click", function(){
                 var token = $("meta[name='_csrf']").attr("content");
                 var header = $("meta[name='_csrf_header']").attr("content");
-
+                console.log(1)
                 $.ajax({
                      type : 'post',              // 타입 (get, post, put 등등)
                      url : '/review/create',     // 요청할 서버url
@@ -278,22 +283,24 @@
                          "Content-Type" : "application/json",
                          "X-HTTP-Method-Override" : "POST"
                      },
-                     dataType : 'json',          // 데이터 타입 (html, xml, json, text 등등)
+                     dataType : 'text',          // 데이터 타입 (html, xml, json, text 등등)
                      data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
-                         "content" : $('#content').val().trim(),
-                         "score" : $('#score').val()
+                         "courseId" : [[${course.id}]],
+                         "content" : $('#reviewContent').val().trim(),
+                         "score" : $('.rating__star.fas.fa-star').length
                      }),
                      success : function(result) { // 결과 성공 콜백함수
-                            console.log(result)
-                       },
+                            $('#reviews').replaceWith(result);
+                            $('.rating__star.fas.fa-star').removeClass('fas fa-star').addClass('far fa-star');
+                            $('#reviewContent').val('');
+
+                     },
                      error : function(request, status, error) { // 결과 에러 콜백함수
-                             alert("리뷰 작성 실패");
+                             console.log(error);
                      }
-                 });
+                })
             });
-
             const ratingStars = [...document.getElementsByClassName("rating__star")];
-
             function executeRating(stars) {
                 const starClassActive = "rating__star fas fa-star";
                 const starClassUnactive = "rating__star far fa-star";
@@ -303,19 +310,18 @@
                     star.onclick = () => {
 
                         i = stars.indexOf(star);
-                        console.log(i);
                         if (star.className.indexOf(starClassUnactive) !== -1) {
                             for (i; i >= 0; --i) stars[i].className = starClassActive;
                         } else {
                             for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
                         }
-                      };
+                    };
                 });
             }
+
             executeRating(ratingStars);
-    });
 
+        });
     </script>
-
 </div>
 </html>

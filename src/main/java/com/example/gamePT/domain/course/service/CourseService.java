@@ -4,7 +4,6 @@ import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.repository.CourseRepository;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +14,9 @@ import java.util.Optional;
 public class CourseService {
     private final CourseRepository courseRepository;
 
-    public Course createCourse(SiteUser siteUser, String gameCategoryname, String name, String introduce, String curriculum, Integer price) {
+    public Course createCourse(SiteUser author, String gameCategoryname, String name, String introduce, String curriculum, Integer price) {
         Course course = Course.builder()
-                .siteUser(siteUser)
+                .author(author)
                 .gameCategoryname(gameCategoryname)
                 .name(name)
                 .introduce(introduce)
