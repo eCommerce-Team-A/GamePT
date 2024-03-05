@@ -32,6 +32,6 @@ public class EmailService {
         }
 
         return randomNumber;
-
     }
+
 }

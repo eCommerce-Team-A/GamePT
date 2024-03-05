@@ -39,4 +39,5 @@ public class SiteUser extends BaseEntity {
     private String tag;
 
     private String puuid;
+
 }

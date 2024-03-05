@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,28 +31,28 @@ public class UserService {
 
     public boolean update(SiteUserRequest.Update updateForm, BindingResult br, MultipartFile profileImg) throws IOException {
 
-        if(br.hasErrors()){
+        if (br.hasErrors()) {
             return false;
         }
 
         SiteUser loginedUser = findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         // 가입된 닉네임이 있는 경우
-        if(userRepository.existsByNickname(updateForm.getNickname())){
+        if (userRepository.existsByNickname(updateForm.getNickname())) {
 
             // 현재 내 닉네임과 다른데 아이디가 있는 경우
-            if(!loginedUser.getNickname().equals(updateForm.getNickname())){
+            if (!loginedUser.getNickname().equals(updateForm.getNickname())) {
                 br.rejectValue("nickname", "unique violation", "가입되어 있는 nickname 입니다.");
                 return false;
             }
-        }else{
+        } else {
             loginedUser = loginedUser.toBuilder().nickname(updateForm.getNickname()).build();
             userRepository.save(loginedUser);
         }
 
 
-        if(!updateForm.getPassword().equals("") || !updateForm.getPasswordConfirm().equals("")){
-            if(!updateForm.getPassword().equals(updateForm.getPasswordConfirm())){
+        if (!updateForm.getPassword().equals("") || !updateForm.getPasswordConfirm().equals("")) {
+            if (!updateForm.getPassword().equals(updateForm.getPasswordConfirm())) {
                 br.rejectValue("passwordConfirm", "not matched", "passwordConfirm does not matched with password");
                 return false;
             }
@@ -64,8 +63,8 @@ public class UserService {
         }
 
 
-        if(!profileImg.isEmpty()){
-            imageService.updateUserProfile(loginedUser,profileImg);
+        if (!profileImg.isEmpty()) {
+            imageService.updateUserProfile(loginedUser, profileImg);
         }
 
         return true;
@@ -75,33 +74,33 @@ public class UserService {
 
         String message = "";
 
-        if(data.getType().isEmpty()){
+        if (data.getType().isEmpty()) {
             return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("유효하지 않은 접근입니다.").build();
         }
 
-        if(data.getType().equals("findUsername")){
-            if(data.getNickname().isEmpty() || data.getEmail().isEmpty()){
+        if (data.getType().equals("findUsername")) {
+            if (data.getNickname().isEmpty() || data.getEmail().isEmpty()) {
                 return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("유효하지 않은 접근입니다.").build();
             }
 
             Optional<SiteUser> siteUser = userRepository.findByNicknameAndEmail(data.getNickname(), data.getEmail());
 
-            if(siteUser.isEmpty()){
+            if (siteUser.isEmpty()) {
                 return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("해당 정보의 회원이 없습니다.").build();
             }
 
-            return SiteUserResponse.AjaxRes.builder().isSuccess(true).message("회원님의 아이디는 " +siteUser.get().getUsername() +" 입니다.").build();
+            return SiteUserResponse.AjaxRes.builder().isSuccess(true).message("회원님의 아이디는 " + siteUser.get().getUsername() + " 입니다.").build();
 
         }
 
-        if(data.getType().equals("findPassword")){
-            if(data.getUsername().isEmpty() || data.getEmail().isEmpty()){
+        if (data.getType().equals("findPassword")) {
+            if (data.getUsername().isEmpty() || data.getEmail().isEmpty()) {
                 return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("유효하지 않은 접근입니다.").build();
             }
 
             Optional<SiteUser> siteUser = userRepository.findByUsernameAndEmail(data.getUsername(), data.getEmail());
 
-            if(siteUser.isEmpty()){
+            if (siteUser.isEmpty()) {
                 return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("해당 정보의 회원이 없습니다.").build();
             }
 
@@ -123,44 +122,43 @@ public class UserService {
 
     public SiteUserResponse.AjaxRes isUnique(SiteUserRequest.IsUniqueAjax isUniqueAjax, BindingResult br) {
 
-        if(br.hasErrors()){
+        if (br.hasErrors()) {
             return SiteUserResponse.AjaxRes.builder().isSuccess(false).message(br.getAllErrors().get(0).getDefaultMessage()).build();
         }
 
-        String[] strArray = {"username", "email", "nickname","gameName-tag"};
+        String[] strArray = {"username", "email", "nickname", "gameName-tag"};
 
-        if(!Arrays.stream(strArray).anyMatch(isUniqueAjax.getName()::equals)) {
+        if (!Arrays.stream(strArray).anyMatch(isUniqueAjax.getName()::equals)) {
             return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("잘못된 요청 입니다.").build();
         }
 
-        if(isUniqueAjax.getName().equals("username") && this.userRepository.existsByUsername(isUniqueAjax.getValue())){
+        if (isUniqueAjax.getName().equals("username") && this.userRepository.existsByUsername(isUniqueAjax.getValue())) {
             return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("이미 가입 되어 있는 아이디 입니다.").build();
-        }else if(isUniqueAjax.getName().equals("email") && this.userRepository.existsByEmail(isUniqueAjax.getValue())){
+        } else if (isUniqueAjax.getName().equals("email") && this.userRepository.existsByEmail(isUniqueAjax.getValue())) {
             return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("이미 가입 되어 있는 이메일 입니다.").build();
-        }
-        else if(isUniqueAjax.getName().equals("nickname") && this.userRepository.existsByNickname(isUniqueAjax.getValue())){
+        } else if (isUniqueAjax.getName().equals("nickname") && this.userRepository.existsByNickname(isUniqueAjax.getValue())) {
             return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("이미 가입 되어 있는 닉네임 입니다.").build();
         } else if (isUniqueAjax.getName().equals("gameName-tag")) {
             String[] gameName_tagList = isUniqueAjax.getValue().split("라이엇");
 
-            String puuid = riotApiService.getPuuid(gameName_tagList[0],gameName_tagList[1]);
+            String puuid = riotApiService.getPuuid(gameName_tagList[0], gameName_tagList[1]);
 
-            if (puuid == null){
+            if (puuid == null) {
                 return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("존재하지 않는 소환사입니다.").build();
             }
-            if (this.userRepository.existsByPuuid(puuid)){
+            if (this.userRepository.existsByPuuid(puuid)) {
                 return SiteUserResponse.AjaxRes.builder().isSuccess(false).message("이미 가입되어 있는 소환사입니다.").build();
             }
         }
 
-        return SiteUserResponse.AjaxRes.builder().isSuccess(true).message(isUniqueAjax.getValue()+"은 사용 가능 합니다.").build();
+        return SiteUserResponse.AjaxRes.builder().isSuccess(true).message(isUniqueAjax.getValue() + "은 사용 가능 합니다.").build();
     }
 
     public boolean signUp(SiteUserRequest.Signup signup, BindingResult br, MultipartFile profileImg) throws IOException {
 
         String puuid = riotApiService.getPuuid(signup.getGameName(), signup.getTag());
 
-        if(!this.signupValidate(signup,br,puuid)) return false;
+        if (!this.signupValidate(signup, br, puuid)) return false;
 
         SiteUser signUp = SiteUser.builder()
                 .username(signup.getUsername())
@@ -172,16 +170,25 @@ public class UserService {
                 .puuid(puuid)
                 .build();
 
-        SiteUser siteUser = userRepository.save(signUp);
+        if (signup.getUsername().equals("admin")) {
+            signUp = signUp.toBuilder()
+                    .authorization("Admin")
+                    .build();
+        }
 
+
+        SiteUser siteUser = userRepository.save(signUp);
         this.imageService.saveUserProfile(siteUser, profileImg);
+
+
+
 
         return true;
     }
 
-    private boolean signupValidate(SiteUserRequest.Signup signup, BindingResult br, String puuid){
+    private boolean signupValidate(SiteUserRequest.Signup signup, BindingResult br, String puuid) {
 
-        if(br.hasErrors()){
+        if (br.hasErrors()) {
             return false;
         }
 
@@ -192,7 +199,7 @@ public class UserService {
             return false;
         }
 
-        if(this.userRepository.existsByPuuid(puuid)){
+        if (this.userRepository.existsByPuuid(puuid)) {
 
             br.rejectValue("puuid", "unique violation", "가입 되어 있는 소환사 입니다.");
 
@@ -238,5 +245,13 @@ public class UserService {
     public String getProfileImg(Long id) {
         return imageService.getSiteUserImg(id);
     }
+
+    public void approveExpert(SiteUser siteUser, String authorization) {
+        SiteUser changeUser = siteUser.toBuilder()
+                .authorization(authorization)
+                .build();
+        this.userRepository.save(changeUser);
+    }
+
 
 }

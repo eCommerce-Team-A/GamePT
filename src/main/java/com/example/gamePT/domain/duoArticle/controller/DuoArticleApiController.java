@@ -29,7 +29,6 @@ public class DuoArticleApiController {
         } else {
             duoArticleList = this.duoArticleService.getDulArticlesByMyLine(line);
         }
-        model.addAttribute("duoArticleList", duoArticleList);
         return "duo/list::#duoArticle1";
     }
 
