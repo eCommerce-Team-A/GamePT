@@ -78,6 +78,10 @@
                     </div>
                     <a href="contact.html" class="nav-item nav-link">Contact</a>
                     <a th:href="@{/duo/list}" class="nav-item nav-link">듀오</a>
+                    <a th:if="${@rq.isLogin() and @rq.getSiteUser().authorization == 'Member'}"
+                       th:href="@{/expert/request}" class="nav-item nav-link">전문가 등록</a>
+                    <a th:if="${@rq.isLogin() and @rq.getSiteUser().authorization == 'Admin'}"
+                       th:href="@{/expert/list}" class="nav-item nav-link">전문가 승인</a>
                 </div>
 
                 <div class="d-flex m-4 me-0" th:if="${@rq.isLogin()}">
