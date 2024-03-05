@@ -169,63 +169,62 @@
             </div>
         </div>
     </div>
-</div>
-<script>
-    $(function() {
-        $('#postReview').on("click", function(){
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
-            console.log(1)
-            $.ajax({
-                 type : 'post',              // 타입 (get, post, put 등등)
-                 url : '/review/create',     // 요청할 서버url
-                 async : true,               // 비동기화 여부 (default : true)
-                 beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                     xhr.setRequestHeader(header, token);
-                 },
-                 headers : {                 // Http header
-                     "Content-Type" : "application/json",
-                     "X-HTTP-Method-Override" : "POST"
-                 },
-                 dataType : 'text',          // 데이터 타입 (html, xml, json, text 등등)
-                 data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
-                     "courseId" : [[${course.id}]],
-                     "content" : $('#reviewContent').val().trim(),
-                     "score" : $('.rating__star.fas.fa-star').length
-                 }),
-                 success : function(result) { // 결과 성공 콜백함수
-                        $('#reviews').replaceWith(result);
-                        $('.rating__star.fas.fa-star').removeClass('fas fa-star').addClass('far fa-star');
-                        $('#reviewContent').val('');
+    <script>
+        $(function() {
+            $('#postReview').on("click", function(){
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+                console.log(1)
+                $.ajax({
+                     type : 'post',              // 타입 (get, post, put 등등)
+                     url : '/review/create',     // 요청할 서버url
+                     async : true,               // 비동기화 여부 (default : true)
+                     beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                         xhr.setRequestHeader(header, token);
+                     },
+                     headers : {                 // Http header
+                         "Content-Type" : "application/json",
+                         "X-HTTP-Method-Override" : "POST"
+                     },
+                     dataType : 'text',          // 데이터 타입 (html, xml, json, text 등등)
+                     data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                         "courseId" : [[${course.id}]],
+                         "content" : $('#reviewContent').val().trim(),
+                         "score" : $('.rating__star.fas.fa-star').length
+                     }),
+                     success : function(result) { // 결과 성공 콜백함수
+                            $('#reviews').replaceWith(result);
+                            $('.rating__star.fas.fa-star').removeClass('fas fa-star').addClass('far fa-star');
+                            $('#reviewContent').val('');
 
-                 },
-                 error : function(request, status, error) { // 결과 에러 콜백함수
-                         console.log(error);
-                 }
-            })
-        });
-        const ratingStars = [...document.getElementsByClassName("rating__star")];
-        function executeRating(stars) {
-            const starClassActive = "rating__star fas fa-star";
-            const starClassUnactive = "rating__star far fa-star";
-            const starsLength = stars.length;
-            let i;
-            stars.map((star) => {
-                star.onclick = () => {
-
-                    i = stars.indexOf(star);
-                    if (star.className.indexOf(starClassUnactive) !== -1) {
-                        for (i; i >= 0; --i) stars[i].className = starClassActive;
-                    } else {
-                        for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
-                    }
-                };
+                     },
+                     error : function(request, status, error) { // 결과 에러 콜백함수
+                             console.log(error);
+                     }
+                })
             });
-        }
+            const ratingStars = [...document.getElementsByClassName("rating__star")];
+            function executeRating(stars) {
+                const starClassActive = "rating__star fas fa-star";
+                const starClassUnactive = "rating__star far fa-star";
+                const starsLength = stars.length;
+                let i;
+                stars.map((star) => {
+                    star.onclick = () => {
 
-        executeRating(ratingStars);
+                        i = stars.indexOf(star);
+                        if (star.className.indexOf(starClassUnactive) !== -1) {
+                            for (i; i >= 0; --i) stars[i].className = starClassActive;
+                        } else {
+                            for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
+                        }
+                    };
+                });
+            }
 
-    });
-</script>
+            executeRating(ratingStars);
+
+        });
+    </script>
 </div>
 </html>
