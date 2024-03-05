@@ -27,11 +27,8 @@ public class ReviewController {
     public String create(@RequestBody ReviewCreateForm reviewCreateForm, Principal principal,
                          Model model) {
         SiteUser author = this.userService.findByUsername(principal.getName());
-        this.reviewService.create(author, reviewCreateForm.getCourseId(), reviewCreateForm.getContent(),
-                reviewCreateForm.getScore());
-
-        List<Review> reviewList = this.reviewService.findByCourseId(reviewCreateForm.getCourseId());
-        model.addAttribute("reviewList", reviewList);
+        model.addAttribute("reviewList",this.reviewService.create(author, reviewCreateForm.getCourseId(), reviewCreateForm.getContent(),
+                reviewCreateForm.getScore()));
 
         return "course/course_detail::#reviews";
     }
