@@ -15,4 +15,5 @@ public class QnAService {
     public List<QnA> getQnAList() {
         return qnARepository.findAll();
     }
+
 }
