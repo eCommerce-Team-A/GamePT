@@ -3,6 +3,7 @@ package com.example.gamePT.domain.chatLog.entity;
 import com.example.gamePT.domain.chatthingRoom.entity.ChattingRoom;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.global.jpa.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -19,6 +20,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class ChatLog extends BaseEntity {
 
+    @JsonIgnore
     @ManyToOne
     private ChattingRoom chattingRoom;
 

@@ -6,6 +6,7 @@ import com.example.gamePT.domain.chatthingRoom.entity.ChattingRoom;
 import com.example.gamePT.domain.chatthingRoom.serivce.ChattingRoomService;
 import com.example.gamePT.domain.user.service.UserService;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
@@ -17,6 +18,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,10 +37,12 @@ public class SocketHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
+
         //메시지 발송
         String msg = message.getPayload(); //JSON형태의 String메시지를 받는다.
-        Map obj = gson.fromJson(msg,Map.class);
 
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> obj = gson.fromJson(msg, type);
 
         ChattingRoom cr = chattingRoomService.findById(Long.parseLong((String)obj.get("roomNumber")));
 
@@ -46,7 +50,7 @@ public class SocketHandler extends TextWebSocketHandler {
                 .chattingRoom(cr)
                 .content((String) obj.get("content"))
                 .isCheck(false)
-                .sender(userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()))
+                .sender(userService.findByUsername((String) obj.get("username")))
                 .build();
 
         chatLogService.save(chatLog);
@@ -70,7 +74,7 @@ public class SocketHandler extends TextWebSocketHandler {
                 WebSocketSession wss = (WebSocketSession) temp.get(k);
                 if(wss != null) {
                     try {
-                        TextMessage textMessage = new TextMessage(obj.toString());
+                        TextMessage textMessage = new TextMessage(gson.toJson(obj));
                         wss.sendMessage(textMessage);
 
                     } catch (IOException e) {
@@ -80,9 +84,6 @@ public class SocketHandler extends TextWebSocketHandler {
             }
         }
     }
-
-
-
 
     @SuppressWarnings("unchecked")
     @Override
