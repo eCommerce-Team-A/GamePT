@@ -6,6 +6,7 @@ import com.example.gamePT.domain.user.entity.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ import java.util.Optional;
 public class QnAService {
     private final QnARepository qnARepository;
 
-    public QnA create(SiteUser author, String title, String content, Boolean isBlind) {
+    public QnA createQnA(SiteUser author, String title, String content, Boolean isBlind) {
         QnA qnA = QnA.builder()
                 .author(author)
                 .title(title)
@@ -24,7 +25,8 @@ public class QnAService {
         this.qnARepository.save(qnA);
         return findById(qnA.getId());
     }
-    public QnA update(Long id, String title,String content,Boolean isBlind){
+
+    public QnA update(Long id, String title, String content, Boolean isBlind) {
         QnA _qnA = findById(id);
         QnA qnA = _qnA.toBuilder()
                 .title(title)
@@ -51,5 +53,22 @@ public class QnAService {
     public void delete(Long id) {
         QnA qnA = findById(id);
         this.qnARepository.delete(qnA);
+    }
+
+    public void createAnswer(QnA _qnA, String answer) {
+        QnA qnA = _qnA.toBuilder()
+                .isAnswered(true)
+                .answer(answer)
+                .answerDate(LocalDateTime.now())
+                .build();
+        this.qnARepository.save(qnA);
+    }
+
+    public void updateAnswer(QnA _qnA, String answer) {
+        QnA qnA = _qnA.toBuilder()
+                .answer(answer)
+                .answerDate(LocalDateTime.now())
+                .build();
+        this.qnARepository.save(qnA);
     }
 }
