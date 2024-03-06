@@ -2,6 +2,16 @@ a {
 	color:inherit;
 	text-decoration:none;
 }
+
+.left-message::before {
+  content: "";
+  top: 50%;
+  left: 1em;
+  border: 1em solid transparent; /** border를 모두 투명하게 설정 **/
+  border-right: 1em solid rgba(92, 174, 227, 0.9); /** 오른쪽 border만 남김 **/
+  z-index: 0;
+}
+
 /*** Spinner Start ***/
 #spinner {
     opacity: 0;

@@ -1,0 +1,241 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="mb-3">
+
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">마이페이지</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item active text-white">홈</li>
+            <li class="breadcrumb-item active text-white">채팅</li>
+        </ol>
+    </div>
+    <!-- Single Page Header End -->
+
+    <div class="container-fluid my-5">
+        <div class="container mx-auto">
+            <div class="row">
+                <div class="col-1 text-center">
+                    <div class="bg-white rounded-circle shadow" style=" width:100px; height:100px; overflow: hidden;">
+                        <img th:src="${@rq.getProfileImg()}" alt="..."
+                             style="width:100%; height:100%; object-fit:contain;">
+                    </div>
+                </div>
+                <div class="col-11 d-flex flex-column justify-content-center">
+                    <div class="ms-2 fw-bold">
+                        <h4>
+                            안녕하세요 [[${@rq.getSiteUser().nickname}]] 님!
+                        </h4>
+                        <div>
+                            <span class="badge rounded-pill text-bg-primary ">[[${@rq.getSiteUser().tag}]]</span>
+                            [[${@rq.getSiteUser().gameName}]]
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card mt-4 border-0 shadow" style="height: 600px;">
+                <div class="row g-0 h-100">
+                    <div class="col-4 border-end h-100">
+                        <div class="text-center py-3">
+                            <i class="fa-regular fa-comments"></i> 채팅 리스트
+                        </div>
+                        <div class="list-group text-center rounded-0" id="list-tab" role="tablist">
+                            <div th:each="room : ${chattingRooms}">
+                                <a th:if="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" ><i class="fa-regular fa-comment"></i> [[${room.expert.username}]] 님</a>
+                                <a th:unless="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" ><i class="fa-regular fa-comment"></i>  [[${room.siteUser.username}]] 님</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8 h-100" >
+                        <div class="card-body h-100">
+                            <div id="unClick">
+                                 채팅방을 선택해 주세요
+                            </div>
+                            <div id="chat" class="h-100" style="display:none; position:relative;">
+                                <div id="chattingArea" style="height:520px; overflow: auto;">
+
+                                </div>
+                                <div class="w-100" style="position: absolute; bottom:0;">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="msg" placeholder="채팅채팅" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                        <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+
+        $(function() {
+
+            var websocket = "";
+            var roomNum = "";
+
+            $(".list-group-item").click(function(){
+                $("#unClick").hide();
+                $("#chat").show();
+                roomNum = $(this).attr("value");
+
+                var url = "ws://localhost:8010/wss/chat/"+roomNum;
+
+                if(url == websocket.url){
+                    return;
+                }
+
+                $("#chattingArea").empty();
+
+                getChattingRoom(roomNum);
+
+                if(websocket != ""){
+                    websocket.close();
+                }
+
+                websocket = new WebSocket(url);
+                websocket.onmessage = onMessage;
+
+            });
+
+            function send(){
+
+                var data = {
+                    "roomNumber" : roomNum,
+                    "content" : $("#msg").val(),
+                    "username" : [[${@rq.getSiteUser().username}]],
+                    "nickname" : [[${@rq.getSiteUser().nickname}]],
+                    "profile" : [[${@rq.getProfileImg()}]]
+                };
+
+                websocket.send(JSON.stringify(data));
+
+                msg.value = '';
+            }
+
+            $("#button-send").on("click", (e) => {
+                send();
+            });
+
+            function onMessage(msg) {
+
+                var temp = JSON.parse(msg.data);
+
+                if(temp.hasOwnProperty('sessionId')){
+                    return;
+                }
+
+                var htmlCode = "";
+
+                if(temp.username != [[${@rq.getSiteUser().username}]]){
+
+                    htmlCode += leftBox(temp.profile, temp.nickname, temp.content)
+                }
+                else{
+                    htmlCode += rightBox(temp.profile, temp.nickname, temp.content)
+                }
+
+                $("#chattingArea").append(htmlCode);
+
+                $("#chattingArea").scrollTop($("#chattingArea")[0].scrollHeight);
+
+            }
+
+            function leftBox(src, nickname, content) {
+
+                var htmlCode = '<div class="left-box mb-4">' +
+                    '<div class="d-flex align-items-center">' +
+                        '<div class="bg-white rounded-circle shadow" style=" width:30px; height:30px; overflow: hidden;">' +
+                            '<img src="'+src+'" alt="..." style="width:100%; height:100%; object-fit:contain;">' +
+                        '</div>' +
+                        '<div class="ms-1 text-secondary">' +
+                            nickname +
+                        '</div>'+
+                    '</div>' +
+                    '<div class="card mt-2 border-primary shadow">' +
+                        '<div class="card-body px-3 py-2">' +
+                            content +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+                return htmlCode;
+            }
+
+            function rightBox(src, nickname, content) {
+
+                var htmlCode = '<div class="right-box mb-4">' +
+                        '<div class="d-flex justify-content-end align-items-center">' +
+                            '<div class="me-1 text-secondary">' +
+                                nickname +
+                            '</div>' +
+                            '<div class="bg-white rounded-circle shadow" style=" width:30px; height:30px; overflow: hidden;">' +
+                                '<img src="'+src+'" alt="..." style="width:100%; height:100%; object-fit:contain;">' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="card mt-2 border-success text-end shadow">'+
+                            '<div class="card-body px-3 py-2">' +
+                                content +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+
+                return htmlCode;
+            }
+
+            <!--  엔터 누를시 클릭  -->
+            $("#msg").keyup(function(event) {
+                if (event.which === 13) {
+                    $("#button-send").trigger("click");
+                }
+            });
+
+            <!--  지난 대화 불러오기 -->
+            function getChattingRoom(roomNum) {
+                $.ajax({
+                    type : 'get',              // 타입 (get, post, put 등등)
+                    url : '/chattingRoom/getChattingRoomById/' + roomNum,     // 요청할 서버url
+                    async : true,               // 비동기화 여부 (default : true)
+                    headers : {                 // Http header
+                        "Content-Type" : "application/json",
+                        "X-HTTP-Method-Override" : "GET"
+                    },
+                    dataType : 'json',
+                    success : function(result) { // 결과 성공 콜백함수
+
+                        var chatLogs = result.chattingRoom.chatLogs
+
+                        var htmlCode = "";
+
+                        for( var chat of chatLogs ){
+                            if(chat.sender.nickname == [[${@rq.getSiteUser().nickname}]]){
+                                htmlCode += rightBox([[${@rq.getProfileImg()}]], chat.sender.nickname, chat.content)
+
+                            }else{
+                                if(chat.sender.nickname == result.chattingRoom.siteUser.nickname){
+                                    htmlCode += leftBox(result.siteUserImgPath, chat.sender.nickname, chat.content)
+                                }else{
+                                    htmlCode += leftBox(result.expertImgPath, chat.sender.nickname, chat.content)
+                                }
+                            }
+                        }
+
+                        $("#chattingArea").append(htmlCode);
+                        $("#chattingArea").scrollTop($("#chattingArea")[0].scrollHeight);
+
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                    }
+                })
+            }
+
+        });
+    </script>
+
+</div>
+</html>
