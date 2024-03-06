@@ -1,0 +1,90 @@
+<html layout:decorate="~{layout}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+<div layout:fragment="content" class="mb-3">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5 Nanum">
+        <h1 class="text-center text-white display-6" th:text="${siteUser.username}"></h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item active text-white">홈</li>
+            <li class="breadcrumb-item active text-white">전문가 목록</li>
+            <li class="breadcrumb-item active text-white" th:text="${siteUser.username}"></li>
+        </ol>
+    </div>
+    <!-- Single Page Header End -->
+
+
+    <!-- Single Product Start -->
+    <div class="container-fluid mt-3">
+        <div class="container pt-5">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center">
+                    <img th:src="${profileImg}" alt="..."
+                         style="width:70px; height:70px; border-radius: 50%;">
+                    <h2 class="fw-bold" th:text="${siteUser.username}" style="margin-left: 20px;"></h2>
+                </div>
+                <div class="d-flex align-items-center">
+                    <a th:if="${@rq.isLogin() and @rq.getSiteUser().username == siteUser.username}"
+                       class="btn btn-outline-primary" th:href="@{/}" role="button">수정</a>
+                    <a th:if="${@rq.isLogin() and @rq.getSiteUser().username != siteUser.username}"
+                       class="btn btn-outline-primary" th:href="@{/}" role="button">상담신청</a>
+                </div>
+            </div>
+
+            <div class="row g-5 mb-5">
+                <div class="col-lg-8 col-xl-9">
+                    <div class="row">
+                        <div class="card p-0 border-0 shadow">
+                            <ul class="list-group list-group-flush mb-5 p-4">
+                                <li class="list-group-item">
+                                    <h4 style="padding: 14px;" th:each="scoreCourse : ${scoreCourseList}">강의
+                                        <div style="padding-top: 14px; display: flex; align-items: center;">
+                                            <img src="https://i.namu.wiki/i/30whaqjessttAI0WYfI4EUeLMpBsch-usaIxU4jd3GJlKj1WSMwTDR8CODkb7dGvhi4PNfYcawLB-scDXOl4QmsFMJpQMTtPhKXUy9DCBdg1_hgm38L9MbXVlRGqDi8KbOwkouNYVtX5NDvT9L3vbA.webp"
+                                                 alt="" style="width:100px; height:100px; border-radius: 7%;">
+                                            <div style="display: flex; flex-direction: column; margin-left: 15px">
+                                                <span th:text="${scoreCourse.value.name}"></span>
+                                                <div>
+                                                    <i class="review__rating fas fa-star"></i><span
+                                                        th:text="${scoreCourse.key}"></span>
+                                                </div>
+                                                <div>
+                                                    <span th:text="${scoreCourse.value.price}"></span>
+                                                    <i class="fa-solid fa-coins"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </h4>
+                                </li>
+                                <li class="list-group-item">강의</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-xl-3 p-0">
+                    <div class="card border-0 shadow col-lg-12 sticky-sm-top" style="top:115px;">
+                        <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
+                            담당 전문가 이력
+                        </div>
+                        <hr class="w-100 m-0">
+                        <div class="m-2">
+                            <div>경력 ~</div>
+                        </div>
+                        <hr class="w-100 m-0">
+                        <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
+                            구매 정보
+                        </div>
+                        <hr class="w-100 p-0 m-0">
+                        <a href="#" class="btn mx-4" style="background-color: #0D6EFD; color:white;">구매하기</a>
+                        <a href="#" class="btn my-1 mb-3 mx-4" style="background-color: #0D6EFD; color:white;">장바구니
+                            넣기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</html>

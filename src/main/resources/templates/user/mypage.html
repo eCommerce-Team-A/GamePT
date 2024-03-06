@@ -20,18 +20,20 @@
                              style="width:100%; height:100%; object-fit:contain;">
                     </div>
                 </div>
-                <div class="col-11 d-flex flex-column justify-content-center">
-                    <div class="ms-2 fw-bold">
-                        <h4>
-                            안녕하세요 [[${@rq.getSiteUser().nickname}]] 님!
-                        </h4>
-                        <div>
-                            <span class="badge rounded-pill text-bg-primary ">[[${@rq.getSiteUser().tag}]]</span>
-                            [[${@rq.getSiteUser().gameName}]]
+                <div class="col-11 flex-column justify-content-center">
+                    <div>
+                        <div class="ms-2 fw-bold">
+                            <h4>
+                                안녕하세요 [[${@rq.getSiteUser().nickname}]] 님!
+                            </h4>
+                            <div>
+                                <span class="badge rounded-pill text-bg-primary ">[[${@rq.getSiteUser().tag}]]</span>
+                                [[${@rq.getSiteUser().gameName}]]
+                            </div>
                         </div>
                     </div>
-
                 </div>
+
             </div>
             <div class="row mt-4">
                 <div class="col-4">
@@ -40,7 +42,8 @@
                             <div class="">내 정보</div>
 
                             <div class="dropstart">
-                                <a href="#" class="px-2" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                <a href="#" class="px-2" data-bs-toggle="dropdown" data-bs-auto-close="true"
+                                   aria-expanded="false">
                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -49,11 +52,11 @@
                                             <i class="fa-regular fa-pen-to-square text-success"></i> &nbsp;정보 수정
                                         </a>
                                     </li>
-<!--                                    <li class="mt-1">-->
-<!--                                        <a class="text-dark dropdown-item deleteTeam" href="#">-->
-<!--                                            <i class="fa-regular fa-trash-can text-danger"></i> &nbsp;팀 삭제-->
-<!--                                        </a>-->
-<!--                                    </li>-->
+                                    <!--                                    <li class="mt-1">-->
+                                    <!--                                        <a class="text-dark dropdown-item deleteTeam" href="#">-->
+                                    <!--                                            <i class="fa-regular fa-trash-can text-danger"></i> &nbsp;팀 삭제-->
+                                    <!--                                        </a>-->
+                                    <!--                                    </li>-->
                                     <li class="mt-1">
                                         <a class="text-dark dropdown-item leaveTeam" href="#">
                                             <i class="fa-solid fa-right-from-bracket text-danger"></i> &nbsp;탈퇴
@@ -142,7 +145,8 @@
                             <div class="games" style="display:none;">
                                 <div class="row">
                                     <div class="col-5 d-flex flex-column align-items-center">
-                                        <div id="chart-title" class="text-secondary text-center" style="font-size:13px;">
+                                        <div id="chart-title" class="text-secondary text-center"
+                                             style="font-size:13px;">
 
                                         </div>
                                         <canvas id="myChart" width="100px" height="100px">
@@ -155,7 +159,7 @@
                                                 <div id="avgKills"></div>
                                                 <div class="mx-1">/</div>
                                                 <div id="avgDeaths" class="text-danger"></div>
-                                                <div class="mx-1"> / </div>
+                                                <div class="mx-1"> /</div>
                                                 <div id="avgAssists"></div>
                                             </div>
                                             <div id="totalKDA" class="fs-4 fw-bold">
@@ -170,7 +174,10 @@
                     </div>
 
                 </div>
-                <div class="col-8">
+
+                <div class="col-8 tab-content mb-5">
+                <div class="tab-pane active" id="nav-myPage" role="tabpanel"
+                     aria-labelledby="nav-myPage-tab">
                     <div class="card w-100 Regular shadow border-0">
                         <div class="card-header bg-white">
                             <i class="fa-solid fa-landmark"></i> 진행중인 강의
@@ -202,28 +209,31 @@
                     </div>
 
                 </div>
+
+                </div>
+
             </div>
         </div>
     </div>
 
     <script th:inline="javascript">
-        $(function() {
+        $(function () {
 
             var puuid = [[${@rq.getSiteUser().puuid}]];
 
             <!-- 최근 20 경기 -->
             $.ajax({
-                type : 'get',              // 타입 (get, post, put 등등)
-                url : '/riotApiController/getMatchesByPuuid/' + puuid,     // 요청할 서버url
-                async : true,               // 비동기화 여부 (default : true)
-                headers : {                 // Http header
-                    "Content-Type" : "application/json",
-                    "X-HTTP-Method-Override" : "GET"
+                type: 'get',              // 타입 (get, post, put 등등)
+                url: '/riotApiController/getMatchesByPuuid/' + puuid,     // 요청할 서버url
+                async: true,               // 비동기화 여부 (default : true)
+                headers: {                 // Http header
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "GET"
                 },
-                dataType : 'json',
-                success : function(result) { // 결과 성공 콜백함수
-                    $('.games-spinner').css("display","none");
-                    $('.games').css("display","block");
+                dataType: 'json',
+                success: function (result) { // 결과 성공 콜백함수
+                    $('.games-spinner').css("display", "none");
+                    $('.games').css("display", "block");
 
                     const ctx = document.getElementById('myChart').getContext('2d');
 
@@ -234,15 +244,15 @@
                     var assists = result.assists;
                     var teamTotalKill = result.teamTotalKill;
 
-                    var killPercent = Math.round((kills + assists)/teamTotalKill *100);
-                    $('#killPercent').text("킬관여 " + killPercent + "%") ;
+                    var killPercent = Math.round((kills + assists) / teamTotalKill * 100);
+                    $('#killPercent').text("킬관여 " + killPercent + "%");
 
-                    var title = (win+lose) + "전 " + win + "승 "+ lose + "패"
+                    var title = (win + lose) + "전 " + win + "승 " + lose + "패"
                     $('#chart-title').text(title);
 
-                    var avgKills = Math.round(((kills / (win+lose)) + Number.EPSILON) * 10) / 10;
-                    var avgDeaths = Math.round(((deaths / (win+lose)) + Number.EPSILON) * 10) / 10;
-                    var avgAssists = Math.round(((assists / (win+lose)) + Number.EPSILON) * 10) / 10;
+                    var avgKills = Math.round(((kills / (win + lose)) + Number.EPSILON) * 10) / 10;
+                    var avgDeaths = Math.round(((deaths / (win + lose)) + Number.EPSILON) * 10) / 10;
+                    var avgAssists = Math.round(((assists / (win + lose)) + Number.EPSILON) * 10) / 10;
 
                     $('#avgKills').text(avgKills);
                     $('#avgDeaths').text(avgDeaths);
@@ -253,50 +263,50 @@
 
 
                     var myChart = new Chart(ctx, {
-                      type: 'doughnut',
+                        type: 'doughnut',
                         data: {
-                          datasets: [{
-                            data: [win, lose], // 승,패
-                            backgroundColor: [
-                              '#5383e8',
-                              '#e84057'
-                            ],
-                            borderWidth: 0,
-                            scaleBeginAtZero: true,
-                          }]
+                            datasets: [{
+                                data: [win, lose], // 승,패
+                                backgroundColor: [
+                                    '#5383e8',
+                                    '#e84057'
+                                ],
+                                borderWidth: 0,
+                                scaleBeginAtZero: true,
+                            }]
                         },
-                          options: {
-                             responsive: false
-                          }
+                        options: {
+                            responsive: false
+                        }
                     });
                 },
-                error : function(request, status, error) { // 결과 에러 콜백함수
-                        console.log(error)
+                error: function (request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
                 }
             })
 
             <!-- 소환사 정보 요청 -->
             $.ajax({
-                type : 'get',              // 타입 (get, post, put 등등)
-                url : '/riotApiController/getLeagueDataByPuuid/' + puuid,     // 요청할 서버url
-                async : true,               // 비동기화 여부 (default : true)
-                headers : {                 // Http header
-                    "Content-Type" : "application/json",
-                    "X-HTTP-Method-Override" : "GET"
+                type: 'get',              // 타입 (get, post, put 등등)
+                url: '/riotApiController/getLeagueDataByPuuid/' + puuid,     // 요청할 서버url
+                async: true,               // 비동기화 여부 (default : true)
+                headers: {                 // Http header
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "GET"
                 },
-                dataType : 'json',
-                success : function(result) { // 결과 성공 콜백함수
-                    $('.rankInfo-spinner').css("display","none");
-                    $('.rankInfo').css("display","block");
-                    if(result != null){
-                        $('#rankImg').attr("src","/img/"+result.tier+".png")
+                dataType: 'json',
+                success: function (result) { // 결과 성공 콜백함수
+                    $('.rankInfo-spinner').css("display", "none");
+                    $('.rankInfo').css("display", "block");
+                    if (result != null) {
+                        $('#rankImg').attr("src", "/img/" + result.tier + ".png")
                         $('#tier-rank').text(result.tier + " " + result.rank)
-                        $('#win-lose').text(result.wins+"승 "+result.losses+"패")
-                        $('#win-rate').text("승률 " + (Math.round((result.wins / (result.wins+result.losses))*100)) + "%")
+                        $('#win-lose').text(result.wins + "승 " + result.losses + "패")
+                        $('#win-rate').text("승률 " + (Math.round((result.wins / (result.wins + result.losses)) * 100)) + "%")
                     }
                 },
-                error : function(request, status, error) { // 결과 에러 콜백함수
-                        console.log(error)
+                error: function (request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
                 }
             })
 
