@@ -53,15 +53,17 @@
                                 <label class="form-label my-3">가격(포인트) <sup>*</sup></label>
                                 <input type="number" name="price" class="form-control"
                                        placeholder="예) 5000 (단위는 생략해주세요.)"
-                                        th:value="${course.price}">
+                                       th:value="${course.price}">
                             </div>
                             <div class="form-item">
                                 <button type="submit"
-                                        class="btn border-secondary py-2 my-5 w-100 text-primary">강의 수정하기
+                                        class="btn border-secondary py-2 mt-5 mb-3 w-100 text-primary">강의 수정하기
                                 </button>
                             </div>
                         </div>
                     </form>
+                    <button onclick="disableCourse()"
+                            class="btn btn-danger border-secondary mb-5 w-100">강의 폐지하기</button>
                 </div>
             </div>
 
@@ -174,6 +176,15 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
             class="fa fa-arrow-up"></i></a>
-
+    <script>
+        function disableCourse() {
+            if (!confirm("강의를 폐지하시겠습니까?\n\n(강의가 폐지됨 상태로 전환됩니다.)")) {
+                alert("취소하셨습니다");
+            } else {
+                alert("강의가 폐지상태로 전환되었습니다.");
+                window.location.href='/course/disable/[[${course.id}]]';
+            }
+        }
+    </script>
 </div>
 </html>

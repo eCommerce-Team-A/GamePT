@@ -54,9 +54,18 @@ public class CourseService {
                 .introduce(introduce)
                 .curriculum(curriculum)
                 .price(price)
+                .isActive(true)
                 .build();
         this.courseRepository.save(course);
 
         return course;
+    }
+
+    public void disalbeCourse(Long id) {
+        Course _course = findCourseById(id);
+        Course course = _course.toBuilder()
+                .isActive(false)
+                .build();
+        this.courseRepository.save(course);
     }
 }

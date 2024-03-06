@@ -83,4 +83,11 @@ public class CourseController {
 
         return "redirect:/course/detail/" + id;
     }
+
+    @GetMapping("/disable/{id}")
+    public String disalbeCourse(@PathVariable(value = "id") Long id) {
+        this.courseService.disalbeCourse(id);
+
+        return "redirect:/course/detail/" + id;
+    }
 }

@@ -22,4 +22,5 @@ public class Course extends BaseEntity {
     private String introduce;
     private String curriculum;
     private Integer price;
+    private boolean isActive;
 }
