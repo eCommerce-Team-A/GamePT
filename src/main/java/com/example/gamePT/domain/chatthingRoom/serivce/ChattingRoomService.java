@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,22 @@ public class ChattingRoomService {
     public List<ChattingRoom> getChattingRoomsByUsername(String username) {
         SiteUser logindUser = userService.findByUsername(username);
         return chattingRoomRepository.findBySiteUserOrExpert(logindUser,logindUser);
+    }
+
+    public ChattingRoom create(SiteUser siteUser, SiteUser expert){
+        ChattingRoom cr = ChattingRoom.builder().siteUser(siteUser).expert(expert).build();
+        return chattingRoomRepository.save(cr);
+    }
+
+    public ChattingRoom getChattingRoomsByBuyUserAndExpert(SiteUser siteUser, SiteUser expert ){
+
+        Optional<ChattingRoom> cr = chattingRoomRepository.findBySiteUserAndExpert(siteUser,expert);
+
+        if(cr.isEmpty()){
+            return null;
+        }
+
+        return cr.get();
     }
 
     public ChattingRoom getChattingRoomById(Long id) {

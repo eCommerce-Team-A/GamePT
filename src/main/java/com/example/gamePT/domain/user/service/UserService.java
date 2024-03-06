@@ -258,5 +258,9 @@ public class UserService {
         this.userRepository.save(changeUser);
     }
 
+    public void save(SiteUser siteUser) {
+        this.userRepository.save(siteUser);
+    }
+
 
 }

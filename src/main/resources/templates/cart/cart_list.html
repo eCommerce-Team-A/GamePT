@@ -1,6 +1,7 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="mb-3">
-
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
@@ -119,12 +120,45 @@
 
                 checked.each(function (index, item) {
                      pp += Number($(item).attr("price"));
+                     item_ids.push($(item).attr("value"));
                 });
 
                 if([[${@rq.getSiteUser.point}]] - pp < 0 ){
                     alert("포인트가 부족합니다. 충전 후 이용해 주세요.");
+                    return;
                 }
 
+                if(!confirm("정말 "+pp+"포인트를 소모하여 해당 강의를 구매하시겠습니까?")){
+                    return;
+                }
+
+                var token = $("meta[name='_csrf']").attr("content");
+		        var header = $("meta[name='_csrf_header']").attr("content");
+
+                $.ajax({
+                    type : 'post',              // 타입 (get, post, put 등등)
+                    url : '/orderItem/createByCart',     // 요청할 서버url
+                    async : true,               // 비동기화 여부 (default : true)
+                    beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                        xhr.setRequestHeader(header, token);
+                    },
+                    headers : {                 // Http header
+                        "Content-Type" : "application/json",
+                        "X-HTTP-Method-Override" : "POST"
+                    },
+                    dataType : 'json',          // 받을 데이터 타입 (html, xml, json, text 등등)
+                    data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                        "cartItem_ids" : item_ids,
+                        "total_price" : pp
+                    }),
+                    success : function(result) { // 결과 성공 콜백함수
+                       alert(result.msg);
+                       window.location.href = '/chattingRoom/list';
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                    }
+                })
             });
 
 
