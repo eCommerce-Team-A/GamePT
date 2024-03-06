@@ -219,7 +219,7 @@ public class UserService {
             return false;
         }
 
-        if (this.userRepository.existsByEmail(signup.getNickname())) {
+        if (this.userRepository.existsByNickname(signup.getNickname())) {
 
             br.rejectValue("nickname", "unique violation", "가입되어 있는 nickname 입니다.");
 

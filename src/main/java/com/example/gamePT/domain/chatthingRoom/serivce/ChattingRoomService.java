@@ -24,4 +24,8 @@ public class ChattingRoomService {
         SiteUser logindUser = userService.findByUsername(username);
         return chattingRoomRepository.findBySiteUserOrExpert(logindUser,logindUser);
     }
+
+    public ChattingRoom getChattingRoomById(Long id) {
+        return chattingRoomRepository.findById(id).get();
+    }
 }

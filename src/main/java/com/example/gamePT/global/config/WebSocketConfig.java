@@ -20,8 +20,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler((WebSocketHandler) socketHandler, "/wss/chat")
+        registry.addHandler((WebSocketHandler) socketHandler, "/wss/chat/{roomId}")
                 .addInterceptors(new HttpSessionHandshakeInterceptor(), new CustomHandshakeInterceptor())
-                .setAllowedOrigins("https:/~~/chatting");
+//                .setAllowedOrigins("*");
+                .setAllowedOrigins("http://localhost:8010/chattingRoom/list");
     }
 }
