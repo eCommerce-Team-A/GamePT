@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.mapping.ToOne;
 
 @Entity
 @Getter
@@ -18,8 +19,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItem extends BaseEntity {
+
     @ManyToOne
     private SiteUser buyer;
-    @OneToOne
+
+    @ManyToOne
     private Course course;
 }

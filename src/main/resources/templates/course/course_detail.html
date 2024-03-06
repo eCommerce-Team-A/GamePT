@@ -244,7 +244,10 @@
                      success : function(result) { // 결과 성공 콜백함수
                             if(result=="success"){
                                 alert("장바구니에 담았습니다.");
-                            }else{
+                            } else if(result == "myCourse"){
+                                alert("자신의 강의는 장바구니에 담을 수 없습니다.");
+                            }
+                            else{
                                 alert("이미 장바구니에 있는 강의입니다.")
                             }
                      },

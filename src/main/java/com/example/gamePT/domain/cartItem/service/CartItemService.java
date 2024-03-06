@@ -15,6 +15,14 @@ import java.util.Optional;
 public class CartItemService {
     private final CartItemRepository cartItemRepository;
 
+    public CartItem findById(Long id) {
+        Optional<CartItem> _cartItem = this.cartItemRepository.findById(id);
+        if (_cartItem.isEmpty()) {
+            return null;
+        }
+        return _cartItem.get();
+    }
+
     public CartItem findCartItem(SiteUser buyer, Course course) {
         Optional<CartItem> _cartItem = this.cartItemRepository.findByBuyerAndCourse(buyer, course);
         if (_cartItem.isEmpty()) {
@@ -33,5 +41,23 @@ public class CartItemService {
 
     public List<CartItem> findByBuyerId(Long id) {
         return this.cartItemRepository.findByBuyerId(id);
+    }
+
+
+    public Boolean deleteCartItemBy(Long id, SiteUser buyer) {
+
+        CartItem ci = findById(id);
+
+        if(ci == null){
+            return false;
+        }
+
+        if(!ci.getBuyer().getUsername().equals(buyer.getUsername())){
+            return false;
+        }
+
+        cartItemRepository.delete(ci);
+
+        return true;
     }
 }

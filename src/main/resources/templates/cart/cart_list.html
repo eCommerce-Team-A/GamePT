@@ -1,0 +1,228 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="mb-3">
+
+
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">장바구니</h1>
+    </div>
+    <!-- Single Page Header End -->
+
+
+    <!-- Single Product Start -->
+    <div class="container-fluid mt-3">
+        <div class="container pt-5">
+            <div class="card border-0 shadow text-center">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-1 d-flex justify-content-center align-items-center">
+                            <input id="cbx_chkAll" class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+                        </div>
+                        <div class="col-5">
+                            강의명
+                        </div>
+                        <div class="col-3">
+                            담당자
+                        </div>
+                        <div class="col-2">
+                            금액
+                        </div>
+                        <div class="col-1">
+                            삭제
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="row py-3" th:each="cartItem : ${cartList}">
+                        <div class="col-1 d-flex justify-content-center align-items-center">
+                            <input class="form-check-input mt-0 item-checkBox" type="checkbox" th:value="${cartItem.id}" th:price="${cartItem.course.price}" aria-label="Checkbox for following text input">
+                        </div>
+                        <div class="col-5" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                            <a th:href="@{|/course/detail/${cartItem.course.id}|}"><span class="badge rounded-pill text-bg-primary ">[[${cartItem.course.gameCategoryname}]]</span> [[${cartItem.course.name}]]</a>
+                        </div>
+                        <div class="col-3" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                            [[${cartItem.course.author.nickname}]]
+                        </div>
+                        <div class="col-2">
+                            [[${cartItem.course.price}]] point
+                        </div>
+                        <div class="col-1">
+                            <a href="#" class="deleteButton" th:value="${cartItem.id}"><i class="fa-regular fa-trash-can text-danger fa-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center border-top py-3 gap-3 mb-2">
+                    <div class="rounded px-2 py-1 shadow">
+                        <div>
+                            보유 포인트
+                        </div>
+                        <div>
+                            [[${@rq.getSiteUser.point}]]
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-minus fa-lg text-danger"></i>
+                    </div>
+                    <div class="rounded px-2 py-1 shadow">
+                        <div>
+                            결제 포인트
+                        </div>
+                        <div id="payPoint">
+                            0
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-equals fa-lg"></i>
+                    </div>
+                    <div class="rounded px-2 py-1 shadow">
+                        <div>
+                            잔여 포인트
+                        </div>
+                        <div id="leftPoint">
+                            [[${@rq.getSiteUser.point}]]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center mt-3">
+                <a href="/course/list" class="btn btn-outline-primary me-3">
+                    쇼핑 계속하기
+                </a>
+
+                <a class="btn btn-outline-success me-3">
+                    충전하기
+                </a>
+                <a id="orderButton" class="btn btn-primary">
+                    주문하기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function() {
+
+            $('#orderButton').on("click", function(){
+
+                item_ids = [];
+
+                var checked = $(".item-checkBox:checked");
+
+                if(checked.length == 0){
+                    alert("상품을 선택해 주세요");
+                    return;
+                }
+
+                var pp = 0;
+
+                checked.each(function (index, item) {
+                     pp += Number($(item).attr("price"));
+                });
+
+                if([[${@rq.getSiteUser.point}]] - pp < 0 ){
+                    alert("포인트가 부족합니다. 충전 후 이용해 주세요.");
+                }
+
+            });
+
+
+
+            $(".item-checkBox").change(function(){
+                var checked = $(".item-checkBox:checked");
+
+                if(checked.length == 0){
+                    $("#payPoint").text("0");
+                    $("#leftPoint").text([[${@rq.getSiteUser.point}]]);
+                    return;
+                }
+
+                var pp = 0;
+
+                checked.each(function (index, item) {
+                     pp += Number($(item).attr("price"));
+                });
+
+                $("#payPoint").text(pp);
+
+                $("#leftPoint").text([[${@rq.getSiteUser.point}]] - pp);
+            });
+
+
+            $("#cbx_chkAll").change(function(){
+
+                var checked = $(".item-checkBox:checked");
+
+                if(checked.length == 0){
+                    $("#payPoint").text("0");
+                    $("#leftPoint").text([[${@rq.getSiteUser.point}]]);
+                    return;
+                }
+
+                var pp = 0;
+
+                checked.each(function (index, item) {
+                     pp += Number($(item).attr("price"));
+                });
+
+                $("#payPoint").text(pp);
+
+                $("#leftPoint").text([[${@rq.getSiteUser.point}]] - pp);
+            });
+
+
+
+            $("#cbx_chkAll").click(function() {
+                if($("#cbx_chkAll").is(":checked")) $(".item-checkBox").prop("checked", true);
+                else $(".item-checkBox").prop("checked", false);
+
+            });
+
+            $(".item-checkBox").click(function() {
+                var total = $(".item-checkBox").length;
+                var checked = $(".item-checkBox:checked").length;
+
+                if(total != checked){
+                    $("#cbx_chkAll").prop("checked", false);
+                } else{
+                    $("#cbx_chkAll").prop("checked", true);
+                }
+            });
+
+            $('.deleteButton').on("click", function(){
+
+                if(!confirm("정말 장바구니에서 삭제하시겠습니까?")){
+                    return;
+                }
+
+                var cartId = $(this).attr("value");
+
+                $.ajax({
+                     type : 'get',              // 타입 (get, post, put 등등)
+                     url : '/cart/delete/'+cartId,     // 요청할 서버url
+                     async : true,               // 비동기화 여부 (default : true)
+                     headers : {                 // Http header
+                         "Content-Type" : "application/json",
+                         "X-HTTP-Method-Override" : "POST"
+                     },
+                     success : function(result) { // 결과 성공 콜백함수
+                        console.log(result)
+                        if(result){
+                            alert("삭제되었습니다.")
+                        }else{
+                            alert("유효하지 않는 요청입니다.")
+                        }
+                        window.location.href = '/cart/list';
+                     },
+                     error : function(request, status, error) { // 결과 에러 콜백함수
+                             console.log(error);
+                     }
+                })
+            });
+
+        });
+
+    </script>
+</div>
+</html>
