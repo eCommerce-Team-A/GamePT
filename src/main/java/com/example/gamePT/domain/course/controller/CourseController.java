@@ -28,7 +28,7 @@ public class CourseController {
     //강의 등록
     @GetMapping("/create")
     public String createCourse() {
-        return "course/course_create_form";
+        return "course/course_create";
     }
 
     // 강의 등록
@@ -36,7 +36,7 @@ public class CourseController {
     public String createCourse(@Valid CourseCreateForm courseCreateForm, BindingResult bindingResult, Principal principal) {
         SiteUser author = this.userService.findByUsername(principal.getName());
         if (bindingResult.hasErrors()) {
-            return "course/course_create_form";
+            return "course/course_create";
         }
         Course course = this.courseService.createCourse(author, courseCreateForm.getGameCategoryname(), courseCreateForm.getName(),
                 courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice());
@@ -65,5 +65,22 @@ public class CourseController {
         model.addAttribute("courseList", courseList);
 
         return "course/course_list";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updateCourse(@PathVariable(value = "id") Long id, Model model) {
+        Course course = this.courseService.findCourseById(id);
+        model.addAttribute("course", course);
+
+        return "course/course_update";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateCourse(@PathVariable(value = "id") Long id, @Valid CourseCreateForm courseCreateForm,
+                               BindingResult bindingResult, Model model) {
+        Course course = this.courseService.updateCourse(id, courseCreateForm.getGameCategoryname(), courseCreateForm.getName(),
+                courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice());
+
+        return "redirect:/course/detail/" + id;
     }
 }

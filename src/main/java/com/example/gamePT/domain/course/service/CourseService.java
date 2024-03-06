@@ -37,10 +37,26 @@ public class CourseService {
         return _course.get();
     }
 
-    public List<Course> findAllCourse(){
+    public List<Course> findAllCourse() {
         return this.courseRepository.findAll();
     }
-    public List<Course> findCourseByAuthorId(Long id){
+
+    public List<Course> findCourseByAuthorId(Long id) {
         return this.courseRepository.findCourseByAuthorId(id);
+    }
+
+    public Course updateCourse(Long id, String gameCategoryname, String name,
+                             String introduce, String curriculum, Integer price) {
+        Course _course = findCourseById(id);
+        Course course = _course.toBuilder()
+                .gameCategoryname(gameCategoryname)
+                .name(name)
+                .introduce(introduce)
+                .curriculum(curriculum)
+                .price(price)
+                .build();
+        this.courseRepository.save(course);
+
+        return course;
     }
 }
