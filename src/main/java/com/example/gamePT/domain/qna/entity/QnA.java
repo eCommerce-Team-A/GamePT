@@ -1,6 +1,7 @@
 package com.example.gamePT.domain.qna.entity;
 
 import com.example.gamePT.domain.user.entity.SiteUser;
+import com.example.gamePT.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -15,10 +16,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class QnA {
+public class QnA extends BaseEntity {
 
     @ManyToOne
-    private SiteUser writer;
+    private SiteUser author;
 
     private String title;
     private String content;
