@@ -139,8 +139,9 @@
                         <hr class="w-100 p-0 m-0">
                         <div class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
                         <a href="#" class="btn mx-4" style="background-color: #0D6EFD; color:white;">구매하기</a>
-                        <a href="#" class="btn my-1 mb-3 mx-4" style="background-color: #0D6EFD; color:white;">장바구니
-                            넣기</a>
+                        <button class="btn my-1 mb-3 mx-4" id="addCart" style="background-color: #0D6EFD; color:white;">
+                            장바구니 담기
+                        </button>
                     </div>
                 </div>
             </div>
@@ -224,6 +225,33 @@
 
             executeRating(ratingStars);
 
+        });
+        $('#addCart').on("click", function(){
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+                console.log(1)
+                $.ajax({
+                     type : 'get',              // 타입 (get, post, put 등등)
+                     url : '/cart/add/[[${course.id}]]',     // 요청할 서버url
+                     async : true,               // 비동기화 여부 (default : true)
+                     beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                         xhr.setRequestHeader(header, token);
+                     },
+                     headers : {                 // Http header
+                         "Content-Type" : "application/json",
+                         "X-HTTP-Method-Override" : "POST"
+                     },
+                     success : function(result) { // 결과 성공 콜백함수
+                            if(result=="success"){
+                                alert("장바구니에 담았습니다.");
+                            }else{
+                                alert("이미 장바구니에 있는 강의입니다.")
+                            }
+                     },
+                     error : function(request, status, error) { // 결과 에러 콜백함수
+                             console.log(error);
+                     }
+                })
         });
     </script>
 </div>

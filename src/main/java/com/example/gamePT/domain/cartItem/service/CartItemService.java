@@ -7,6 +7,7 @@ import com.example.gamePT.domain.user.entity.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,5 +21,17 @@ public class CartItemService {
             return null;
         }
         return _cartItem.get();
+    }
+
+    public void create (SiteUser buyer, Course course){
+        CartItem cartItem = CartItem.builder()
+                .buyer(buyer)
+                .course(course)
+                .build();
+        this.cartItemRepository.save(cartItem);
+    }
+
+    public List<CartItem> findByBuyerId(Long id) {
+        return this.cartItemRepository.findByBuyerId(id);
     }
 }

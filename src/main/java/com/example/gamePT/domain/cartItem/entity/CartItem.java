@@ -2,6 +2,7 @@ package com.example.gamePT.domain.cartItem.entity;
 
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.user.entity.SiteUser;
+import com.example.gamePT.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -16,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItem {
+public class CartItem extends BaseEntity {
     @ManyToOne
     private SiteUser buyer;
     @OneToOne
