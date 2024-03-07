@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -239,6 +240,14 @@ public class UserService {
         return this.userRepository.findByUsername(username).get();
     }
 
+    public SiteUser findByUserId(Long id) {
+        Optional<SiteUser> _user = this.userRepository.findById(id);
+        if (_user.isEmpty()) {
+            return null;
+        }
+        return _user.get();
+    }
+
     public String getProfileImg(Long id) {
         return imageService.getSiteUserImg(id);
     }
@@ -248,6 +257,17 @@ public class UserService {
                 .authorization(authorization)
                 .build();
         this.userRepository.save(changeUser);
+    }
+
+    public void save(SiteUser siteUser) {
+        this.userRepository.save(siteUser);
+    }
+
+    public List<SiteUser> getUserListByAuthorization(String authorization) {
+        return this.userRepository.findByAuthorization(authorization);
+    }
+    public List<SiteUser> getUserListAll() {
+        return this.userRepository.findAll();
     }
 
 

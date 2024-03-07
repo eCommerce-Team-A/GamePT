@@ -1,0 +1,100 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="mb-3">
+
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">주문상세</h1>
+    </div>
+    <!-- Single Page Header End -->
+
+    <!-- Single Product Start -->
+    <div class="container-fluid mt-3">
+        <div class="container pt-5">
+            <div class="card border-0 shadow text-center">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-1 d-flex justify-content-center align-items-center">
+                            번호
+                        </div>
+                        <div class="col-5">
+                            강의명
+                        </div>
+                        <div class="col-3">
+                            담당자
+                        </div>
+                        <div class="col-3">
+                            금액
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="row py-3" th:each="orderItem : ${order.orderItemList}">
+                        <div class="col-1 d-flex justify-content-center align-items-center">
+                            [[${orderItem.id}]]
+                        </div>
+                        <div class="col-5" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                            <span class="badge rounded-pill text-bg-primary ">[[${orderItem.gameCategoryname}]]</span>
+                            [[${orderItem.name}]]
+                        </div>
+                        <div class="col-3" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                            [[${orderItem.course.author.nickname}]]
+                        </div>
+                        <div class="col-3">
+                            [[${orderItem.price}]] point
+                        </div>
+                    </div>
+
+
+                    <div class="text-center border-top pb-2 pt-4 mb-2">
+                        <div>
+                            최종 결제 정보
+                        </div>
+                        <div class="d-flex justify-content-center py-3 gap-5">
+                            <div class="">
+                                <div>
+                                    구매번호
+                                </div>
+                                <div>
+                                    [[${order.id}]]
+                                </div>
+                            </div>
+                            <div class="" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                <div>
+                                    결제 포인트
+                                </div>
+                                <div>
+                                    [[${order.totalPrice}]] point
+                                </div>
+
+                            </div>
+                            <div class="" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                <div>
+                                    결제 일시
+                                </div>
+                                <div>
+                                    [[${#temporals.format(order.createDate, 'yy-MM-dd HH:mm')}]]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-3">
+                <a href="/user/mypage" class="btn btn-outline-primary">
+                    목록으로
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function() {
+
+
+        });
+
+    </script>
+</div>
+</html>
