@@ -40,4 +40,7 @@ public class SiteUser extends BaseEntity {
 
     private String puuid;
 
+    @Builder.Default
+    private int point = 0;
+
 }
