@@ -54,6 +54,10 @@ public class OrderItemService {
 
             CartItem ci = this.cartItemService.findById(id);
 
+            if(buyUser.getUsername().equals(ci.getCourse().getAuthor().getUsername())){
+                return new OrderItemController.OrderItemsCreateResponse(false,"자신의 강의는 구매 불가");
+            }
+
             if(!ci.getBuyer().getUsername().equals(buyUser.getUsername())){
                 return new OrderItemController.OrderItemsCreateResponse(false,"잘못된 접근");
             }
@@ -100,6 +104,10 @@ public class OrderItemService {
         SiteUser buyUser = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Course course = courseService.findCourseById(courseId);
+
+        if(buyUser.getUsername().equals(course.getAuthor().getUsername())){
+            return new OrderItemController.OrderItemsCreateResponse(false,"자신의 강의는 구매 불가");
+        }
 
         if(buyUser.getPoint() < course.getPrice()){
             return new OrderItemController.OrderItemsCreateResponse(false,"잔액 부족");
