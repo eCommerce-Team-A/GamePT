@@ -138,9 +138,11 @@
                         </div>
                         <hr class="w-100 p-0 m-0">
                         <div class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
-                        <a href="#" class="btn mx-4" style="background-color: #0D6EFD; color:white;">구매하기</a>
-                        <a href="#" class="btn my-1 mb-3 mx-4" style="background-color: #0D6EFD; color:white;">장바구니
-                            넣기</a>
+                        <div class="m-2 mx-4 fw-bold"> 내 보유 포인트 : [[${@rq.getSiteUser.point}]]</div>
+                        <button id="orderButton" href="#" class="btn mx-4" style="background-color: #0D6EFD; color:white;">구매하기</button>
+                        <button class="btn my-1 mb-3 mx-4" id="addCart" style="background-color: #0D6EFD; color:white;">
+                            장바구니 담기
+                        </button>
                     </div>
                 </div>
             </div>
@@ -160,7 +162,7 @@
                                  style="top: 10px; right: 10px;" th:text="${relateCourse.gameCategoryname}">
                             </div>
                             <div class="p-4 rounded-bottom">
-                                <h4 th:text="${relateCourse.author.nickname}">신광식</h4>
+                                <h4 th:text="${relateCourse.author.nickname}"></h4>
                                 <div th:text="${relateCourse.introduce}"></div>
                             </div>
                         </div>
@@ -171,6 +173,54 @@
     </div>
     <script>
         $(function() {
+
+            $('#orderButton').on("click", function(){
+
+                var pp = [[${course.price}]];
+
+                if("[[${@rq.getSiteUser.username}]]" == "[[${course.author.username}]]" ){
+                    alert("자신의 강의는 구매할 수 없습니다.");
+                    return;
+                }
+
+                if([[${@rq.getSiteUser.point}]] - pp < 0 ){
+                    alert("포인트가 부족합니다. 충전 후 이용해 주세요.");
+                    return;
+                }
+
+                if(!confirm("정말 "+pp+"포인트를 소모하여 해당 강의를 구매하시겠습니까?")){
+                    return;
+                }
+
+                var token = $("meta[name='_csrf']").attr("content");
+		        var header = $("meta[name='_csrf_header']").attr("content");
+
+                $.ajax({
+                    type : 'post',              // 타입 (get, post, put 등등)
+                    url : '/orderItem/create',     // 요청할 서버url
+                    async : true,               // 비동기화 여부 (default : true)
+                    beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                        xhr.setRequestHeader(header, token);
+                    },
+                    headers : {                 // Http header
+                        "Content-Type" : "application/json",
+                        "X-HTTP-Method-Override" : "POST"
+                    },
+                    dataType : 'json',          // 받을 데이터 타입 (html, xml, json, text 등등)
+                    data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                        "course_id" : [[${course.id}]]
+                    }),
+                    success : function(result) { // 결과 성공 콜백함수
+                       alert(result.msg);
+                       window.location.href = '/chattingRoom/list';
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                    }
+                })
+            });
+
+
             $('#postReview').on("click", function(){
                 var token = $("meta[name='_csrf']").attr("content");
                 var header = $("meta[name='_csrf_header']").attr("content");
@@ -224,6 +274,36 @@
 
             executeRating(ratingStars);
 
+        });
+        $('#addCart').on("click", function(){
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+                console.log(1)
+                $.ajax({
+                     type : 'get',              // 타입 (get, post, put 등등)
+                     url : '/cart/add/[[${course.id}]]',     // 요청할 서버url
+                     async : true,               // 비동기화 여부 (default : true)
+                     beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                         xhr.setRequestHeader(header, token);
+                     },
+                     headers : {                 // Http header
+                         "Content-Type" : "application/json",
+                         "X-HTTP-Method-Override" : "POST"
+                     },
+                     success : function(result) { // 결과 성공 콜백함수
+                            if(result=="success"){
+                                alert("장바구니에 담았습니다.");
+                            } else if(result == "myCourse"){
+                                alert("자신의 강의는 장바구니에 담을 수 없습니다.");
+                            }
+                            else{
+                                alert("이미 장바구니에 있는 강의입니다.")
+                            }
+                     },
+                     error : function(request, status, error) { // 결과 에러 콜백함수
+                             console.log(error);
+                     }
+                })
         });
     </script>
 </div>
