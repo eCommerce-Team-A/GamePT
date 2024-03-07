@@ -240,6 +240,14 @@ public class UserService {
         return this.userRepository.findByUsername(username).get();
     }
 
+    public SiteUser findByUserId(Long id) {
+        Optional<SiteUser> _user = this.userRepository.findById(id);
+        if (_user.isEmpty()) {
+            return null;
+        }
+        return _user.get();
+    }
+
     public String getProfileImg(Long id) {
         return imageService.getSiteUserImg(id);
     }
@@ -249,6 +257,10 @@ public class UserService {
                 .authorization(authorization)
                 .build();
         this.userRepository.save(changeUser);
+    }
+
+    public void save(SiteUser siteUser) {
+        this.userRepository.save(siteUser);
     }
 
     public List<SiteUser> getUserListByAuthorization(String authorization) {
