@@ -9,6 +9,7 @@ import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,8 +61,8 @@ public class CourseController {
 
 
     @GetMapping("/list")
-    public String courseList(Model model) {
-        List<Course> courseList = this.courseService.findAllCourse();
+    public String courseList(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Course> courseList = this.courseService.findAll(page);
         model.addAttribute("courseList", courseList);
 
         return "course/course_list";
