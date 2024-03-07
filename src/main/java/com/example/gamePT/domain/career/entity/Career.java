@@ -1,9 +1,7 @@
 package com.example.gamePT.domain.career.entity;
 
-import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +13,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Career extends BaseEntity {
+    private String introduce;
     private String category;
     private String content;
-    @ManyToOne
-    private SiteUser expertUser;
+    private String username;
 }

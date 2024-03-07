@@ -1,5 +1,7 @@
 package com.example.gamePT.domain.expert.controller;
 
+import com.example.gamePT.domain.career.entity.Career;
+import com.example.gamePT.domain.career.service.CareerService;
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.service.CourseService;
 import com.example.gamePT.domain.expert.entity.Expert;
@@ -28,6 +30,7 @@ public class ExpertController {
     private final EmailService emailService;
     private final CourseService courseService;
     private final ReviewService reviewService;
+    private final CareerService careerService;
 
     @GetMapping("/request")
     public String request() {
@@ -85,6 +88,7 @@ public class ExpertController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{username}")
     public String detail(@PathVariable("username") String username, Model model) {
+        List<Career> careerList = this.careerService.getCareerListByUsername(username);
         SiteUser siteUser = this.userService.findByUsername(username);
         String profileImg = this.userService.getProfileImg(siteUser.getId());
         List<Course> courseList = this.courseService.findCourseByAuthorId(siteUser.getId());
@@ -92,9 +96,12 @@ public class ExpertController {
         for (Course course : courseList) {
             scoreCourseList.put(this.reviewService.getScoreAvg(course.getId()), course);
         }
+        String introduce = this.careerService.getIntroduce(careerList);
         model.addAttribute("siteUser", siteUser);
         model.addAttribute("profileImg", profileImg);
         model.addAttribute("scoreCourseList", scoreCourseList);
+        model.addAttribute("careerList", careerList);
+        model.addAttribute("introduce", introduce);
         return "expert/detail";
     }
 
