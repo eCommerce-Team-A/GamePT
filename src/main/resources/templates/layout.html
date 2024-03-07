@@ -66,7 +66,7 @@
                 <div class="navbar-nav mx-auto">
                     <a href="/" class="nav-item nav-link">Home</a>
                     <a th:href="@{/course/list}" class="nav-item nav-link">강의 목록</a>
-                    <a th:href="@{/course/expert/list}" class="nav-item nav-link">전문가 목록</a>
+                    <a th:href="@{/expert/users}" class="nav-item nav-link">전문가 목록</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggl  e" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0 bg-secondary rounded-0">
@@ -81,7 +81,7 @@
                     <a th:if="${@rq.isLogin() and @rq.getSiteUser().authorization == 'Member'}"
                        th:href="@{/expert/request}" class="nav-item nav-link">전문가 등록</a>
                     <a th:if="${@rq.isLogin() and @rq.getSiteUser().authorization == 'Admin'}"
-                       th:href="@{/expert/list}" class="nav-item nav-link">전문가 승인</a>
+                       th:href="@{/expert/request/list}" class="nav-item nav-link">전문가 승인</a>
                 </div>
 
                 <div class="d-flex m-4 me-0" th:if="${@rq.isLogin()}">

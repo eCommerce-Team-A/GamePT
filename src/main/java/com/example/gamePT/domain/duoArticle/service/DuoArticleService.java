@@ -22,7 +22,7 @@ public class DuoArticleService {
         return duoArticleRepository.findAll(sort);
     }
 
-    public List<DuoArticle> getDulArticlesByMyLine(String line) {
+    public List<DuoArticle> getDuoArticlesByMyLine(String line) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Sort sort = Sort.by(sorts);

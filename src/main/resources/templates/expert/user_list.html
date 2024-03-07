@@ -3,10 +3,10 @@
 
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-white display-6">강의 목록</h1>
+        <h1 class="text-center text-white display-6">전문가 목록</h1>
         <ol class="breadcrumb justify-content-center mb-0">
             <li class="breadcrumb-item active text-white">홈</li>
-            <li class="breadcrumb-item active text-white">강의 목록</li>
+            <li class="breadcrumb-item active text-white">전문가 목록</li>
         </ol>
     </div>
     <!-- Single Page Header End -->
@@ -14,66 +14,59 @@
 
     <!-- Fruits Shop Start-->
     <div class="container-fluid fruite py-5">
-        <div class="container d-flex justify-content-end">
-            <a th:if="${@rq.isLogin() and @rq.getSiteUser().authorization == 'Expert'}"
-               href="/course/create" class="btn btn-primary btn-sm">강의 등록</a>
-        </div>
         <div class="container mt-4 pb-5">
 
             <div class="row row-cols-4 g-4 justify-content-start">
-                <div class="col" th:each="course : ${courseList}">
-                    <div class="rounded position-relative fruite-item">
-                        <a th:href="@{|/course/detail/${course.id}|}">
-                            <div class="fruite-img">
-                                <img src="https://i.ibb.co/w7yw4kK/image.jpg"
-                                     class="img-fluid w-100 rounded-top" alt="">
+                <div class="col" th:each="expertUserImg : ${expertUserImgList}">
+                    <a th:href="@{|/expert/detail/${expertUserImg.value.username}|}" class="expert-card">
+                        <div class="expert-img">
+                            <img th:src="${expertUserImg.key}" alt="..."
+                                 style="width:70px; height:70px; border-radius: 50%;">
+                            <div>
+<!--                                <img th:src="@{|/img/${expertUserImg.value.get}.png|}" style="height: 40px;">-->
+                                <span class="Nanum" th:text="${expertUserImg.value.username}"></span>
                             </div>
-                        </a>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                             style="top: 10px; left: 10px;" th:text="${course.gameCategoryname}">
                         </div>
-                        <div class="p-4 border border-top-0 rounded-bottom">
-                            <h4 class="mb-3">
-                                <a th:href="@{|/course/detail/${course.id}|}"
-                                   style="text-decoration: none; color: inherit;"
-                                   th:text="${course.name}"></a>
-                            </h4>
-                            <p th:text="${course.introduce}"></p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-7 fw-bold mb-0"
-                                   th:text="@{|${course.price} 포인트|}"></p>
-                            </div>
-                            <br>
-                            <a th:href="@{|/course/detail/${course.id}|}"
-                               class="btn border border-secondary rounded-pill px-3 text-primary"
-                               style="display:block;">상세
-                                보기</a>
-                        </div>
-                    </div>
+                        <div class="expert-content"></div>
+                    </a>
+                    <!--                    <div class="rounded position-relative fruite-item" >-->
+                    <!--                        <a th:href="@{|/expert/detail/${expertUser.username}|}">-->
+                    <!--                            <div class="fruite-img">-->
+                    <!--                                <img src="https://i.ibb.co/w7yw4kK/image.jpg"-->
+                    <!--                                     class="img-fluid w-100 rounded-top" alt="">-->
+                    <!--                            </div>-->
+                    <!--                        </a>-->
+                    <!--                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"-->
+                    <!--                             style="top: 10px; left: 10px;" >asdsdfa-->
+                    <!--                        </div>-->
+                    <!--                        <div class="p-4 border border-top-0 rounded-bottom">-->
+                    <!--                            <h4 class="mb-3">-->
+                    <!--                                <a th:href="@{|/expert/detail/${expertUser.username}|}" style="text-decoration: none; color: inherit;"-->
+                    <!--                                   th:text="${expertUser.username}"></a>-->
+                    <!--                            </h4>-->
+                    <!--                            <p >sdfasd</p>-->
+                    <!--                            <div class="d-flex justify-content-between flex-lg-wrap">-->
+                    <!--                                <p class="text-dark fs-7 fw-bold mb-0"-->
+                    <!--                                   >dsd</p>-->
+                    <!--                            </div>-->
+                    <!--                            <br>-->
+                    <!--                            <a th:href="@{|/expert/detail/${expertUser.username}|}"-->
+                    <!--                               class="btn border border-secondary rounded-pill px-3 text-primary"-->
+                    <!--                               style="display:block;">상세 보기</a>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                 </div>
             </div>
-            <div class="col-12 mt-5">
-                <div th:if="${!courseList.isEmpty()}">
-                    <ul class="pagination d-flex justify-content-center">
-                        <li class="page-item" th:classappend="${!courseList.hasPrevious} ? 'disabled'">
-                            <a class="page-link"
-                               th:href="@{|?page=${courseList.number-1}|}">
-                                <span>이전</span>
-                            </a>
-                        </li>
-                        <li th:each="page: ${#numbers.sequence(0, courseList.totalPages-1)}"
-                            th:if="${page >= courseList.number-5 and page <= courseList.number+5}"
-                            th:classappend="${page == courseList.number} ? 'active'"
-                            class="page-item">
-                            <a th:text="${page+1}" class="page-link"
-                               th:href="@{|?page=${page}|}"></a>
-                        </li>
-                        <li class="page-item" th:classappend="${!courseList.hasNext} ? 'disabled'">
-                            <a class="page-link" th:href="@{|?page=${courseList.number+1}|}">
-                                <span>다음</span>
-                            </a>
-                        </li>
-                    </ul>
+            <div class="col-12">
+                <div class="pagination d-flex justify-content-center mt-5">
+                    <a href="#" class="rounded">&laquo;</a>
+                    <a href="#" class="active rounded">1</a>
+                    <a href="#" class="rounded">2</a>
+                    <a href="#" class="rounded">3</a>
+                    <a href="#" class="rounded">4</a>
+                    <a href="#" class="rounded">5</a>
+                    <a href="#" class="rounded">6</a>
+                    <a href="#" class="rounded">&raquo;</a>
                 </div>
             </div>
         </div>
@@ -186,4 +179,5 @@
     <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
             class="fa fa-arrow-up"></i></a>
 </div>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 </html>
