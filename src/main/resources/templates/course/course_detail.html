@@ -21,11 +21,13 @@
         <div class="container pt-5">
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <div class="d-flex align-items-center">
-                    <h2 class="fw-bold" th:text="${course.name}"></h2>
+                    <h2 th:if="${course.isActive}" class="fw-bold" th:text="${course.name}"></h2>
+                    <h2 th:if="!${course.isActive}" class="fw-bold" th:text="@{|${course.name}(폐지된 강의입니다.)|}"></h2>
                     <div class="badge rounded-pill text-bg-primary ms-2">[[${course.gameCategoryname}]]</div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <a class="btn btn-primary" th:href="@{/course/list}" role="button">강의 목록</a>
+                    <a class="btn btn-primary" th:href="@{|/course/update/${course.id}|}" role="button">강의 수정</a>
+                    <a class="btn btn-primary" style="margin-left:10px;" th:href="@{/course/list}" role="button">강의 목록</a>
                 </div>
             </div>
 
@@ -246,7 +248,6 @@
                             $('#reviews').replaceWith(result);
                             $('.rating__star.fas.fa-star').removeClass('fas fa-star').addClass('far fa-star');
                             $('#reviewContent').val('');
-
                      },
                      error : function(request, status, error) { // 결과 에러 콜백함수
                              console.log(error);
