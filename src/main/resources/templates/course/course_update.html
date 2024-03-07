@@ -62,8 +62,12 @@
                             </div>
                         </div>
                     </form>
-                    <button onclick="disableCourse()"
-                            class="btn btn-danger border-secondary mb-5 w-100">강의 폐지하기</button>
+                    <button th:if="${course.isActive}" onclick="disableCourse()"
+                            class="btn btn-danger border-secondary mb-5 w-100">강의 폐지하기
+                    </button>
+                    <button th:if="!${course.isActive}" onclick="activeCourse()"
+                            class="btn btn-danger border-secondary mb-5 w-100">강의 활성화하기
+                    </button>
                 </div>
             </div>
 
@@ -183,6 +187,14 @@
             } else {
                 alert("강의가 폐지상태로 전환되었습니다.");
                 window.location.href='/course/disable/[[${course.id}]]';
+            }
+        }
+        function activeCourse() {
+            if (!confirm("강의를 활성화하시겠습니까?\n\n(강의가 활성화 상태로 전환됩니다.)")) {
+                alert("취소하셨습니다");
+            } else {
+                alert("강의가 활성화 상태로 전환되었습니다.");
+                window.location.href='/course/active/[[${course.id}]]';
             }
         }
     </script>

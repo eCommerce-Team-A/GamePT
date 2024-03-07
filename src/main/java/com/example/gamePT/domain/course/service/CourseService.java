@@ -68,4 +68,12 @@ public class CourseService {
                 .build();
         this.courseRepository.save(course);
     }
+
+    public void activeCourse(Long id) {
+        Course _course = findCourseById(id);
+        Course course = _course.toBuilder()
+                .isActive(true)
+                .build();
+        this.courseRepository.save(course);
+    }
 }

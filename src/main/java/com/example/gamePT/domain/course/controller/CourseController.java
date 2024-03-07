@@ -90,4 +90,11 @@ public class CourseController {
 
         return "redirect:/course/detail/" + id;
     }
+
+    @GetMapping("/active/{id}")
+    public String activeCourse(@PathVariable(value = "id") Long id) {
+        this.courseService.activeCourse(id);
+
+        return "redirect:/course/detail/" + id;
+    }
 }
