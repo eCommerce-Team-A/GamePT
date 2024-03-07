@@ -1,0 +1,65 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="mb-3">
+
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">QnA 등록</h1>
+    </div>
+    <!-- Single Page Header End -->
+
+
+    <!-- Checkout Page Start -->
+    <div class="container-fluid py-5">
+        <div class="container pt-2">
+            <div class="card border-0 shadow">
+                <div class="card-header bg-white mt-2 text-center">
+                    <h2 class="text-primary">QnA 등록</h2>
+                </div>
+                <div class=" card-body">
+                    <form th:action="@{/qna/create}" th:object="${qnACreateForm}" method="post">
+                        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+                            <div class="row form-item">
+                                <div class="col-10 my-3">
+                                    <label class="form-label"> 제목 <sup>*</sup></label>
+                                    <input type="text" name="title" class="form-control"
+                                           placeholder="문의 제목을 입력해 주세요">
+                                </div>
+                                <div class="col-2 my-3 text-center">
+                                    비밀글 여부
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <i class="fa-solid fa-lock-open me-3"></i>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" id="isBlindCheckBox" name="isBlindCheckBox" type="checkbox" role="switch" >
+                                            <input id="isBlind" name="isBlind" value="false" type="hidden">
+                                        </div>
+                                        <i class="fa-solid fa-lock ms-2"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label">내용<sup>*</sup></label>
+                                <textarea name="content" class="form-control" cols="30" rows="20" style="resize: none;"
+                                          placeholder="문의 내용을 입력해 주세요"></textarea>
+                            </div>
+                            <button
+                                    id="submitButton"  class="btn border-secondary py-2 my-5 w-100 text-primary">문의 등록하기
+                            </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        $(function() {
+            $("#isBlindCheckBox").change(function(){
+                if($("#isBlindCheckBox").is(":checked")){
+                     $("#isBlind").attr("value",true);
+                }else{
+                    $("#isBlind").attr("value",false);
+                }
+            });
+        });
+    </script>
+</div>
+</html>

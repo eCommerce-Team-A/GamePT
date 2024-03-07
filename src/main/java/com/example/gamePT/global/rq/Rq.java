@@ -65,7 +65,7 @@ public class Rq {
         return siteUser;
     }
 
-    private String getLoginedSiteUserUsername() {
+    public String getLoginedSiteUserUsername() {
         if (isLogout()) return null;
 
         return user.getUsername();

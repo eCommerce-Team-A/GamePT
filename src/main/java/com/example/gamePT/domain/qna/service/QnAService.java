@@ -1,12 +1,18 @@
 package com.example.gamePT.domain.qna.service;
 
 import com.example.gamePT.domain.qna.entity.QnA;
+import com.example.gamePT.domain.qna.entity.QnACreateForm;
 import com.example.gamePT.domain.qna.repository.QnARepository;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,31 +21,41 @@ import java.util.Optional;
 public class QnAService {
     private final QnARepository qnARepository;
 
-    public QnA createQnA(SiteUser author, String title, String content, Boolean isBlind) {
+    public QnA createQnA(SiteUser author, QnACreateForm qnACreateForm) {
+
         QnA qnA = QnA.builder()
                 .author(author)
-                .title(title)
-                .content(content)
-                .isBlind(isBlind)
+                .title(qnACreateForm.getTitle())
+                .content(qnACreateForm.getContent())
+                .isBlind(qnACreateForm.getIsBlind())
+                .isAnswered(false)
                 .build();
+
         this.qnARepository.save(qnA);
         return findById(qnA.getId());
     }
 
-    public QnA update(Long id, String title, String content, Boolean isBlind) {
-        QnA _qnA = findById(id);
+    public QnA update(QnACreateForm qnACreateForm) {
+
+        QnA _qnA = findById(qnACreateForm.getId());
         QnA qnA = _qnA.toBuilder()
-                .title(title)
-                .content(content)
-                .isBlind(isBlind)
+                .title(qnACreateForm.getTitle())
+                .content(qnACreateForm.getContent())
+                .isBlind(qnACreateForm.getIsBlind())
                 .build();
         this.qnARepository.save(qnA);
 
         return qnA;
     }
 
-    public List<QnA> getQnAList() {
-        return qnARepository.findAll();
+    public Page<QnA> getQnAList(int page) {
+
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+
+        return qnARepository.findAll(pageable);
     }
 
     public QnA findById(Long id) {
@@ -50,8 +66,8 @@ public class QnAService {
         return _qnA.get();
     }
 
-    public void delete(Long id) {
-        QnA qnA = findById(id);
+    public void delete(QnA qnA) {
+
         this.qnARepository.delete(qnA);
     }
 
