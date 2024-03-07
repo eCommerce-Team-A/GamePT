@@ -9,6 +9,7 @@ import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,10 +47,10 @@ public class CourseController {
 
     //강의 상세 페이지
     @GetMapping("/detail/{id}")
-    public String showCourseDetail(@PathVariable(value = "id") Long id, Model model) {
+    public String showCourseDetail(@PathVariable(value = "id") Long id, @RequestParam(value = "page",defaultValue = "0") int page, Model model) {
         Course course = this.courseService.findCourseById(id);
         List<Course> courseListByAuthor = this.courseService.findCourseByAuthorId(course.getAuthor().getId());
-        List<Review> reviewList = this.reviewService.findByCourseId(id);
+        Page<Review> reviewList = this.reviewService.findByCourseId(id,page);
 
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("courseListByAuthor", courseListByAuthor);
@@ -60,8 +61,8 @@ public class CourseController {
 
 
     @GetMapping("/list")
-    public String courseList(Model model) {
-        List<Course> courseList = this.courseService.findAllCourse();
+    public String courseList(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Course> courseList = this.courseService.findAll(page);
         model.addAttribute("courseList", courseList);
 
         return "course/course_list";

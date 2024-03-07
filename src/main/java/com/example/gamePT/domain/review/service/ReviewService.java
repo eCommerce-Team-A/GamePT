@@ -6,6 +6,10 @@ import com.example.gamePT.domain.review.entity.Review;
 import com.example.gamePT.domain.review.repository.ReviewRepository;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +22,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final CourseRepository courseRepository;
 
-    public List<Review> create(SiteUser author, Long courseId, String content, Integer score) {
+    public Page<Review> create(SiteUser author, Long courseId, String content, Integer score, int page) {
         Course course = this.courseRepository.getById(courseId);
         Review review = Review.builder()
                 .author(author)
@@ -27,16 +31,22 @@ public class ReviewService {
                 .score(score)
                 .build();
         this.reviewRepository.save(review);
-        return this.reviewRepository.findByCourseIdOrderByCreateDateDesc(courseId);
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return this.reviewRepository.findByCourseIdOrderByCreateDateDesc(courseId, pageable);
     }
 
-    public List<Review> findByCourseId(Long id) {
-        return this.reviewRepository.findByCourseIdOrderByCreateDateDesc(id);
+    public Page<Review> findByCourseId(Long id, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return this.reviewRepository.findByCourseIdOrderByCreateDateDesc(id, pageable);
     }
 
     public String getScoreAvg(Long courseId) {
         List<Integer> scoreList = new ArrayList<>();
-        List<Review> reviewList = this.reviewRepository.findByCourseIdOrderByCreateDateDesc(courseId);
+        List<Review> reviewList = this.reviewRepository.findByCourseId(courseId);
         for (Review review : reviewList) {
             scoreList.add(review.getScore());
         }
