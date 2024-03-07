@@ -52,11 +52,6 @@
                                             <i class="fa-regular fa-pen-to-square text-success"></i> &nbsp;정보 수정
                                         </a>
                                     </li>
-                                    <!--                                    <li class="mt-1">-->
-                                    <!--                                        <a class="text-dark dropdown-item deleteTeam" href="#">-->
-                                    <!--                                            <i class="fa-regular fa-trash-can text-danger"></i> &nbsp;팀 삭제-->
-                                    <!--                                        </a>-->
-                                    <!--                                    </li>-->
                                     <li class="mt-1">
                                         <a class="text-dark dropdown-item leaveTeam" href="#">
                                             <i class="fa-solid fa-right-from-bracket text-danger"></i> &nbsp;탈퇴
@@ -77,6 +72,9 @@
                                 <div>
                                     <i class="fa-solid fa-envelope"></i>
                                 </div>
+                                <div>
+                                    <i class="fa-solid fa-sack-dollar"></i>
+                                </div>
                             </div>
                             <div class="text-center col-3">
                                 <div>
@@ -88,6 +86,9 @@
                                 <div>
                                     Email
                                 </div>
+                                <div>
+                                    Point
+                                </div>
                             </div>
                             <div class="col-7">
                                 <div>
@@ -98,6 +99,9 @@
                                 </div>
                                 <div>
                                     [[${@rq.getSiteUser().email}]]
+                                </div>
+                                <div>
+                                    [[${@rq.getSiteUser().point}]]
                                 </div>
                             </div>
 
@@ -172,43 +176,87 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <div class="col-8 tab-content mb-5">
-                <div class="tab-pane active" id="nav-myPage" role="tabpanel"
-                     aria-labelledby="nav-myPage-tab">
+                <div class="col-8">
                     <div class="card w-100 Regular shadow border-0">
-                        <div class="card-header bg-white">
-                            <i class="fa-solid fa-landmark"></i> 진행중인 강의
+                        <div id="orderHistory" class="card w-100 Regular shadow border-0">
+                            <div class="card-header bg-white">
+                                <i class="fa-regular fa-credit-card"></i> 주문내역
+                            </div>
+                            <ul class="list-group list-group-flush text-center my-3">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            번호
+                                        </div>
+                                        <div class="col-6">
+                                            구매품명
+                                        </div>
+                                        <div class="col-2">
+                                            총 가격
+                                        </div>
+                                        <div class="col-3">
+                                            구매 일시
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item" th:each="orderEntity, loop : ${paging}">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            [[${orderEntity.id}]]
+                                        </div>
+                                        <div class="col-6">
+                                            <a th:href="@{|/order/detail/${orderEntity.id}|}"
+                                               th:if="${#lists.size(orderEntity.orderItemList) > 1}">
+                                                [[${orderEntity.orderItemList[0].course.name}]] 외
+                                                [[${#lists.size(orderEntity.orderItemList) -1}]]개 상품
+                                            </a>
+                                            <a th:href="@{|/order/detail/${orderEntity.id}|}"
+                                               th:unless="${#lists.size(orderEntity.orderItemList) > 1}">
+                                                [[${orderEntity.orderItemList[0].course.name}]]
+                                            </a>
+
+
+                                        </div>
+                                        <div class="col-2">
+                                            [[${orderEntity.totalPrice}]]
+                                        </div>
+                                        <div class="col-3">
+                                            [[${#temporals.format(orderEntity.createDate, 'yy-MM-dd HH:mm')}]]
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- 페이징처리 시작 -->
+                            <div th:if="${!paging.isEmpty()}">
+                                <ul class="pagination pagination-sm justify-content-center d-flex justify-content-center">
+                                    <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="page-link changePageButton"
+                                           th:value="${paging.number-1}">
+                                            <span>이전</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                                        th:if="${page >= paging.number-3 and page <= paging.number+3}"
+                                        th:classappend="${page == paging.number} ? 'active'"
+                                        class="page-item">
+                                        <a href="#" onclick="return false" class="page-link changePageButton"
+                                           th:value="${page}">[[${page} + 1]]</a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="page-link changePageButton"
+                                           th:value="${paging.number+1}">
+                                            <span>다음</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- 페이징처리 끝 -->
                         </div>
 
-                        <div class="card-body">
-                            <p class="card-text">진행중인 강의가 보여질 예정</p>
-                        </div>
-
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">강의 1</li>
-                            <li class="list-group-item">강의 2</li>
-                            <li class="list-group-item">강의 3</li>
-                        </ul>
                     </div>
-
-                    <div class="card w-100 Regular shadow border-0 mt-4">
-                        <div class="card-header bg-white">
-                            <i class="fa-regular fa-credit-card"></i> 주문내역
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">주문 내역이 보여질 예정</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">주문내역 1</li>
-                            <li class="list-group-item">주문내역 2</li>
-                            <li class="list-group-item">주문내역 3</li>
-                        </ul>
-                    </div>
-
-                </div>
 
                 </div>
 
@@ -218,6 +266,28 @@
 
     <script th:inline="javascript">
         $(function () {
+
+            <!-- 주문내역 페이징 클릭시 이동 -->
+            $(document).on('click', '.page-link', function(event) {
+                $.ajax({
+                    type : 'get',              // 타입 (get, post, put 등등)
+                    url : '/user/mypage/' + $(this).attr("value"),     // 요청할 서버url
+                    async : true,               // 비동기화 여부 (default : true)
+                    headers : {                 // Http header
+                        "Content-Type" : "application/json",
+                        "X-HTTP-Method-Override" : "GET"
+                    },
+                    dataType : 'html',
+                    success : function(result) { // 결과 성공 콜백함수
+                        $("#orderHistory").replaceWith(result);
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                    }
+                })
+            });
+
+
 
             var puuid = [[${@rq.getSiteUser().puuid}]];
 

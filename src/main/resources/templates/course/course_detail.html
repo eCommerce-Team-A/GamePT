@@ -166,14 +166,15 @@
                         </div>
                         <hr class="w-100 p-0 m-0">
                         <div class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
-                        <div class="m-2 mx-4 fw-bold"> 내 보유 포인트 : [[${@rq.getSiteUser.point}]]</div>
-                        <button id="orderButton" href="#" class="btn mx-4"
-                                style="background-color: #0D6EFD; color:white;">구매하기
-                        </button>
-                        <button class="btn my-1 mb-3 mx-4" id="addCart"
-                                style="background-color: #0D6EFD; color:white;">
+                        <div class="m-2 mx-4 fw-bold mt-1" th:if="${@rq.isLogin()}">
+                            내 보유 포인트 : [[${@rq.getSiteUser != null ? @rq.getSiteUser.point : null }]]
+                        </div>
+                        <button th:if="${@rq.isLogin()}" id="orderButton" href="#" class="btn mx-4" style="background-color: #0D6EFD; color:white;">구매하기</button>
+                        <button th:if="${@rq.isLogin()}" class="btn my-1 mb-3 mx-4" id="addCart" style="background-color: #0D6EFD; color:white;">
                             장바구니 담기
                         </button>
+
+
                     </div>
                 </div>
             </div>
@@ -210,12 +211,16 @@
 
                 var pp = [[${course.price}]];
 
-                if("[[${@rq.getSiteUser.username}]]" == "[[${course.author.username}]]" ){
+                var authorName = "[[${course.author.username}]]";
+                var buyUserName = "[[${@rq.getSiteUser != null ? @rq.getSiteUser.username : null }]]";
+                var buyUserPoint = [[${@rq.getSiteUser != null ? @rq.getSiteUser.point : null }]];
+
+                if(buyUserName == authorName ){
                     alert("자신의 강의는 구매할 수 없습니다.");
                     return;
                 }
 
-                if([[${@rq.getSiteUser.point}]] - pp < 0 ){
+                if(buyUserPoint - pp < 0 ){
                     alert("포인트가 부족합니다. 충전 후 이용해 주세요.");
                     return;
                 }
