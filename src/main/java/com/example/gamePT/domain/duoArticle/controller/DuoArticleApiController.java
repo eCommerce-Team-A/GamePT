@@ -27,7 +27,7 @@ public class DuoArticleApiController {
         if (line.equals("fill")) {
             duoArticleList = this.duoArticleService.getAllDuoArticles();
         } else {
-            duoArticleList = this.duoArticleService.getDulArticlesByMyLine(line);
+            duoArticleList = this.duoArticleService.getDuoArticlesByMyLine(line);
         }
         model.addAttribute("duoArticleList", duoArticleList);
         return "duo/list::#duoArticle1";

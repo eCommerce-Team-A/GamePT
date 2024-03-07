@@ -31,6 +31,13 @@ public class ExpertService {
         return this.expertReository.findById(id).get();
     }
 
+    public Expert getExpertByUsername(String username) {
+        if (this.expertReository.findByUserName(username).isEmpty()) {
+            return null;
+        }
+        return this.expertReository.findByUserName(username).get();
+    }
+
     public void deleteExpert(Expert expert) {
         this.expertReository.delete(expert);
     }
