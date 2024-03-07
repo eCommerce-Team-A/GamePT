@@ -22,6 +22,7 @@ public class CourseService {
                 .introduce(introduce)
                 .curriculum(curriculum)
                 .price(price)
+                .isActive(true)
                 .build();
         this.courseRepository.save(course);
 
