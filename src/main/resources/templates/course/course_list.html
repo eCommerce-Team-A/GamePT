@@ -56,7 +56,7 @@
                 <div th:if="${!courseList.isEmpty()}">
                     <ul class="pagination d-flex justify-content-center">
                         <li class="page-item" th:classappend="${!courseList.hasPrevious} ? 'disabled'">
-                            <a class="page-link" style="margin:0px;"
+                            <a class="page-link"
                                th:href="@{|?page=${courseList.number-1}|}">
                                 <span>이전</span>
                             </a>
@@ -65,11 +65,11 @@
                             th:if="${page >= courseList.number-5 and page <= courseList.number+5}"
                             th:classappend="${page == courseList.number} ? 'active'"
                             class="page-item">
-                            <a th:text="${page+1}" class="page-link" style="margin-inline:-1px;"
+                            <a th:text="${page+1}" class="page-link"
                                th:href="@{|?page=${page}|}"></a>
                         </li>
                         <li class="page-item" th:classappend="${!courseList.hasNext} ? 'disabled'">
-                            <a class="page-link" style="margin:0px;" th:href="@{|?page=${courseList.number+1}|}">
+                            <a class="page-link" th:href="@{|?page=${courseList.number+1}|}">
                                 <span>다음</span>
                             </a>
                         </li>

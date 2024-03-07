@@ -47,10 +47,10 @@ public class CourseController {
 
     //강의 상세 페이지
     @GetMapping("/detail/{id}")
-    public String showCourseDetail(@PathVariable(value = "id") Long id, Model model) {
+    public String showCourseDetail(@PathVariable(value = "id") Long id, @RequestParam(value = "page",defaultValue = "0") int page, Model model) {
         Course course = this.courseService.findCourseById(id);
         List<Course> courseListByAuthor = this.courseService.findCourseByAuthorId(course.getAuthor().getId());
-        List<Review> reviewList = this.reviewService.findByCourseId(id);
+        Page<Review> reviewList = this.reviewService.findByCourseId(id,page);
 
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("courseListByAuthor", courseListByAuthor);
