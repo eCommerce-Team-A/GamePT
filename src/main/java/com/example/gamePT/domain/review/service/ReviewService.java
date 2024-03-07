@@ -13,7 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 
 @Service
@@ -42,6 +42,18 @@ public class ReviewService {
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return this.reviewRepository.findByCourseIdOrderByCreateDateDesc(id, pageable);
+    }
 
+    public String getScoreAvg(Long courseId) {
+        List<Integer> scoreList = new ArrayList<>();
+        List<Review> reviewList = this.reviewRepository.findByCourseIdOrderByCreateDateDesc(courseId);
+        for (Review review : reviewList) {
+            scoreList.add(review.getScore());
+        }
+        IntSummaryStatistics statistics = scoreList
+                .stream()
+                .mapToInt(num -> num)
+                .summaryStatistics();
+        return String.format("%s (%d)", statistics.getAverage(), reviewList.size());
     }
 }
