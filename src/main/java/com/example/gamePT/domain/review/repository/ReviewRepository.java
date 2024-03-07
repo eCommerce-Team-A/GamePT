@@ -11,4 +11,5 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findByCourseIdOrderByCreateDateDesc(Long id , Pageable pageable);
+    List<Review> findByCourseId(Long id);
 }

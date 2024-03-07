@@ -46,7 +46,7 @@ public class ReviewService {
 
     public String getScoreAvg(Long courseId) {
         List<Integer> scoreList = new ArrayList<>();
-        List<Review> reviewList = this.reviewRepository.findByCourseIdOrderByCreateDateDesc(courseId);
+        List<Review> reviewList = this.reviewRepository.findByCourseId(courseId);
         for (Review review : reviewList) {
             scoreList.add(review.getScore());
         }
