@@ -17,44 +17,23 @@
         <div class="container mt-4 pb-5">
 
             <div class="row row-cols-4 g-4 justify-content-start">
-                <div class="col" th:each="expertUserImg : ${expertUserImgList}">
+                <div class="col" th:each="expertUserImg, loop : ${expertUserImgList}">
                     <a th:href="@{|/expert/detail/${expertUserImg.value.username}|}" class="expert-card">
                         <div class="expert-img">
                             <img th:src="${expertUserImg.key}" alt="..."
                                  style="width:70px; height:70px; border-radius: 50%;">
-                            <div>
-<!--                                <img th:src="@{|/img/${expertUserImg.value.get}.png|}" style="height: 40px;">-->
+                            <div id="expert-info" style="display: flex; flex-direction: column; align-items: flex-end;">
+                                <img style="width: 40px;" th:name="|expert-tier${loop.index}|" th:src="@{|/img/${a}.png|}">
+                                <script th:src="@{/js/calculateDate.js}"></script>
+                                <script th:inline="javascript">
+                                    getTier([[${expertUserImg.value.puuid}]], 'expert-tier' + [[${loop.index}]]);
+                                </script>
                                 <span class="Nanum" th:text="${expertUserImg.value.username}"></span>
                             </div>
                         </div>
-                        <div class="expert-content"></div>
+                        <div class="expert-content">
+                        </div>
                     </a>
-                    <!--                    <div class="rounded position-relative fruite-item" >-->
-                    <!--                        <a th:href="@{|/expert/detail/${expertUser.username}|}">-->
-                    <!--                            <div class="fruite-img">-->
-                    <!--                                <img src="https://i.ibb.co/w7yw4kK/image.jpg"-->
-                    <!--                                     class="img-fluid w-100 rounded-top" alt="">-->
-                    <!--                            </div>-->
-                    <!--                        </a>-->
-                    <!--                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"-->
-                    <!--                             style="top: 10px; left: 10px;" >asdsdfa-->
-                    <!--                        </div>-->
-                    <!--                        <div class="p-4 border border-top-0 rounded-bottom">-->
-                    <!--                            <h4 class="mb-3">-->
-                    <!--                                <a th:href="@{|/expert/detail/${expertUser.username}|}" style="text-decoration: none; color: inherit;"-->
-                    <!--                                   th:text="${expertUser.username}"></a>-->
-                    <!--                            </h4>-->
-                    <!--                            <p >sdfasd</p>-->
-                    <!--                            <div class="d-flex justify-content-between flex-lg-wrap">-->
-                    <!--                                <p class="text-dark fs-7 fw-bold mb-0"-->
-                    <!--                                   >dsd</p>-->
-                    <!--                            </div>-->
-                    <!--                            <br>-->
-                    <!--                            <a th:href="@{|/expert/detail/${expertUser.username}|}"-->
-                    <!--                               class="btn border border-secondary rounded-pill px-3 text-primary"-->
-                    <!--                               style="display:block;">상세 보기</a>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
                 </div>
             </div>
             <div class="col-12">
@@ -178,6 +157,7 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
             class="fa fa-arrow-up"></i></a>
+
 </div>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 </html>

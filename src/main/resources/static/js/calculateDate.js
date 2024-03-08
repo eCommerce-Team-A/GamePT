@@ -23,3 +23,20 @@ function calculateDate(articleCreateDate, index) {
         document.getElementById(index).innerHTML = parseInt(difference / 31536000) + '년 전';
     }
 }
+
+function getTier(puuid, index) {
+    $.ajax({
+            type: 'GET',
+            url: '/riotApiController/getLeagueDataByPuuid/' + puuid,
+            success: function (result) {
+                $("img[name='" + index + "']").attr({
+                    "src": "/img/" + result.tier + ".png"
+                });
+                console.log(result.tier);
+            },
+            error: function (request, status, error) {
+                console.log(error);
+            }
+        }
+    )
+}

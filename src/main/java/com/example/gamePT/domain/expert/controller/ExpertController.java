@@ -78,6 +78,7 @@ public class ExpertController {
     public String expertList(Model model) {
         List<SiteUser> expertUserList = this.userService.getUserListByAuthorization("Expert");
         Map<String, SiteUser> expertUserImgList = new HashMap<>();
+        Map<String, Map<String, SiteUser>> expertUserImgInfoList = new HashMap<>();
         for (SiteUser expert : expertUserList) {
             expertUserImgList.put(this.userService.getProfileImg(expert.getId()), expert);
         }
