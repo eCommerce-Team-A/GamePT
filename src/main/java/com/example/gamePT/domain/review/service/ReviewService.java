@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.IntSummaryStatistics;
 import java.util.List;
@@ -54,6 +55,7 @@ public class ReviewService {
                 .stream()
                 .mapToInt(num -> num)
                 .summaryStatistics();
-        return String.format("%s (%d)", statistics.getAverage(), reviewList.size());
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        return String.format("%s (%d)", decimalFormat.format(statistics.getAverage()), reviewList.size());
     }
 }
