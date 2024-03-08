@@ -26,7 +26,8 @@
                     <div class="badge rounded-pill text-bg-primary ms-2">[[${course.gameCategoryname}]]</div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <a class="btn btn-primary" th:href="@{|/course/update/${course.id}|}" role="button">강의 수정</a>
+                    <a class="btn btn-primary" th:href="@{|/course/update/${course.id}|}" role="button" sec:authorize="isAuthenticated()"
+                        th:if="${course.author != null and #authentication.getPrincipal().getUsername() == course.author.username}">강의 수정</a>
                     <a class="btn btn-primary" style="margin-left:10px;" th:href="@{/course/list}" role="button">강의
                         목록</a>
                 </div>
@@ -188,7 +189,7 @@
                        th:href="@{|/course/detail/${relateCourse.id}|}">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div>
-                                <img src="https://i.namu.wiki/i/30whaqjessttAI0WYfI4EUeLMpBsch-usaIxU4jd3GJlKj1WSMwTDR8CODkb7dGvhi4PNfYcawLB-scDXOl4QmsFMJpQMTtPhKXUy9DCBdg1_hgm38L9MbXVlRGqDi8KbOwkouNYVtX5NDvT9L3vbA.webp"
+                                <img th:src=@{|/img/forMainCourse/${@rq.getRandomImage()}|}
                                      class="vesitable-img w-100 rounded-top" alt="">
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
@@ -196,7 +197,7 @@
                             </div>
                             <div class="p-4 rounded-bottom">
                                 <h4 th:text="${relateCourse.author.nickname}"></h4>
-                                <div th:text="${relateCourse.introduce}"></div>
+                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${relateCourse.introduce}"></div>
                             </div>
                         </div>
                     </a>
@@ -259,6 +260,14 @@
 
 
             $('#postReview').on("click", function(){
+                var authorName = "[[${course.author.username}]]";
+                var buyUserName = "[[${@rq.getSiteUser != null ? @rq.getSiteUser.username : null }]]";
+
+                if(buyUserName == authorName ){
+                    alert("자신의 강의에는 리뷰를 작성할 수 없습니다.");
+                    return;
+                }
+
                 var token = $("meta[name='_csrf']").attr("content");
                 var header = $("meta[name='_csrf_header']").attr("content");
                 console.log(1)

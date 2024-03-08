@@ -87,4 +87,5 @@ public class QnAService {
                 .build();
         this.qnARepository.save(qnA);
     }
+
 }

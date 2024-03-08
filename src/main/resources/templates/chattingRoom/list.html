@@ -42,8 +42,8 @@
                         </div>
                         <div class="list-group text-center rounded-0" id="list-tab" role="tablist">
                             <div th:each="room : ${chattingRooms}">
-                                <a th:if="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" ><i class="fa-regular fa-comment"></i> [[${room.expert.username}]] 님</a>
-                                <a th:unless="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" ><i class="fa-regular fa-comment"></i>  [[${room.siteUser.username}]] 님</a>
+                                <a th:if="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" ><i class="fa-regular fa-comment"></i> [[${room.expert.nickname}]] 님</a>
+                                <a th:unless="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" ><i class="fa-regular fa-comment"></i>  [[${room.siteUser.nickname}]] 님</a>
                             </div>
                         </div>
                     </div>
