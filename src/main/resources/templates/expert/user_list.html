@@ -17,16 +17,22 @@
         <div class="container mt-4 pb-5">
 
             <div class="row row-cols-4 g-4 justify-content-start">
-                <div class="col" th:each="expertUserImg : ${expertUserImgList}">
+                <div class="col" th:each="expertUserImg, loop : ${expertUserImgList}">
                     <a th:href="@{|/expert/detail/${expertUserImg.value.username}|}" class="expert-card">
                         <div class="expert-img">
                             <img th:src="${expertUserImg.key}" alt="..."
                                  style="width:70px; height:70px; border-radius: 50%;">
-                            <div id="expert-info">
+                            <div id="expert-info" style="display: flex; flex-direction: column; align-items: flex-end;">
+                                <img style="width: 40px;" th:name="|expert-tier${loop.index}|" th:src="@{|/img/${a}.png|}">
+                                <script th:src="@{/js/calculateDate.js}"></script>
+                                <script th:inline="javascript">
+                                    getTier([[${expertUserImg.value.puuid}]], 'expert-tier' + [[${loop.index}]]);
+                                </script>
                                 <span class="Nanum" th:text="${expertUserImg.value.username}"></span>
                             </div>
                         </div>
-                        <div class="expert-content"></div>
+                        <div class="expert-content">
+                        </div>
                     </a>
                 </div>
             </div>
@@ -151,15 +157,7 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
             class="fa fa-arrow-up"></i></a>
-    <script th:inline="javascript">
-        var expertUserImgList = [[${expertUserImgList}]];
 
-        $.each(expertUserImgList, function (index, expertUserImg) {
-            var puuid = expertUserImg.puuid;
-            console.log(puuid);
-        });
-    </script>
 </div>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
-
 </html>

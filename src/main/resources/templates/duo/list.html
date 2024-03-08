@@ -173,7 +173,7 @@
                     </td>
                     <script th:src="@{/js/calculateDate.js}"></script>
                     <script th:inline="javascript">
-                        calculateDate(/*[[${duoArticle.createDate}]]*/, 'result' + /*[[${loop.index + 1}]]*/);
+                        calculateDate([[${duoArticle.createDate}]], 'result' + [[${loop.index + 1}]]);
                     </script>
                     <td class="article_element" style="width: 3%">
                         <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
