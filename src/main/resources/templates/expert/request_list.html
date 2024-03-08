@@ -26,23 +26,23 @@
                 </tr>
                 </thead>
                 <tbody style="text-align: center">
-                <tr th:each="expert, loop : ${expertList}">
+                <tr th:each="expertRequest, loop : ${expertRequestList}">
                     <td >
                         <div class="article-element"><span th:text="${loop.count}"></span></div>
                     </td>
                     <td style="width: 20%">
-                        <div class="article-element"><a href="/" th:text="${expert.userName}"></a></div>
+                        <div class="article-element"><a href="/" th:text="${expertRequest.userName}"></a></div>
                     </td>
                     <td style="width: 50%">
-                        <div class="article-element"><span th:text="${expert.introduce}" ></span></div>
+                        <div class="article-element"><span th:text="${expertRequest.content}" ></span></div>
                     </td>
                     <td>
-                        <div class="article-element"><span th:text="${#temporals.format(expert.createDate, 'yyyy-MM-dd')}"></span></div>
+                        <div class="article-element"><span th:text="${#temporals.format(expertRequest.createDate, 'yyyy-MM-dd')}"></span></div>
                     </td>
                     <td style="width: 10%">
                         <div class="article-element">
-                            <a class="btn btn-sm btn-outline-primary" th:href="@{|/expert/approve/${expert.id}|}" style="margin-right: 6px;">승인</a>
-                            <a class="btn btn-sm btn-outline-secondary" th:href="@{|/expert/reject/${expert.id}|}">거부</a>
+                            <a class="btn btn-sm btn-outline-primary" th:href="@{|/expert/request/approve/${expertRequest.id}|}" style="margin-right: 6px;">승인</a>
+                            <a class="btn btn-sm btn-outline-secondary" th:href="@{|/expert/request/reject/${expertRequest.id}|}">거부</a>
                         </div>
                     </td>
                 </tr>

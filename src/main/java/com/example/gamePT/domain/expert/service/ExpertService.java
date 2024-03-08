@@ -1,7 +1,7 @@
 package com.example.gamePT.domain.expert.service;
 
 import com.example.gamePT.domain.expert.entity.Expert;
-import com.example.gamePT.domain.expert.repository.ExpertReository;
+import com.example.gamePT.domain.expert.repository.ExpertRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,35 +10,41 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ExpertService {
-    private final ExpertReository expertReository;
+    private final ExpertRepository expertRepository;
 
-    public void create(String userName, String introduce) {
+    public void createExpert(Long id) {
         Expert expert = Expert.builder()
-                .userName(userName)
+                .siteUserId(id)
+                .build();
+        this.expertRepository.save(expert);
+    }
+
+    public void modifyExpert(Expert expert, String introduce) {
+        Expert modifyExpert= expert.toBuilder()
                 .introduce(introduce)
                 .build();
-        this.expertReository.save(expert);
+        this.expertRepository.save(modifyExpert);
     }
 
     public List<Expert> getExpertList() {
-        return this.expertReository.findAll();
+        return this.expertRepository.findAll();
     }
 
     public Expert getExpertById(Long id) {
-        if (this.expertReository.findById(id).isEmpty()) {
+        if (this.expertRepository.findById(id).isEmpty()) {
             return null;
         }
-        return this.expertReository.findById(id).get();
+        return this.expertRepository.findById(id).get();
     }
 
-    public Expert getExpertByUsername(String username) {
-        if (this.expertReository.findByUserName(username).isEmpty()) {
+    public Expert getExpertBySiteUserId(Long id) {
+        if (this.expertRepository.findBySiteUserId(id).isEmpty()) {
             return null;
         }
-        return this.expertReository.findByUserName(username).get();
+        return this.expertRepository.findBySiteUserId(id).get();
     }
 
     public void deleteExpert(Expert expert) {
-        this.expertReository.delete(expert);
+        this.expertRepository.delete(expert);
     }
 }

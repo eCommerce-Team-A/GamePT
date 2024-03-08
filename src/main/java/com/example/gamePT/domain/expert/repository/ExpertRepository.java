@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ExpertReository extends JpaRepository<Expert, Long> {
+public interface ExpertRepository extends JpaRepository<Expert, Long> {
 
-    Optional<Expert> findByUserName(String username);
+    Optional<Expert> findBySiteUserId(Long id);
 }

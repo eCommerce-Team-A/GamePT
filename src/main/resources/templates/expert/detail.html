@@ -28,7 +28,7 @@
                 <div class="d-flex align-items-center">
                     <a th:if="${@rq.isLogin() and @rq.getSiteUser().username == siteUser.username}"
                        class="btn btn-sm btn-outline-primary" style="margin-right: -20px; "
-                       th:href="@{|/career/create/${@rq.getSiteUser().username}|}"
+                       th:href="@{|/expert/modify/${@rq.getSiteUser().username}|}"
                        role="button">수정<i class="fa-solid fa-pen-to-square" style="margin-left: 3px;"></i></a>
                     <a th:if="${@rq.isLogin() and @rq.getSiteUser().username != siteUser.username}" style="margin-right: -20px;"
                        class="btn btn-sm btn-outline-primary" th:href="@{/}" role="button">상담신청<i class="fa-solid fa-comment-dots" style="margin-left: 3px;"></i></a>
@@ -82,7 +82,7 @@
                             <span style="margin-left: 10px"><i class="fa-solid fa-award" style="color: goldenrod; margin-right: 5px;"></i>경력</span>
                         </div>
                         <hr class="w-100 m-0">
-                        <div class="m-2" th:each="career : ${careerList}" th:if="${career.category != null}">
+                        <div class="m-2" th:each="career : ${careerList}">
                             <div>
                                 <span th:text="|${career.category}, |"></span>
                                 <span th:text="${career.content}"></span>
