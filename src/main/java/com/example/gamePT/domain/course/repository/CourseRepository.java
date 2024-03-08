@@ -10,4 +10,6 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findCourseByAuthorId(Long id);
     Page<Course> findAll(Pageable pageable);
+
+    List<Course> findTop4ByOrderByCreateDateDesc();
 }
