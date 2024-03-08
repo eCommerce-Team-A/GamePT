@@ -475,7 +475,7 @@ a {
     text-decoration: none;
     transition: 0.5s;
     border: 1px solid var(--bs-secondary);
-    margin: 0 4px;
+    margin: 0 0px;
 }
   
 .pagination a.active {
@@ -550,3 +550,26 @@ a {
     transition: filter linear .3s;
 }
 /*** Rate Star End ***/
+
+.expert-card {
+    height: 100%;
+    transition: 0.5s;
+    position: relative;
+    box-sizing: border-box;
+    display: block;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    padding: 15px;
+}
+
+.expert-img {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.Nanum {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 1000;
+    font-style: normal;
+}

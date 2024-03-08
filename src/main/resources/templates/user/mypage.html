@@ -20,18 +20,20 @@
                              style="width:100%; height:100%; object-fit:contain;">
                     </div>
                 </div>
-                <div class="col-11 d-flex flex-column justify-content-center">
-                    <div class="ms-2 fw-bold">
-                        <h4>
-                            안녕하세요 [[${@rq.getSiteUser().nickname}]] 님!
-                        </h4>
-                        <div>
-                            <span class="badge rounded-pill text-bg-primary ">[[${@rq.getSiteUser().tag}]]</span>
-                            [[${@rq.getSiteUser().gameName}]]
+                <div class="col-11 flex-column justify-content-center">
+                    <div>
+                        <div class="ms-2 fw-bold">
+                            <h4>
+                                안녕하세요 [[${@rq.getSiteUser().nickname}]] 님!
+                            </h4>
+                            <div>
+                                <span class="badge rounded-pill text-bg-primary ">[[${@rq.getSiteUser().tag}]]</span>
+                                [[${@rq.getSiteUser().gameName}]]
+                            </div>
                         </div>
                     </div>
-
                 </div>
+
             </div>
             <div class="row mt-4">
                 <div class="col-4">
@@ -40,7 +42,8 @@
                             <div class="">내 정보</div>
 
                             <div class="dropstart">
-                                <a href="#" class="px-2" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                <a href="#" class="px-2" data-bs-toggle="dropdown" data-bs-auto-close="true"
+                                   aria-expanded="false">
                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -49,11 +52,6 @@
                                             <i class="fa-regular fa-pen-to-square text-success"></i> &nbsp;정보 수정
                                         </a>
                                     </li>
-<!--                                    <li class="mt-1">-->
-<!--                                        <a class="text-dark dropdown-item deleteTeam" href="#">-->
-<!--                                            <i class="fa-regular fa-trash-can text-danger"></i> &nbsp;팀 삭제-->
-<!--                                        </a>-->
-<!--                                    </li>-->
                                     <li class="mt-1">
                                         <a class="text-dark dropdown-item leaveTeam" href="#">
                                             <i class="fa-solid fa-right-from-bracket text-danger"></i> &nbsp;탈퇴
@@ -74,6 +72,9 @@
                                 <div>
                                     <i class="fa-solid fa-envelope"></i>
                                 </div>
+                                <div>
+                                    <i class="fa-solid fa-sack-dollar"></i>
+                                </div>
                             </div>
                             <div class="text-center col-3">
                                 <div>
@@ -85,6 +86,9 @@
                                 <div>
                                     Email
                                 </div>
+                                <div>
+                                    Point
+                                </div>
                             </div>
                             <div class="col-7">
                                 <div>
@@ -95,6 +99,9 @@
                                 </div>
                                 <div>
                                     [[${@rq.getSiteUser().email}]]
+                                </div>
+                                <div>
+                                    [[${@rq.getSiteUser().point}]]
                                 </div>
                             </div>
 
@@ -142,7 +149,8 @@
                             <div class="games" style="display:none;">
                                 <div class="row">
                                     <div class="col-5 d-flex flex-column align-items-center">
-                                        <div id="chart-title" class="text-secondary text-center" style="font-size:13px;">
+                                        <div id="chart-title" class="text-secondary text-center"
+                                             style="font-size:13px;">
 
                                         </div>
                                         <canvas id="myChart" width="100px" height="100px">
@@ -155,7 +163,7 @@
                                                 <div id="avgKills"></div>
                                                 <div class="mx-1">/</div>
                                                 <div id="avgDeaths" class="text-danger"></div>
-                                                <div class="mx-1"> / </div>
+                                                <div class="mx-1"> /</div>
                                                 <div id="avgAssists"></div>
                                             </div>
                                             <div id="totalKDA" class="fs-4 fw-bold">
@@ -168,62 +176,134 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
+
                 <div class="col-8">
                     <div class="card w-100 Regular shadow border-0">
-                        <div class="card-header bg-white">
-                            <i class="fa-solid fa-landmark"></i> 진행중인 강의
+                        <div id="orderHistory" class="card w-100 Regular shadow border-0">
+                            <div class="card-header bg-white">
+                                <i class="fa-regular fa-credit-card"></i> 주문내역
+                            </div>
+                            <ul class="list-group list-group-flush text-center my-3">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            번호
+                                        </div>
+                                        <div class="col-6">
+                                            구매품명
+                                        </div>
+                                        <div class="col-2">
+                                            총 가격
+                                        </div>
+                                        <div class="col-3">
+                                            구매 일시
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item" th:each="orderEntity, loop : ${paging}">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            [[${orderEntity.id}]]
+                                        </div>
+                                        <div class="col-6">
+                                            <a th:href="@{|/order/detail/${orderEntity.id}|}"
+                                               th:if="${#lists.size(orderEntity.orderItemList) > 1}">
+                                                [[${orderEntity.orderItemList[0].course.name}]] 외
+                                                [[${#lists.size(orderEntity.orderItemList) -1}]]개 상품
+                                            </a>
+                                            <a th:href="@{|/order/detail/${orderEntity.id}|}"
+                                               th:unless="${#lists.size(orderEntity.orderItemList) > 1}">
+                                                [[${orderEntity.orderItemList[0].course.name}]]
+                                            </a>
+
+
+                                        </div>
+                                        <div class="col-2">
+                                            [[${orderEntity.totalPrice}]]
+                                        </div>
+                                        <div class="col-3">
+                                            [[${#temporals.format(orderEntity.createDate, 'yy-MM-dd HH:mm')}]]
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- 페이징처리 시작 -->
+                            <div th:if="${!paging.isEmpty()}">
+                                <ul class="pagination pagination-sm justify-content-center d-flex justify-content-center">
+                                    <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="page-link changePageButton"
+                                           th:value="${paging.number-1}">
+                                            <span>이전</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                                        th:if="${page >= paging.number-3 and page <= paging.number+3}"
+                                        th:classappend="${page == paging.number} ? 'active'"
+                                        class="page-item">
+                                        <a href="#" onclick="return false" class="page-link changePageButton"
+                                           th:value="${page}">[[${page} + 1]]</a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="page-link changePageButton"
+                                           th:value="${paging.number+1}">
+                                            <span>다음</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- 페이징처리 끝 -->
                         </div>
 
-                        <div class="card-body">
-                            <p class="card-text">진행중인 강의가 보여질 예정</p>
-                        </div>
-
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">강의 1</li>
-                            <li class="list-group-item">강의 2</li>
-                            <li class="list-group-item">강의 3</li>
-                        </ul>
-                    </div>
-
-                    <div class="card w-100 Regular shadow border-0 mt-4">
-                        <div class="card-header bg-white">
-                            <i class="fa-regular fa-credit-card"></i> 주문내역
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">주문 내역이 보여질 예정</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">주문내역 1</li>
-                            <li class="list-group-item">주문내역 2</li>
-                            <li class="list-group-item">주문내역 3</li>
-                        </ul>
                     </div>
 
                 </div>
+
             </div>
         </div>
     </div>
 
     <script th:inline="javascript">
-        $(function() {
+        $(function () {
+
+            <!-- 주문내역 페이징 클릭시 이동 -->
+            $(document).on('click', '.page-link', function(event) {
+                $.ajax({
+                    type : 'get',              // 타입 (get, post, put 등등)
+                    url : '/user/mypage/' + $(this).attr("value"),     // 요청할 서버url
+                    async : true,               // 비동기화 여부 (default : true)
+                    headers : {                 // Http header
+                        "Content-Type" : "application/json",
+                        "X-HTTP-Method-Override" : "GET"
+                    },
+                    dataType : 'html',
+                    success : function(result) { // 결과 성공 콜백함수
+                        $("#orderHistory").replaceWith(result);
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                    }
+                })
+            });
+
+
 
             var puuid = [[${@rq.getSiteUser().puuid}]];
 
             <!-- 최근 20 경기 -->
             $.ajax({
-                type : 'get',              // 타입 (get, post, put 등등)
-                url : '/riotApiController/getMatchesByPuuid/' + puuid,     // 요청할 서버url
-                async : true,               // 비동기화 여부 (default : true)
-                headers : {                 // Http header
-                    "Content-Type" : "application/json",
-                    "X-HTTP-Method-Override" : "GET"
+                type: 'get',              // 타입 (get, post, put 등등)
+                url: '/riotApiController/getMatchesByPuuid/' + puuid,     // 요청할 서버url
+                async: true,               // 비동기화 여부 (default : true)
+                headers: {                 // Http header
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "GET"
                 },
-                dataType : 'json',
-                success : function(result) { // 결과 성공 콜백함수
-                    $('.games-spinner').css("display","none");
-                    $('.games').css("display","block");
+                dataType: 'json',
+                success: function (result) { // 결과 성공 콜백함수
+                    $('.games-spinner').css("display", "none");
+                    $('.games').css("display", "block");
 
                     const ctx = document.getElementById('myChart').getContext('2d');
 
@@ -234,15 +314,15 @@
                     var assists = result.assists;
                     var teamTotalKill = result.teamTotalKill;
 
-                    var killPercent = Math.round((kills + assists)/teamTotalKill *100);
-                    $('#killPercent').text("킬관여 " + killPercent + "%") ;
+                    var killPercent = Math.round((kills + assists) / teamTotalKill * 100);
+                    $('#killPercent').text("킬관여 " + killPercent + "%");
 
-                    var title = (win+lose) + "전 " + win + "승 "+ lose + "패"
+                    var title = (win + lose) + "전 " + win + "승 " + lose + "패"
                     $('#chart-title').text(title);
 
-                    var avgKills = Math.round(((kills / (win+lose)) + Number.EPSILON) * 10) / 10;
-                    var avgDeaths = Math.round(((deaths / (win+lose)) + Number.EPSILON) * 10) / 10;
-                    var avgAssists = Math.round(((assists / (win+lose)) + Number.EPSILON) * 10) / 10;
+                    var avgKills = Math.round(((kills / (win + lose)) + Number.EPSILON) * 10) / 10;
+                    var avgDeaths = Math.round(((deaths / (win + lose)) + Number.EPSILON) * 10) / 10;
+                    var avgAssists = Math.round(((assists / (win + lose)) + Number.EPSILON) * 10) / 10;
 
                     $('#avgKills').text(avgKills);
                     $('#avgDeaths').text(avgDeaths);
@@ -253,50 +333,50 @@
 
 
                     var myChart = new Chart(ctx, {
-                      type: 'doughnut',
+                        type: 'doughnut',
                         data: {
-                          datasets: [{
-                            data: [win, lose], // 승,패
-                            backgroundColor: [
-                              '#5383e8',
-                              '#e84057'
-                            ],
-                            borderWidth: 0,
-                            scaleBeginAtZero: true,
-                          }]
+                            datasets: [{
+                                data: [win, lose], // 승,패
+                                backgroundColor: [
+                                    '#5383e8',
+                                    '#e84057'
+                                ],
+                                borderWidth: 0,
+                                scaleBeginAtZero: true,
+                            }]
                         },
-                          options: {
-                             responsive: false
-                          }
+                        options: {
+                            responsive: false
+                        }
                     });
                 },
-                error : function(request, status, error) { // 결과 에러 콜백함수
-                        console.log(error)
+                error: function (request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
                 }
             })
 
             <!-- 소환사 정보 요청 -->
             $.ajax({
-                type : 'get',              // 타입 (get, post, put 등등)
-                url : '/riotApiController/getLeagueDataByPuuid/' + puuid,     // 요청할 서버url
-                async : true,               // 비동기화 여부 (default : true)
-                headers : {                 // Http header
-                    "Content-Type" : "application/json",
-                    "X-HTTP-Method-Override" : "GET"
+                type: 'get',              // 타입 (get, post, put 등등)
+                url: '/riotApiController/getLeagueDataByPuuid/' + puuid,     // 요청할 서버url
+                async: true,               // 비동기화 여부 (default : true)
+                headers: {                 // Http header
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "GET"
                 },
-                dataType : 'json',
-                success : function(result) { // 결과 성공 콜백함수
-                    $('.rankInfo-spinner').css("display","none");
-                    $('.rankInfo').css("display","block");
-                    if(result != null){
-                        $('#rankImg').attr("src","/img/"+result.tier+".png")
+                dataType: 'json',
+                success: function (result) { // 결과 성공 콜백함수
+                    $('.rankInfo-spinner').css("display", "none");
+                    $('.rankInfo').css("display", "block");
+                    if (result != null) {
+                        $('#rankImg').attr("src", "/img/" + result.tier + ".png")
                         $('#tier-rank').text(result.tier + " " + result.rank)
-                        $('#win-lose').text(result.wins+"승 "+result.losses+"패")
-                        $('#win-rate').text("승률 " + (Math.round((result.wins / (result.wins+result.losses))*100)) + "%")
+                        $('#win-lose').text(result.wins + "승 " + result.losses + "패")
+                        $('#win-rate').text("승률 " + (Math.round((result.wins / (result.wins + result.losses)) * 100)) + "%")
                     }
                 },
-                error : function(request, status, error) { // 결과 에러 콜백함수
-                        console.log(error)
+                error: function (request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
                 }
             })
 
