@@ -26,7 +26,8 @@
                     <div class="badge rounded-pill text-bg-primary ms-2">[[${course.gameCategoryname}]]</div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <a class="btn btn-primary" th:href="@{|/course/update/${course.id}|}" role="button">강의 수정</a>
+                    <a class="btn btn-primary" th:href="@{|/course/update/${course.id}|}" role="button" sec:authorize="isAuthenticated()"
+                        th:if="${course.author != null and #authentication.getPrincipal().getUsername() == course.author.username}">강의 수정</a>
                     <a class="btn btn-primary" style="margin-left:10px;" th:href="@{/course/list}" role="button">강의
                         목록</a>
                 </div>
@@ -259,6 +260,14 @@
 
 
             $('#postReview').on("click", function(){
+                var authorName = "[[${course.author.username}]]";
+                var buyUserName = "[[${@rq.getSiteUser != null ? @rq.getSiteUser.username : null }]]";
+
+                if(buyUserName == authorName ){
+                    alert("자신의 강의에는 리뷰를 작성할 수 없습니다.");
+                    return;
+                }
+
                 var token = $("meta[name='_csrf']").attr("content");
                 var header = $("meta[name='_csrf_header']").attr("content");
                 console.log(1)
