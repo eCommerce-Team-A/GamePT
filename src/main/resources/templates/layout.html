@@ -66,7 +66,7 @@
                 <div class="navbar-nav mx-auto">
                     <a href="/" class="nav-item nav-link">Home</a>
                     <a th:href="@{/course/list}" class="nav-item nav-link">강의 목록</a>
-                    <a th:href="@{/expert/users}" class="nav-item nav-link">전문가 목록</a>
+                    <a th:href="@{/expert/list}" class="nav-item nav-link">전문가 목록</a>
                     <a th:href="@{/qna/list}" class="nav-item nav-link">QnA</a>
                     <a th:href="@{/duo/list}" class="nav-item nav-link">듀오</a>
                     <a th:if="${@rq.isLogin() and @rq.getSiteUser().authorization == 'Member'}"

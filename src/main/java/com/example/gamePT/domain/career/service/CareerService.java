@@ -2,6 +2,7 @@ package com.example.gamePT.domain.career.service;
 
 import com.example.gamePT.domain.career.entity.Career;
 import com.example.gamePT.domain.career.repository.CareerRepository;
+import com.example.gamePT.domain.expert.entity.Expert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,8 @@ import java.util.Optional;
 public class CareerService {
     private final CareerRepository careerRepository;
 
-    public List<Career> getCareerListByUsername(String username) {
-        return this.careerRepository.findCareersByUsername(username);
+    public List<Career> getCareerListByExpertId(Long id) {
+        return this.careerRepository.findCareersByExpert_Id(id);
     }
 
     public Career getCareerById(Long id) {
@@ -25,42 +26,18 @@ public class CareerService {
         return career.get();
     }
 
-    public void registerIntroduce(String username, String introduce) {
+    public Career createCareer(String category, String content, Expert expert) {
         Career career = Career.builder()
-                .username(username)
-                .introduce(introduce)
-                .build();
-        this.careerRepository.save(career);
-    }
-
-    public void modifyIntroduce(String username, String introduce) {
-        List<Career> careerList = this.getCareerListByUsername(username);
-        for (Career career : careerList) {
-            Career modifyCareer = career.toBuilder()
-                    .introduce(introduce)
-                    .build();
-            this.careerRepository.save(modifyCareer);
-        }
-    }
-
-    public void registerCareer(String username, String introduce, String category, String content) {
-        Career career = Career.builder()
-                .username(username)
-                .introduce(introduce)
                 .category(category)
                 .content(content)
+                .expert(expert)
                 .build();
         this.careerRepository.save(career);
+        return career;
     }
 
     public void deleteCareer(Career career) {
         this.careerRepository.delete(career);
     }
 
-    public String getIntroduce(List<Career> careerList) {
-        if (!careerList.isEmpty()) {
-            return careerList.get(0).getIntroduce();
-        }
-        return null;
-    }
 }
