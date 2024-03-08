@@ -4,7 +4,9 @@ import com.example.gamePT.domain.career.entity.Career;
 import com.example.gamePT.domain.career.service.CareerService;
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.service.CourseService;
+import com.example.gamePT.domain.expert.entity.CourseScore;
 import com.example.gamePT.domain.expert.entity.Expert;
+import com.example.gamePT.domain.expert.entity.SiteUserWithImg;
 import com.example.gamePT.domain.expert.service.ExpertService;
 import com.example.gamePT.domain.review.service.ReviewService;
 import com.example.gamePT.domain.user.entity.SiteUser;
@@ -15,9 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,11 +36,12 @@ public class ExpertController {
     @GetMapping("/list")
     public String expertList(Model model) {
         List<SiteUser> expertUserList = this.userService.getUserListByAuthorization("Expert");
-        Map<String, SiteUser> expertUserImgList = new HashMap<>();
-        for (SiteUser expert : expertUserList) {
-            expertUserImgList.put(this.userService.getProfileImg(expert.getId()), expert);
+        List<SiteUserWithImg> siteUserWithImgList = new ArrayList<>();
+        for (SiteUser siteUser : expertUserList) {
+            SiteUserWithImg siteUserWithImg = new SiteUserWithImg(this.userService.getProfileImg(siteUser.getId()), siteUser);
+            siteUserWithImgList.add(siteUserWithImg);
         }
-        model.addAttribute("expertUserImgList", expertUserImgList);
+        model.addAttribute("siteUserWithImgList", siteUserWithImgList);
         return "expert/user_list";
     }
 
@@ -71,14 +73,15 @@ public class ExpertController {
         String profileImg = this.userService.getProfileImg(siteUser.getId());
         List<Career> careerList = this.careerService.getCareerListByExpertId(expert.getId());
         List<Course> courseList = this.courseService.findCourseByAuthorId(siteUser.getId());
-        Map<String, Course> scoreCourseList = new HashMap<>();
+        List<CourseScore> courseScoreList = new ArrayList<>();
         for (Course course : courseList) {
-            scoreCourseList.put(this.reviewService.getScoreAvg(course.getId()), course);
+            CourseScore courseScore = new CourseScore(this.reviewService.getScoreAvg(course.getId()), course);
+            courseScoreList.add(courseScore);
         }
         model.addAttribute("siteUser", siteUser);
         model.addAttribute("introduce", expert.getIntroduce());
         model.addAttribute("profileImg", profileImg);
-        model.addAttribute("scoreCourseList", scoreCourseList);
+        model.addAttribute("courseScoreList", courseScoreList);
         model.addAttribute("careerList", careerList);
     }
 

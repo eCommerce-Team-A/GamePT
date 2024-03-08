@@ -42,22 +42,22 @@
                             <ul class="list-group list-group-flush mb-5 p-4">
                                 <li class="list-group-item">
                                     <h4 style="padding: 14px;">강의
-                                        <div>
-                                            <a th:href="@{|/course/detail/${scoreCourse.value.id}|}"
-                                               style="padding-top: 14px; display: flex; align-items: center; font-size: 21px;" th:each="scoreCourse : ${scoreCourseList}">
+                                        <div th:each="courseScore : ${courseScoreList}">
+                                            <a th:href="@{|/course/detail/${courseScore.course.id}|}"
+                                               style="padding-top: 14px; display: flex; align-items: center; font-size: 21px;" >
                                                 <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg"
                                                      alt="" style="width:100px; height:100px; border-radius: 7%;">
                                                 <div style="display: flex; flex-direction: column; margin-left: 15px">
-                                                    <span th:text="${scoreCourse.value.name}"
+                                                    <span th:text="${courseScore.course.name}"
                                                           style="margin: 5px;"></span>
                                                     <div style="margin: 5px; font-size: 18px; display: flex; align-items: center; margin-top: -3px;">
                                                         <i class="review__rating fas fa-star"
                                                            style="font-size: 15px;"></i><span
-                                                            th:text="${scoreCourse.key}"
+                                                            th:text="${courseScore.avg}"
                                                             style="margin-left: 5px;"></span>
                                                     </div>
                                                     <div style="margin: 5px; font-size: 20px;">
-                                                        <span th:text="${scoreCourse.value.price}"></span>
+                                                        <span th:text="${courseScore.course.price}"></span>
                                                         <i class="fa-solid fa-coins" style="font-size: 15px;"></i>
                                                     </div>
                                                 </div>

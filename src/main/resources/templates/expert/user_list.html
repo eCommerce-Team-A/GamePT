@@ -17,18 +17,18 @@
         <div class="container mt-4 pb-5">
 
             <div class="row row-cols-4 g-4 justify-content-start">
-                <div class="col" th:each="expertUserImg, loop : ${expertUserImgList}">
-                    <a th:href="@{|/expert/detail/${expertUserImg.value.username}|}" class="expert-card">
+                <div class="col" th:each="siteUserWithImg, loop : ${siteUserWithImgList}">
+                    <a th:href="@{|/expert/detail/${siteUserWithImg.siteUser.username}|}" class="expert-card">
                         <div class="expert-img">
-                            <img th:src="${expertUserImg.key}" alt="..."
+                            <img th:src="${siteUserWithImg.img}" alt="..."
                                  style="width:70px; height:70px; border-radius: 50%;">
                             <div id="expert-info" style="display: flex; flex-direction: column; align-items: flex-end;">
-                                <img style="width: 40px;" th:name="|expert-tier${loop.index}|" th:src="@{|/img/${a}.png|}">
-                                <script th:src="@{/js/calculateDate.js}"></script>
-                                <script th:inline="javascript">
-                                    getTier([[${expertUserImg.value.puuid}]], 'expert-tier' + [[${loop.index}]]);
-                                </script>
-                                <span class="Nanum" th:text="${expertUserImg.value.username}"></span>
+<!--                                <img style="width: 40px;" th:name="|expert-tier${loop.index}|" th:src="@{|/img/${a}.png|}">-->
+<!--                                <script th:src="@{/js/calculateDate.js}"></script>-->
+<!--                                <script th:inline="javascript">-->
+<!--                                    getTier([[${siteUserWithImg.siteUser.puuid}]], 'expert-tier' + [[${loop.index}]]);-->
+<!--                                </script>-->
+                                <span class="Nanum" th:text="${siteUserWithImg.siteUser.username}"></span>
                             </div>
                         </div>
                         <div class="expert-content">
