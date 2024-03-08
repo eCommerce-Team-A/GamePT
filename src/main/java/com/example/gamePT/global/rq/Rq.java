@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.List;
+import java.util.Random;
 
 @Component
 @RequestScope
@@ -76,5 +77,15 @@ public class Rq {
 
         return userService.getProfileImg(siteUser.getId());
     }
+
+    public String getRandomImage(){
+
+        Random random = new Random(); //랜덤 객체 생성(디폴트 시드값 : 현재시간)
+//        random.setSeed(System.currentTimeMillis()); //시드값 설정을 따로 할수도 있음
+
+        return (random.nextInt(11)+1)+".webp";
+    }
+
+
 
 }

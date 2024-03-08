@@ -19,6 +19,13 @@ import java.util.Optional;
 public class CourseService {
     private final CourseRepository courseRepository;
 
+    public List<Course> getCourseForMain() {
+
+        return courseRepository.findTop4ByOrderByCreateDateDesc();
+
+    }
+
+
     public Course createCourse(SiteUser author, String gameCategoryname, String name, String introduce, String curriculum, Integer price) {
         Course course = Course.builder()
                 .author(author)

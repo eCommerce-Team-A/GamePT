@@ -189,7 +189,7 @@
                        th:href="@{|/course/detail/${relateCourse.id}|}">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div>
-                                <img src="https://i.namu.wiki/i/30whaqjessttAI0WYfI4EUeLMpBsch-usaIxU4jd3GJlKj1WSMwTDR8CODkb7dGvhi4PNfYcawLB-scDXOl4QmsFMJpQMTtPhKXUy9DCBdg1_hgm38L9MbXVlRGqDi8KbOwkouNYVtX5NDvT9L3vbA.webp"
+                                <img th:src=@{|/img/forMainCourse/${@rq.getRandomImage()}|}
                                      class="vesitable-img w-100 rounded-top" alt="">
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
@@ -197,7 +197,7 @@
                             </div>
                             <div class="p-4 rounded-bottom">
                                 <h4 th:text="${relateCourse.author.nickname}"></h4>
-                                <div th:text="${relateCourse.introduce}"></div>
+                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${relateCourse.introduce}"></div>
                             </div>
                         </div>
                     </a>

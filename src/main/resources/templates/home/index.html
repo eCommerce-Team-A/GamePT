@@ -9,14 +9,6 @@
                     <h4 class="mb-4">게임 강의 플랫폼</h4>
                     <h1 class="mb-2 text-primary text-bold">모든 유저들을 위한</h1>
                     <h1 class="mb-4 text-primary">GamePT에 오신 것을 환영 합니다.</h1>
-                    <div class="position-relative mx-auto">
-                        <input class="form-control border-2 border-light w-75 py-3 px-4 rounded-pill" type="number"
-                               placeholder="Search">
-                        <button type="submit"
-                                class="btn btn-primary border-2 border-light py-3 px-4 position-absolute rounded-pill text-white h-100"
-                                style="top: 0; right: 25%;">Submit Now
-                        </button>
-                    </div>
                 </div>
                 <div class="col-md-12 col-lg-5">
                     <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
@@ -24,11 +16,11 @@
                             <div class="carousel-item active rounded">
                                 <img src="/img/main-carousel-1.webp" class="img-fluid w-100 h-100 bg-secondary rounded"
                                      alt="First slide">
-                                <a href="#" class="btn px-4 py-2 text-white rounded">강의</a>
+                                <a href="/course/list" class="btn px-4 py-2 text-white rounded">강의</a>
                             </div>
                             <div class="carousel-item rounded">
                                 <img src="/img/main-carousel-2.webp" class="img-fluid w-100 h-100 rounded" alt="Second slide">
-                                <a href="#" class="btn px-4 py-2 text-white rounded">전문가</a>
+                                <a href="/expert/users" class="btn px-4 py-2 text-white rounded">전문가</a>
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselId"
@@ -54,398 +46,33 @@
             <div class="tab-class text-center">
                 <div class="row g-4">
                     <div class="col-lg-4 text-start">
-                        <h1>추천 강의</h1>
-                    </div>
-                    <div class="col-lg-8 text-end">
-                        <ul class="nav nav-pills d-inline-flex text-center mb-5">
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill"
-                                   href="#tab-1">
-                                    <span class="text-dark" style="width: 130px;">All Products</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex py-2 m-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-2">
-                                    <span class="text-dark" style="width: 130px;">초보</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-3">
-                                    <span class="text-dark" style="width: 130px;">중수</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-4">
-                                    <span class="text-dark" style="width: 130px;">고수</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-5">
-                                    <span class="text-dark" style="width: 130px;">프로</span>
-                                </a>
-                            </li>
-                        </ul>
+                        <h1>신규 강의</h1>
                     </div>
                 </div>
-                <div class="tab-content">
+                <div class="tab-content mt-3">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
                         <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/MNHypzCAPMZaOWkvU3NPy6gIqfF7aKdjd0l5tY7j-8a3sqQnMSxl2_Ldm8Nhrox5vv33KkOsTchWK694oBhIwQ1bD1hrbaGw1u6gUMwWyXiSpo7II5gZJpfzT-DtU7y3_7X5Xi-PXIfPbPIFhxQGvg.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">초보
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>초보 탈출</h4>
-                                                <div>당신도 할 수 있다.</div>
-                                                <div>초보 탈출 기초 강의</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">10,000 point</p>
-                                                </div>
+                            <div class="col-3" th:each="course : ${courseList}">
+                                <a href="#" th:href="@{|/course/detail/${course.id}|}">
+                                    <div class="rounded position-relative fruite-item">
+                                        <div class="fruite-img">
+                                            <img th:src=@{|/img/forMainCourse/${@rq.getRandomImage()}|} class="img-fluid w-100 rounded-top"
+                                                 alt="">
+                                        </div>
+                                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                             style="top: 10px; left: 10px;">[[${course.gameCategoryname}]]
+                                        </div>
+                                        <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                            <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">[[${course.name}]]</h4>
+                                            <div class="mt-3" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">[[${course.introduce}]]</div>
+                                            <div class="text-center mt-3">
+                                                <p class="text-dark fs-5 fw-bold mb-0">[[${course.price}]] point</p>
                                             </div>
                                         </div>
-                                    </a>
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/MNHypzCAPMZaOWkvU3NPy6gIqfF7aKdjd0l5tY7j-8a3sqQnMSxl2_Ldm8Nhrox5vv33KkOsTchWK694oBhIwQ1bD1hrbaGw1u6gUMwWyXiSpo7II5gZJpfzT-DtU7y3_7X5Xi-PXIfPbPIFhxQGvg.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">초보
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>허접 탈출</h4>
-                                                <div>언제까지 허접 소리 들을꺼야</div>
-                                                <div>덜 허접이 될 수 있는 기회</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">10,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/1Bs11AyNym3lSQ90bfuJifFuvXJx8pyVxyYNiYpEdKt9LgWuv7xnLDgj82SRZzzuOtQdf3RMd2jNRZ_smbD27N3xyEHV54CSkHngt4wGGc-Jn-e0faY6lDFLSwf-EBVSY86Ih1wOFE5prBr-pjH5Yg.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">중수
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>그래도 브실골플</h4>
-                                                <div>티어 상승 보장</div>
-                                                <div>안되면 말고</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">20,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/1Bs11AyNym3lSQ90bfuJifFuvXJx8pyVxyYNiYpEdKt9LgWuv7xnLDgj82SRZzzuOtQdf3RMd2jNRZ_smbD27N3xyEHV54CSkHngt4wGGc-Jn-e0faY6lDFLSwf-EBVSY86Ih1wOFE5prBr-pjH5Yg.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">중수
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>애매한 사람들</h4>
-                                                <div>모여라~</div>
-                                                <div>중수가 되어 보자</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">25,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/59k2T5zUqx5AQn3IQfCpE--Z6BThKoQs46eXcoRuC6BW_9HuOMV5paIyYojZWXvr1m4CrRxD53aqpTxML3P-nHWg0OUYCEEU8FnjpFV1FEaQ0d7lnank0JEhffiNOcWwmJeqYeyJXCVrmiPj7GeYtQ.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">고수
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>체계적 강의 시스템</h4>
-                                                <div>다마챌에 도전하는 당신을 위해</div>
-                                                <div>지금 눌러야 들을 수 있어</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">200,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/59k2T5zUqx5AQn3IQfCpE--Z6BThKoQs46eXcoRuC6BW_9HuOMV5paIyYojZWXvr1m4CrRxD53aqpTxML3P-nHWg0OUYCEEU8FnjpFV1FEaQ0d7lnank0JEhffiNOcWwmJeqYeyJXCVrmiPj7GeYtQ.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">고수
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>고수는 쌀국수에</h4>
-                                                <div>호불호 갈리는 강의</div>
-                                                <div>다이아 갈때 까지 무제한</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">132,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/RdRYGVCEdrTgWd6EfKR8glmTjEC9_TDkcXLEBJveJK3imc4zZBE2WTXH0iwaYIy23X_yTktgURpBbe842hW5cWDFpR6JRx3-pplqEoFO0DzKWsc_OcNMIUrn-o8FkwFaAc1_flb19kJksZ2PEQp_sQ.webp" class="img-fluid w-100 rounded-top"|
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">프로
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>SKT T1</h4>
-                                                <div>에 입단할 뻔</div>
-                                                <div>그 정도로 알려준다!</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">540,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/RdRYGVCEdrTgWd6EfKR8glmTjEC9_TDkcXLEBJveJK3imc4zZBE2WTXH0iwaYIy23X_yTktgURpBbe842hW5cWDFpR6JRx3-pplqEoFO0DzKWsc_OcNMIUrn-o8FkwFaAc1_flb19kJksZ2PEQp_sQ.webp" class="img-fluid w-100 rounded-top"|
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">프로
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>프로가 수업하는 강의</h4>
-                                                <div>야 너두 프로 할 수 있어</div>
-                                                <div>아닌거 같으면 개발해라</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">888,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-
-
-                                </div>
+                                    </div>
+                                </a>
                             </div>
-                        </div>
-                    </div>
-                    <div id="tab-2" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/MNHypzCAPMZaOWkvU3NPy6gIqfF7aKdjd0l5tY7j-8a3sqQnMSxl2_Ldm8Nhrox5vv33KkOsTchWK694oBhIwQ1bD1hrbaGw1u6gUMwWyXiSpo7II5gZJpfzT-DtU7y3_7X5Xi-PXIfPbPIFhxQGvg.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">초보
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>초보 탈출</h4>
-                                                <div>당신도 할 수 있다.</div>
-                                                <div>초보 탈출 기초 강의</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">10,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
 
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/MNHypzCAPMZaOWkvU3NPy6gIqfF7aKdjd0l5tY7j-8a3sqQnMSxl2_Ldm8Nhrox5vv33KkOsTchWK694oBhIwQ1bD1hrbaGw1u6gUMwWyXiSpo7II5gZJpfzT-DtU7y3_7X5Xi-PXIfPbPIFhxQGvg.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">초보
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>허접 탈출</h4>
-                                                <div>언제까지 허접 소리 들을꺼야</div>
-                                                <div>덜 허접이 될 수 있는 기회</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">10,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab-3" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/1Bs11AyNym3lSQ90bfuJifFuvXJx8pyVxyYNiYpEdKt9LgWuv7xnLDgj82SRZzzuOtQdf3RMd2jNRZ_smbD27N3xyEHV54CSkHngt4wGGc-Jn-e0faY6lDFLSwf-EBVSY86Ih1wOFE5prBr-pjH5Yg.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">중수
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>그래도 브실골플</h4>
-                                                <div>티어 상승 보장</div>
-                                                <div>안되면 말고</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">20,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/1Bs11AyNym3lSQ90bfuJifFuvXJx8pyVxyYNiYpEdKt9LgWuv7xnLDgj82SRZzzuOtQdf3RMd2jNRZ_smbD27N3xyEHV54CSkHngt4wGGc-Jn-e0faY6lDFLSwf-EBVSY86Ih1wOFE5prBr-pjH5Yg.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">중수
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>애매한 사람들</h4>
-                                                <div>모여라~</div>
-                                                <div>중수가 되어 보자</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">25,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab-4" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/59k2T5zUqx5AQn3IQfCpE--Z6BThKoQs46eXcoRuC6BW_9HuOMV5paIyYojZWXvr1m4CrRxD53aqpTxML3P-nHWg0OUYCEEU8FnjpFV1FEaQ0d7lnank0JEhffiNOcWwmJeqYeyJXCVrmiPj7GeYtQ.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">고수
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>체계적 강의 시스템</h4>
-                                                <div>다마챌에 도전하는 당신을 위해</div>
-                                                <div>지금 눌러야 들을 수 있어</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">200,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/59k2T5zUqx5AQn3IQfCpE--Z6BThKoQs46eXcoRuC6BW_9HuOMV5paIyYojZWXvr1m4CrRxD53aqpTxML3P-nHWg0OUYCEEU8FnjpFV1FEaQ0d7lnank0JEhffiNOcWwmJeqYeyJXCVrmiPj7GeYtQ.webp" class="img-fluid w-100 rounded-top"
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">고수
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>고수는 쌀국수에</h4>
-                                                <div>호불호 갈리는 강의</div>
-                                                <div>다이아 갈때 까지 무제한</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">132,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab-5" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/RdRYGVCEdrTgWd6EfKR8glmTjEC9_TDkcXLEBJveJK3imc4zZBE2WTXH0iwaYIy23X_yTktgURpBbe842hW5cWDFpR6JRx3-pplqEoFO0DzKWsc_OcNMIUrn-o8FkwFaAc1_flb19kJksZ2PEQp_sQ.webp" class="img-fluid w-100 rounded-top"|
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">프로
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>SKT T1</h4>
-                                                <div>에 입단할 뻔</div>
-                                                <div>그 정도로 알려준다!</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">540,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="https://i.namu.wiki/i/RdRYGVCEdrTgWd6EfKR8glmTjEC9_TDkcXLEBJveJK3imc4zZBE2WTXH0iwaYIy23X_yTktgURpBbe842hW5cWDFpR6JRx3-pplqEoFO0DzKWsc_OcNMIUrn-o8FkwFaAc1_flb19kJksZ2PEQp_sQ.webp" class="img-fluid w-100 rounded-top"|
-                                                     alt="">
-                                            </div>
-                                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                                 style="top: 10px; left: 10px;">프로
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>프로가 수업하는 강의</h4>
-                                                <div>야 너두 프로 할 수 있어</div>
-                                                <div>아닌거 같으면 개발해라</div>
-                                                <div class="text-center mt-3">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">888,000 point</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -459,6 +86,7 @@
         <div class="container">
             <h1 class="mb-0">추천 전문가</h1>
             <div class="owl-carousel vegetable-carousel justify-content-center">
+
 
                 <a href="#">
                     <div class="border border-primary rounded position-relative vesitable-item">
@@ -481,89 +109,6 @@
                     </div>
                 </a>
 
-                <a href="#">
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="https://i.namu.wiki/i/UpBemT9FWEQLTEy2mr1UOfdHKI5falKCBX5HTEAbmgayHHadrmDCk559aG8UeovO2P1NZPuJSuM31vpw1edOaN3fWzLBRfihJoudSPjSDPy6gpieLFfFNoO5CkSUrmZv-76S29qAdaptK9OvyRmQAA.webp" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                             style="top: 10px; right: 10px;">
-                            우수 학생
-                        </div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>김두한</h4>
-                            <div>
-                                개발자 연구소 반장
-                            </div>
-                            <div>
-                                넷카라쿠배당 드가자~
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#">
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="https://i.namu.wiki/i/RGkr0udf66wY1Qht4nAo6mBS0PRoDKzGMkfz7BSyZ1a6WCWSMizfXwvUzfYj6ty0WeIV-ZUeY_6T6ltPlkgVUdf1y86v3i5jEuSoepTrBMAuujn-U40ZnLezXGWRYgUFKkvYrMVH-9hVypVzEFkrHw.webp" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                             style="top: 10px; right: 10px;">
-                            우수 학생
-                        </div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>김대호</h4>
-                            <div>
-                                개발자 연구소 우수 학생
-                            </div>
-                            <div>
-                                넷카라쿠배당 드가자~
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#">
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="https://i.namu.wiki/i/NfoLir0aEVQURPb0RFGD1u-G2YVFOD-8SaLuPZuZ7PAeWIsPMGGlO_kS6575Qs_QKvs9gwtyi5cLjQURSdbVlnwA9XN_XYPyJ3QHt61iNwdvpmHFkWDU-huYsGbPA0Qe5pLMrzQIaNPu2PK-XRTelw.webp" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                             style="top: 10px; right: 10px;">
-                            그냥 학생
-                        </div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>전오빈</h4>
-                            <div>
-                                개발자 연구소 연구원
-                            </div>
-                            <div>
-                                넷카라쿠배당 드가자~
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#">
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="https://i.namu.wiki/i/blVyIGCxGdHoC24pHBc_S92-_VizSaRvsFlfvCCR9YlheDcmbbZ45QRSLn1aKBgzexWUGFz7fa8qCyru6yCfA7Rdbbo9Z2ZxhzdoB9peLXlobdxP2-gfdcMHAB0xuUGfzrluOb6GQeUmu0vHblEaHQ.webp" class="img-fluid w-100 rounded-top" alt="">
-                        </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                             style="top: 10px; right: 10px;">
-                            그냥 학생
-                        </div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>양희동</h4>
-                            <div>
-                                개발자 연구소 연구원
-                            </div>
-                            <div>
-                                넷카라쿠배당 드가자~
-                            </div>
-                        </div>
-                    </div>
-                </a>
 
 
             </div>
