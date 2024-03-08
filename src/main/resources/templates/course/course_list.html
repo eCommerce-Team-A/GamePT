@@ -32,10 +32,9 @@
                         <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                              style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; top: 10px; left: 10px;" th:text="${course.gameCategoryname}">
                         </div>
-                        <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class="p-4 border border-top-0 rounded-bottom">
-                            <h4 class="mb-3">
+                        <div class="p-4 border border-top-0 rounded-bottom">
+                            <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class="mb-3">
                                 <a th:href="@{|/course/detail/${course.id}|}"
-                                   style="text-decoration: none; color: inherit;"
                                    th:text="${course.name}"></a>
                             </h4>
                             <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${course.introduce}"></p>
