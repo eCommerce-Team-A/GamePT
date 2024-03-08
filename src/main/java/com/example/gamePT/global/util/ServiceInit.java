@@ -4,6 +4,8 @@ import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.repository.CourseRepository;
 import com.example.gamePT.domain.duoArticle.enity.DuoArticle;
 import com.example.gamePT.domain.duoArticle.repository.DuoArticleRepository;
+import com.example.gamePT.domain.expert.entity.Expert;
+import com.example.gamePT.domain.expert.repository.ExpertRepository;
 import com.example.gamePT.domain.image.service.ImageService;
 import com.example.gamePT.domain.qna.entity.QnA;
 import com.example.gamePT.domain.qna.repository.QnARepository;
@@ -34,6 +36,7 @@ public class ServiceInit implements InitializingBean {
     private final RiotApiService riotApiService;
     private final QnARepository qnARepository;
     private final DuoArticleRepository duoArticleRepository;
+    private final ExpertRepository expertRepository;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -112,6 +115,13 @@ public class ServiceInit implements InitializingBean {
 
             courseRepository.save(cu);
 
+            Expert expert = Expert.builder()
+                    .siteUserId(su2.getId())
+                    .introduce("전문가 " + su2.getNickname() + "의 소개글 이에요~")
+                    .build();
+
+            expertRepository.save(expert);
+
             SummonerDTO summonerDTO = this.riotApiService.getSummoner(su2.getPuuid());
             LeagueDTO leagueDTO = this.riotApiService.getLeague(summonerDTO.getId());
 
@@ -149,7 +159,7 @@ public class ServiceInit implements InitializingBean {
                     email("seller"+i+"@gmail.com").
                     gameName(riotData[i].split(" ")[0]).
                     tag(riotData[i].split(" ")[1]).
-                    authorization("Expert").
+                    authorization("Member").
                     puuid(pid2).
                     point(1000000).
                     build();
