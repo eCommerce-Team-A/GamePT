@@ -6,11 +6,11 @@
 
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5 Nanum">
-        <h1 class="text-center text-white display-6" th:text="${siteUser.username}"></h1>
+        <h1 class="text-center text-white display-6" th:text="${siteUser.nickname}"></h1>
         <ol class="breadcrumb justify-content-center mb-0">
             <li class="breadcrumb-item active text-white">홈</li>
             <li class="breadcrumb-item active text-white">전문가 목록</li>
-            <li class="breadcrumb-item active text-white" th:text="${siteUser.username}"></li>
+            <li class="breadcrumb-item active text-white" th:text="${siteUser.nickname}"></li>
         </ol>
     </div>
     <!-- Single Page Header End -->
@@ -19,80 +19,157 @@
     <!-- Single Product Start -->
     <div class="container-fluid mt-3">
         <div class="container pt-5">
-            <div class="d-flex justify-content-between mb-3" style="align-items: flex-end;">
-                <div class="d-flex" style="align-items: flex-end;">
-                    <img th:src="${profileImg}" alt="..."
-                         style="width:70px; height:70px; border-radius: 50%;">
-                    <h2 class="fw-bold" th:text="${siteUser.username}" style="margin-left: 20px;"></h2>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center" style="align-items: flex-end;">
+                    <img class="shadow" th:src="${profileImg}" alt="..."
+                         style="width:90px; height:90px; border-radius: 50%;">
+                    <h2 class="fw-bold ms-4" th:text="${siteUser.nickname}"></h2>
                 </div>
                 <div class="d-flex align-items-center">
                     <a th:if="${@rq.isLogin() and @rq.getSiteUser().username == siteUser.username}"
-                       class="btn btn-sm btn-outline-primary" style="margin-right: -20px; "
+                       class="btn btn-outline-primary"
                        th:href="@{|/expert/modify/${@rq.getSiteUser().username}|}"
-                       role="button">수정<i class="fa-solid fa-pen-to-square" style="margin-left: 3px;"></i></a>
-                    <a th:if="${@rq.isLogin() and @rq.getSiteUser().username != siteUser.username}" style="margin-right: -20px;"
-                       class="btn btn-sm btn-outline-primary" th:href="@{/}" role="button">상담신청<i class="fa-solid fa-comment-dots" style="margin-left: 3px;"></i></a>
+                       role="button">수정<i class="fa-solid fa-pen-to-square"></i></a>
+                    <a th:if="${@rq.isLogin() and @rq.getSiteUser().username != siteUser.username}"
+                       class="btn btn-outline-primary" th:href="@{/}" role="button">상담신청<i
+                            class="fa-solid fa-comment-dots" ></i></a>
                 </div>
             </div>
 
-            <div class="row g-5 mb-5">
-                <div class="col-lg-8 col-xl-9" style="width: 65%;">
-                    <div class="row">
-                        <div class="card p-0 border-0 shadow">
-                            <ul class="list-group list-group-flush mb-5 p-4">
-                                <li class="list-group-item">
-                                    <h4 style="padding: 14px;">강의
-                                        <div th:each="courseScore : ${courseScoreList}">
-                                            <a th:href="@{|/course/detail/${courseScore.course.id}|}"
-                                               style="padding-top: 14px; display: flex; align-items: center; font-size: 21px;" >
-                                                <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg"
-                                                     alt="" style="width:100px; height:100px; border-radius: 7%;">
-                                                <div style="display: flex; flex-direction: column; margin-left: 15px">
-                                                    <span th:text="${courseScore.course.name}"
-                                                          style="margin: 5px;"></span>
-                                                    <div style="margin: 5px; font-size: 18px; display: flex; align-items: center; margin-top: -3px;">
-                                                        <i class="review__rating fas fa-star"
-                                                           style="font-size: 15px;"></i><span
-                                                            th:text="${courseScore.avg}"
-                                                            style="margin-left: 5px;"></span>
-                                                    </div>
-                                                    <div style="margin: 5px; font-size: 20px;">
-                                                        <span th:text="${courseScore.course.price}"></span>
-                                                        <i class="fa-solid fa-coins" style="font-size: 15px;"></i>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </h4>
-                                </li>
-                                <li class="list-group-item">
-                                    <h4 style="padding: 14px;">소개</h4>
-                                    <div style="padding: 14px;">
-                                        <span th:text="${introduce}"></span>
-                                    </div>
-                                </li>
-                            </ul>
+            <div class="row my-4">
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow col-lg-12">
+                        <div class="fw-bold card-header fs-5 ">
+                            <span><i class="fa-solid fa-award me-2" style="color: goldenrod;"></i>경력</span>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-lg-4 col-xl-3 p-0" style="width: 35%;">
-                    <div class="card border-0 shadow col-lg-12 sticky-sm-top" style="top:115px;">
-                        <div class="my-2 fw-bold" style="display:flex; justify-content:flex-start; font-size:18px;">
-                            <span style="margin-left: 10px"><i class="fa-solid fa-award" style="color: goldenrod; margin-right: 5px;"></i>경력</span>
+                        <div class="card-body">
+                            <div class="mx-2 my-4" th:each="career : ${careerList}">
+                                <div class="Nanum fs-6 d-flex flex align-items-center">
+                                    <i class="fa-solid fa-crown text-success ms-1 me-2 fa-lg"></i>
+                                    <div>
+                                        <span class="mx-2" th:text="|${career.category}"></span>
+                                        <span th:text="${career.content}"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <hr class="w-100 m-0">
-                        <div class="m-2" th:each="career : ${careerList}">
-                            <div>
-                                <span th:text="|${career.category}, |"></span>
-                                <span th:text="${career.content}"></span>
+
+                    </div>
+
+                    <div class="card w-100 Regular shadow border-0 mt-3">
+                        <div class="fw-bold card-header fs-5 ">
+                            <i class="fa-solid fa-ranking-star text-danger"></i>
+                            솔로랭크
+                        </div>
+                        <!-- spinner -->
+                        <div class="text-center my-3 text-primary rankInfo-spinner">
+                            <div class="spinner-border" role="status"></div>
+                        </div>
+
+                        <div class="rankInfo" style="display:none;">
+
+                            <div class="card-body row">
+                                <div class="col-8 d-flex align-items-center">
+                                    <div class="bg-light rounded-circle"
+                                         style=" width:100px; height:100px; overflow: hidden;">
+                                        <img id="rankImg" src="" alt="..."
+                                             style="width:100%; height:100%; object-fit:contain;">
+                                    </div>
+                                    <div id="tier-rank" class="ms-2 fs-4 fw-bold">
+                                    </div>
+                                </div>
+                                <div class="col-4 d-flex align-items-center justify-content-end">
+                                    <div class="text-end fs-6 text-secondary">
+                                        <div id="win-lose">
+                                        </div>
+                                        <div id="win-rate">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
+                <div class="col-lg-8 ">
+
+                    <div class="card p-0 border-0 shadow">
+                        <div class="card-header fs-5 fw-bold">
+                            <i class="fa-solid fa-microphone-lines text-primary me-2"></i>
+                            소개
+                        </div>
+
+                        <div class="card-body">
+                            [[${introduce == null ? "아직 등록된 소개가 없어요" : introduce}]]
+                        </div>
+                    </div>
+
+                    <div class="card p-0 border-0 shadow mt-4">
+                        <div class="card-header fs-5 fw-bold">
+                            <i class="fa-solid fa-landmark me-2"></i>
+                            강의
+                        </div>
+                        <div class="card-body">
+                            <div th:each="courseScore : ${courseScoreList}">
+                                <a class="rounded my-2 bg-secondary bg-opacity-10" th:href="@{|/course/detail/${courseScore.course.id}|}"
+                                   style="display: flex; align-items: center; font-size: 21px;">
+                                    <img class="ms-2" th:src="@{|/img/forMainCourse/${@rq.getRandomImage()}|}"
+                                         alt="" style="width:100px; height:100px; border-radius: 7%; object-fit: cover;">
+                                    <div style="display: flex; flex-direction: column; margin-left: 15px">
+                                                    <span th:text="${courseScore.course.name}"
+                                                          style="margin: 5px;"></span>
+                                        <div style="margin: 5px; font-size: 18px; display: flex; align-items: center; margin-top: -3px;">
+                                            <i class="review__rating fas fa-star"
+                                               style="font-size: 15px;"></i><span
+                                                th:text="${courseScore.avg}"
+                                                style="margin-left: 5px;"></span>
+                                        </div>
+                                        <div style="margin: 5px; font-size: 20px;">
+                                            <span th:text="${courseScore.course.price}"></span>
+                                            <i class="fa-solid fa-coins" style="font-size: 15px;"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
             </div>
         </div>
 
     </div>
+    <script th:inline="javascript">
+        $(function () {
+            <!-- 소환사 정보 요청 -->
+            $.ajax({
+                type: 'get',              // 타입 (get, post, put 등등)
+                url: '/riotApiController/getLeagueDataByPuuid/' + [[${siteUser.puuid}]],     // 요청할 서버url
+                async: true,               // 비동기화 여부 (default : true)
+                headers: {                 // Http header
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "GET"
+                },
+                dataType: 'json',
+                success: function (result) { // 결과 성공 콜백함수
+                    $('.rankInfo-spinner').css("display", "none");
+                    $('.rankInfo').css("display", "block");
+                    if (result != null) {
+                        $('#rankImg').attr("src", "/img/" + result.tier + ".png")
+                        $('#tier-rank').text(result.tier + " " + result.rank)
+                        $('#win-lose').text(result.wins + "승 " + result.losses + "패")
+                        $('#win-rate').text("승률 " + (Math.round((result.wins / (result.wins + result.losses)) * 100)) + "%")
+                    }
+                },
+                error: function (request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
+                }
+            })
+
+        });
+    </script>
 </div>
 </html>

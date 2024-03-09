@@ -1,6 +1,8 @@
 package com.example.gamePT.domain.user.repository;
 
 import com.example.gamePT.domain.user.entity.SiteUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +29,7 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     boolean existsByPuuid(String puuid);
 
-    List<SiteUser> findByAuthorization(String authorization);
+    Page<SiteUser> findByAuthorization(String authorization, Pageable pageable);
+
+    List<SiteUser> findTop5ByAuthorizationOrderByCreateDateDesc(String authorization);
 }

@@ -3,6 +3,8 @@ package com.example.gamePT.domain.course.controller;
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.entity.CourseCreateForm;
 import com.example.gamePT.domain.course.service.CourseService;
+import com.example.gamePT.domain.expert.entity.SiteUserWithImg;
+import com.example.gamePT.domain.expert.service.ExpertService;
 import com.example.gamePT.domain.review.entity.Review;
 import com.example.gamePT.domain.review.service.ReviewService;
 import com.example.gamePT.domain.user.entity.SiteUser;
@@ -26,6 +28,7 @@ public class CourseController {
     private final CourseService courseService;
     private final UserService userService;
     private final ReviewService reviewService;
+    private final ExpertService expertService;
 
     //강의 등록
     @PreAuthorize("isAuthenticated()")
@@ -58,6 +61,10 @@ public class CourseController {
         List<Course> courseListByAuthor = this.courseService.findCourseByAuthorId(course.getAuthor().getId());
         Page<Review> reviewList = this.reviewService.findByCourseId(id, page);
 
+        SiteUserWithImg expertData = toDto(course.getAuthor());
+
+        model.addAttribute("expertData", expertData);
+
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("courseListByAuthor", courseListByAuthor);
         model.addAttribute("course", course);
@@ -65,6 +72,16 @@ public class CourseController {
         return "course/course_detail";
     }
 
+    public SiteUserWithImg toDto(SiteUser expertUser){
+
+        SiteUserWithImg SiteUserWithImgList = SiteUserWithImg.builder()
+                .siteUser(expertUser)
+                .img(this.userService.getProfileImg(expertUser.getId()))
+                .expert(this.expertService.getExpertBySiteUserId(expertUser.getId()))
+                .build();
+
+        return SiteUserWithImgList;
+    }
 
     @GetMapping("/list")
     public String courseList(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {

@@ -87,27 +87,34 @@
             <h1 class="mb-0">추천 전문가</h1>
             <div class="owl-carousel vegetable-carousel justify-content-center">
 
+                <div th:each="siteUserWithImg, loop : ${siteUserWithImgList}">
+                    <a th:href="@{|/expert/detail/${siteUserWithImg.siteUser.username}|}" class="d-flex flex-column justify-content-between alin-items-between expert-card bg-white shadow border-0">
 
-                <a href="#">
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="https://i.namu.wiki/i/30whaqjessttAI0WYfI4EUeLMpBsch-usaIxU4jd3GJlKj1WSMwTDR8CODkb7dGvhi4PNfYcawLB-scDXOl4QmsFMJpQMTtPhKXUy9DCBdg1_hgm38L9MbXVlRGqDi8KbOwkouNYVtX5NDvT9L3vbA.webp" class="img-fluid w-100 rounded-top" alt="">
+                        <div class="d-flex align-items-center">
+                            <img th:src="${siteUserWithImg.img}" alt="..."
+                                 style="width:70px; height:70px; border-radius: 50%;">
+                            <div class="Nanum ms-2 fs-5" th:text="${siteUserWithImg.siteUser.nickname}"></div>
                         </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                             style="top: 10px; right: 10px;">
-                            대장 강사
+
+                        <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class=" Nanum mt-3 fs-6" th:if="${#lists.size(siteUserWithImg.expert.careerList) != 0}">
+                            <i class="fa-solid fa-crown text-success ms-3 me-2 fa-lg"></i>
+                            <span>[[${#lists.size(siteUserWithImg.expert.careerList) != 0 ? siteUserWithImg.expert.careerList[0].category: null}]]</span>
+                            <span>
+                                    [[${#lists.size(siteUserWithImg.expert.careerList) != 0 ? siteUserWithImg.expert.careerList[0].content: null}]]
+                                </span>
                         </div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>신광식</h4>
-                            <div>
-                                개발자 연구소장
+                        <div class="mt-3" th:unless="${#lists.size(siteUserWithImg.expert.careerList) != 0}">
+                            아직 등록된 경력이 없어요
+                        </div>
+                        <div class="card bg-secondary bg-opacity-25 border-0 mt-3">
+                            <div style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;" class="mx-3 my-3">
+                                [[${siteUserWithImg.expert.introduce == null ? "아직 등록된 소개글이 없어요": siteUserWithImg.expert.introduce}]]
                             </div>
-                            <div>
-                                넷카라쿠배당 드가자~
-                            </div>
                         </div>
-                    </div>
-                </a>
+                        <div class="expert-content">
+                        </div>
+                    </a>
+                </div>
 
 
 

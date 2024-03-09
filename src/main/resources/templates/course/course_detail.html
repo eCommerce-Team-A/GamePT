@@ -26,8 +26,10 @@
                     <div class="badge rounded-pill text-bg-primary ms-2">[[${course.gameCategoryname}]]</div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <a class="btn btn-primary" th:href="@{|/course/update/${course.id}|}" role="button" sec:authorize="isAuthenticated()"
-                        th:if="${course.author != null and #authentication.getPrincipal().getUsername() == course.author.username}">강의 수정</a>
+                    <a class="btn btn-primary" th:href="@{|/course/update/${course.id}|}" role="button"
+                       sec:authorize="isAuthenticated()"
+                       th:if="${course.author != null and #authentication.getPrincipal().getUsername() == course.author.username}">강의
+                        수정</a>
                     <a class="btn btn-primary" style="margin-left:10px;" th:href="@{/course/list}" role="button">강의
                         목록</a>
                 </div>
@@ -151,32 +153,61 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-xl-3 p-0">
-                    <div class="card border-0 shadow col-lg-12 sticky-sm-top" style="top:115px;">
-                        <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
-                            담당 전문가 이력
-                        </div>
-                        <hr class="w-100 m-0">
-                        <div class="m-2">
-                            <div th:text="@{|인게임명 : ${course.author.gameName} #${course.author.tag}|}"></div>
-                            <div>경력 ~</div>
-                        </div>
-                        <hr class="w-100 m-0">
-                        <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
-                            구매 정보
-                        </div>
-                        <hr class="w-100 p-0 m-0">
-                        <div class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
-                        <div class="m-2 mx-4 fw-bold mt-1" th:if="${@rq.isLogin()}">
-                            내 보유 포인트 : [[${@rq.getSiteUser != null ? @rq.getSiteUser.point : null }]]
-                        </div>
-                        <button th:if="${@rq.isLogin()}" id="orderButton" href="#" class="btn mx-4" style="background-color: #0D6EFD; color:white;">구매하기</button>
-                        <button th:if="${@rq.isLogin()}" class="btn my-1 mb-3 mx-4" id="addCart" style="background-color: #0D6EFD; color:white;">
-                            장바구니 담기
-                        </button>
+                <div class="col-lg-4 col-xl-3 p-0 ">
+                    <div class="sticky-sm-top " style="top:110px;">
+                        <a th:href="@{|/expert/detail/${expertData.siteUser.username}|}"
+                           class="d-flex flex-column justify-content-between alin-items-between card bg-white shadow border-0">
+                            <div class="card-header bg-white text-center fw-bold" style="font-size:18px;">
+                                담당 전문가
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <img th:src="${expertData.img}" alt="..."
+                                         style="width:50px; height:50px; border-radius: 50%;">
+                                    <div class="Nanum ms-2 fs-5" th:text="${expertData.siteUser.nickname}"></div>
+                                </div>
+
+                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                     class=" Nanum mt-3 fs-6" th:if="${#lists.size(expertData.expert.careerList) != 0}">
+                                    <i class="fa-solid fa-crown text-success ms-3 me-2 fa-lg"></i>
+                                    <span>[[${#lists.size(expertData.expert.careerList) != 0 ? expertData.expert.careerList[0].category: null}]]</span>
+                                    <span>
+                                    [[${#lists.size(expertData.expert.careerList) != 0 ? expertData.expert.careerList[0].content: null}]]
+                                </span>
+                                </div>
+                                <div class="mt-3" th:unless="${#lists.size(expertData.expert.careerList) != 0}">
+                                    아직 등록된 경력이 없어요
+                                </div>
+                                <div class="card bg-secondary bg-opacity-25 border-0 mt-3">
+                                    <div style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
+                                         class="mx-3 my-3">
+                                        [[${expertData.expert.introduce == null ? "아직 등록된 소개글이 없어요":
+                                        expertData.expert.introduce}]]
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="card border-0 shadow col-lg-12 mt-3 ">
+                            <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
+                                구매 정보
+                            </div>
+                            <hr class="w-100 p-0 m-0">
+                            <div class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
+                            <div class="m-2 mx-4 fw-bold mt-1" th:if="${@rq.isLogin()}">
+                                내 보유 포인트 : [[${@rq.getSiteUser != null ? @rq.getSiteUser.point : null }]]
+                            </div>
+                            <button th:if="${@rq.isLogin()}" id="orderButton" href="#" class="btn mx-4"
+                                    style="background-color: #0D6EFD; color:white;">구매하기
+                            </button>
+                            <button th:if="${@rq.isLogin()}" class="btn my-1 mb-3 mx-4" id="addCart"
+                                    style="background-color: #0D6EFD; color:white;">
+                                장바구니 담기
+                            </button>
 
 
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -197,7 +228,8 @@
                             </div>
                             <div class="p-4 rounded-bottom">
                                 <h4 th:text="${relateCourse.author.nickname}"></h4>
-                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${relateCourse.introduce}"></div>
+                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                     th:text="${relateCourse.introduce}"></div>
                             </div>
                         </div>
                     </a>

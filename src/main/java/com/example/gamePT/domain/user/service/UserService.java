@@ -8,6 +8,10 @@ import com.example.gamePT.domain.user.response.SiteUserResponse;
 import com.example.gamePT.global.email.EmailService;
 import com.example.gamePT.global.riot.service.RiotApiService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -263,8 +268,16 @@ public class UserService {
         this.userRepository.save(siteUser);
     }
 
-    public List<SiteUser> getUserListByAuthorization(String authorization) {
-        return this.userRepository.findByAuthorization(authorization);
+    public Page<SiteUser> getUserListByAuthorization(String authorization, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page,8,Sort.by(sorts));
+
+        return this.userRepository.findByAuthorization(authorization,pageable);
+    }
+
+    public List<SiteUser> getUserListByAuthorizationForMain(String authorization) {
+        return this.userRepository.findTop5ByAuthorizationOrderByCreateDateDesc(authorization);
     }
     public List<SiteUser> getUserListAll() {
         return this.userRepository.findAll();

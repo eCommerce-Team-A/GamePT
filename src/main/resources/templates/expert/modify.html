@@ -19,11 +19,12 @@
     <!-- Single Product Start -->
     <div class="container-fluid mt-3">
         <div class="container pt-5">
-            <div class="d-flex justify-content-between mb-3" style="align-items: flex-end;">
-                <div class="d-flex" style="align-items: flex-end;">
-                    <img th:src="${profileImg}" alt="..."
-                         style="width:70px; height:70px; border-radius: 50%;">
-                    <h2 class="fw-bold" th:text="${siteUser.username}" style="margin-left: 20px;"></h2>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center" style="align-items: flex-end;">
+                    <img class="shadow" th:src="${profileImg}" alt="..."
+                         style="width:90px; height:90px; border-radius: 50%;">
+                    <h2 class="fw-bold ms-4" th:text="${siteUser.nickname}"></h2>
                 </div>
                 <div class="d-flex align-items-center">
                     <a class="btn btn-sm btn-outline-secondary" style="margin-right: -20px;"
@@ -31,57 +32,8 @@
                 </div>
             </div>
 
-            <div class="row g-5 mb-5">
-                <div class="col-lg-8 col-xl-9" style="width: 65%;">
-                    <div class="row">
-                        <div class="card p-0 border-0 shadow">
-                            <ul class="list-group list-group-flush mb-5 p-4">
-                                <li class="list-group-item">
-                                    <h4 style="padding: 14px;">강의
-                                        <div style="display: flex; justify-content: space-between; align-items: center;"
-                                             th:each="scoreCourse : ${scoreCourseList}">
-                                            <a th:href="@{|/course/detail/${scoreCourse.value.id}|}"
-                                               style="padding-top: 14px; display: flex; align-items: center; font-size: 21px;">
-                                                <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg"
-                                                     alt="" style="width:100px; height:100px; border-radius: 7%;">
-                                                <div style="display: flex; flex-direction: column; margin-left: 15px">
-                                                    <span th:text="${scoreCourse.value.name}"
-                                                          style="margin: 5px;"></span>
-                                                    <div style="margin: 5px; font-size: 18px; display: flex; align-items: center; margin-top: -3px;">
-                                                        <i class="review__rating fas fa-star"
-                                                           style="font-size: 15px;"></i><span
-                                                            th:text="${scoreCourse.key}"
-                                                            style="margin-left: 5px;"></span>
-                                                    </div>
-                                                    <div style="margin: 5px; font-size: 20px;">
-                                                        <span th:text="${scoreCourse.value.price}"></span>
-                                                        <i class="fa-solid fa-coins" style="font-size: 15px;"></i>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="" class="btn btn-sm btn-outline-secondary">수정</a>
-                                        </div>
-                                    </h4>
-                                </li>
-                                <li class="list-group-item">
-                                    <form th:action="@{|/expert/modify/${siteUser.username}|}" method="post">
-                                        <div style=" display: flex; justify-content: space-between; align-items: center; padding: 14px;">
-                                            <h4>소개</h4>
-                                            <button style="margin-left: 5px;" type="submit"
-                                                    class="btn btn-sm btn-outline-primary">저장
-                                                <i class="fa-solid fa-floppy-disk"></i>
-                                            </button>
-                                        </div>
-                                        <textarea id="introduce" name="introduce" cols="90" rows="10" class="form-control"
-                                                  th:placeholder="${introduce}"></textarea>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <form th:action="@{|/career/add/${siteUser.username}|}" class="col-lg-4 col-xl-3 p-0" method="post" style="width: 35%;">
+            <div class="row mb-5">
+                <form th:action="@{|/career/add/${siteUser.username}|}" class="col-lg-4" method="post">
                     <div class="card border-0 shadow col-lg-12 sticky-sm-top" style="top:115px;">
                         <div class="my-2 fw-bold" style="display:flex; justify-content:space-between; font-size:18px;">
                             <span style="margin-left: 10px"><i class="fa-solid fa-award" style="color: goldenrod; margin-right: 5px;"></i>경력</span>
@@ -113,6 +65,62 @@
                         </div>
                     </div>
                 </form>
+
+                <div class="col-8">
+                    <div class="row">
+                        <div class="card p-0 border-0 shadow">
+                            <div class="card-header fs-5 fw-bold">
+                                <i class="fa-solid fa-microphone-lines text-primary me-2"></i>
+                                소개
+                            </div>
+
+                            <div class="card-body">
+                                [[${introduce == null ? "아직 등록된 소개가 없어요" : introduce}]]
+                                <form th:action="@{|/expert/modify/${siteUser.username}|}" method="post">
+
+                                    <textarea id="introduce" name="introduce" cols="90" rows="7" class="form-control mt-3"
+                                              th:placeholder="${introduce}"></textarea>
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-primary float-end my-2">저장
+                                        <i class="fa-solid fa-floppy-disk"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="card p-0 border-0 shadow mt-4">
+                            <div class="card-header fs-5 fw-bold">
+                                <i class="fa-solid fa-landmark me-2"></i>
+                                강의
+                            </div>
+                            <div class="card-body">
+                                <div th:each="courseScore : ${courseScoreList}">
+                                    <a class="rounded my-2 bg-secondary bg-opacity-10" th:href="@{|/course/detail/${courseScore.course.id}|}"
+                                       style="display: flex; align-items: center; font-size: 21px;">
+                                        <img class="ms-2" th:src="@{|/img/forMainCourse/${@rq.getRandomImage()}|}"
+                                             alt="" style="width:100px; height:100px; border-radius: 7%; object-fit: cover;">
+                                        <div style="display: flex; flex-direction: column; margin-left: 15px">
+                                                    <span th:text="${courseScore.course.name}"
+                                                          style="margin: 5px;"></span>
+                                            <div style="margin: 5px; font-size: 18px; display: flex; align-items: center; margin-top: -3px;">
+                                                <i class="review__rating fas fa-star"
+                                                   style="font-size: 15px;"></i><span
+                                                    th:text="${courseScore.avg}"
+                                                    style="margin-left: 5px;"></span>
+                                            </div>
+                                            <div style="margin: 5px; font-size: 20px;">
+                                                <span th:text="${courseScore.course.price}"></span>
+                                                <i class="fa-solid fa-coins" style="font-size: 15px;"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
 

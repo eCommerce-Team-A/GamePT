@@ -12,6 +12,7 @@ import com.example.gamePT.domain.review.service.ReviewService;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,15 +35,22 @@ public class ExpertController {
     //전문가 목록
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/list")
-    public String expertList(Model model) {
-        List<SiteUser> expertUserList = this.userService.getUserListByAuthorization("Expert");
-        List<SiteUserWithImg> siteUserWithImgList = new ArrayList<>();
-        for (SiteUser siteUser : expertUserList) {
-            SiteUserWithImg siteUserWithImg = new SiteUserWithImg(this.userService.getProfileImg(siteUser.getId()), siteUser);
-            siteUserWithImgList.add(siteUserWithImg);
-        }
+    public String expertList(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+
+        Page<SiteUser> expertUserList = this.userService.getUserListByAuthorization("Expert",page);
+        Page<SiteUserWithImg> siteUserWithImgList = toDtoList(expertUserList);
+
         model.addAttribute("siteUserWithImgList", siteUserWithImgList);
         return "expert/user_list";
+    }
+
+    public Page<SiteUserWithImg> toDtoList(Page<SiteUser> expertUserList){
+        Page<SiteUserWithImg> SiteUserWithImgList = expertUserList.map(m -> SiteUserWithImg.builder()
+                .siteUser(m)
+                .img(this.userService.getProfileImg(m.getId()))
+                .expert(this.expertService.getExpertBySiteUserId(m.getId()))
+                .build());
+        return SiteUserWithImgList;
     }
 
     @PreAuthorize("isAuthenticated()")
