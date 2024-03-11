@@ -139,3 +139,152 @@ $(".list-group-item").click(function(){
 });
 ```
 
+## 2.
+### 이슈 내역
+- 라인 별로 articleList 를 나오게 하려 했으나, 해당 데이터를 html에 넘기지 못함
+
+### 문제점 설명
+
+```java
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/api")
+public class DuoArticleApiController {
+
+    private final DuoArticleService duoArticleService;
+
+    @GetMapping("/getDuoArticleList/{line}")
+    public List<DuoArticle> getDuoArticlesByMyLine(@PathVariable(value = "line") String line, Model model) {
+        List<DuoArticle> duoArticleList;
+        if (line.equals("fill")) {
+            duoArticleList = this.duoArticleService.getAllDuoArticles();
+        } else {
+            duoArticleList = this.duoArticleService.getDuoArticlesByMyLine(line);
+        }
+        return duoArticleList;
+    }
+}
+```
+```JS
+function findByLine() {
+            var selectedLine = $("input[name='sortByLine']:checked").val();  //클릭한 값을 저장
+            $.ajax({
+                type: 'GET',  //요청 타입 (get, post, put 등등)
+                url: '/api/getDuoArticleList/' + selectedLine,   //요청할 url
+                dataType: 'json',   //데이터 타입 (xml, json, text 등등)
+                success: function (result) { // 결과 성공 콜백함수
+                    console.log(result);
+                    $("#duoArticle").X // 문제점
+                },
+                error: function (request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
+                }
+            })
+        }
+```
+```html
+<tr id="duoArticle" th:each="duoArticle, loop : ${duoArticleList}">...</tr>
+```
+
+- 위와 같이 해당 리스트를 받아오는 것은 됐지만, 타임리프에서 쓰는 duoArticleList에 직접적으로 줄 수 없음
+
+
+## 🚥 해결
+
+1. 해당 데이터를 태그마다 지정(X)
+```JS
+function getArticleById(duoArticleId) {
+            console.log(duoArticleId);
+            $.ajax({
+                type: 'GET',
+                url: '/api/getDouArticle/' + duoArticleId,
+                dataType: 'json',
+                success: function (result) {
+                    let duoArticle = result;
+                    console.log(duoArticle);
+                    $("input[name='myLine'][value='" + duoArticle.myLine + "']").prop("checked", true);
+                    $("input[name='findLine'][value='" + duoArticle.findLine + "']").prop("checked", true);
+                    $("input[name='microphoneCheck']").prop("checked", duoArticle.microphoneCheck);
+                    $("textarea[name='content']").val(duoArticle.content);
+                    $("button[name='createButton']").hide();
+                    $("button[name='modifyButton']").show();
+                    $("form[name='createForm']").attr("action", "/duo/modify/" + duoArticleId);
+                },
+                error: function (request, status, error) {
+                    console.log(error);
+                }
+            })
+        }
+
+function findByLine() {
+            var selectedLine = $("input[name='sortByLine']:checked").val();  //클릭한 값을 저장
+            $.ajax({
+                type: 'GET',  //요청 타입 (get, post, put 등등)
+                url: '/api/getDuoArticleList/' + selectedLine,   //요청할 url
+                dataType: 'json',   //데이터 타입 (xml, json, text 등등)
+                success: function (result) { // 결과 성공 콜백함수
+                    $.each(result, function(index, item) {  //반복문 추가
+                    var listItem = '<li>' + item + '</li>';
+                    $('#duoArticle').append(listItem);
+                });
+                    console.log(result);
+                    $("#duoArticle").X // 문제점
+                },
+                error: function (request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
+                }
+            })
+        }
+```
+- 게시글 수정 기능에서 해당 데이터 게시글 데이터를 처리한 방식을 반복문으로 처리하는 방법
+
+*문제점
+
+ 1)해당 반복문을 사용하는 tr태그 안의 내용이 방대해, 직접 하나하나 지정해주기 복잡하다.
+
+ 2)직접 지정해준 내용이 요청이 올 때마다, 반복문을 수행해야 한다.
+
+2. jQuery replace
+```java
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/api")
+public class DuoArticleApiController {
+
+    private final DuoArticleService duoArticleService;
+
+    @GetMapping("/getDuoArticleList/{line}")
+    public String getDuoArticlesByMyLine(@PathVariable(value = "line") String line, Model model) {
+        List<DuoArticle> duoArticleList;
+        if (line.equals("fill")) {
+            duoArticleList = this.duoArticleService.getAllDuoArticles();
+        } else {
+            duoArticleList = this.duoArticleService.getDuoArticlesByMyLine(line);
+        }
+        model.addAttribute("duoArticleList", duoArticleList);
+        return "duo/list::#duoArticle";  //duoArticle부분만을 업데이트
+    }
+}
+```
+```JS
+function findByLine() {
+            var selectedLine = $("input[name='sortByLine']:checked").val(); //클릭한 값을 저장
+            $.ajax({
+                type: 'GET',              // 타입 (get, post, put 등등)
+                url: '/api/getDuoArticleList/' + selectedLine,     // 요청할 url
+                success: function (result) { // 결과 성공 콜백함수
+                    $("#duoArticle").replaceWith(result); //table -> result 교체
+                },
+                error: function (request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
+                }
+            })
+        }
+```
+```html
+<tr id="duoArticle" th:each="duoArticle, loop : ${duoArticleList}">...</tr>
+```
+- 위와 같이 컨트롤러에서 해당 경로를 지정하여 id가duoArticle부분만 업데이트 하고 script에서 해당 경로를 기존 태그 요소들을 새로 불러온 요소와 교체함
+
+
+
