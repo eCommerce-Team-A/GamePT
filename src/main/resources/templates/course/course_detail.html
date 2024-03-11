@@ -245,8 +245,14 @@
                 var pp = [[${course.price}]];
 
                 var authorName = "[[${course.author.username}]]";
+                var courseIsActive = [[${course.isActive}]];
                 var buyUserName = "[[${@rq.getSiteUser != null ? @rq.getSiteUser.username : null }]]";
                 var buyUserPoint = [[${@rq.getSiteUser != null ? @rq.getSiteUser.point : null }]];
+
+                if(!courseIsActive){
+                    alert("폐지된 강의는 구매할 수 없습니다.");
+                    return;
+                }
 
                 if(buyUserName == authorName ){
                     alert("자신의 강의는 구매할 수 없습니다.");
@@ -355,7 +361,14 @@
         $('#addCart').on("click", function(){
                 var token = $("meta[name='_csrf']").attr("content");
                 var header = $("meta[name='_csrf_header']").attr("content");
-                console.log(1)
+
+                var courseIsActive = [[${course.isActive}]];
+
+                if(!courseIsActive){
+                    alert("폐지된 강의는 장바구니에 담을 수 없습니다.");
+                    return;
+                }
+
                 $.ajax({
                      type : 'get',              // 타입 (get, post, put 등등)
                      url : '/cart/add/[[${course.id}]]',     // 요청할 서버url
