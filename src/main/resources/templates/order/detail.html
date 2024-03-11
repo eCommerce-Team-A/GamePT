@@ -34,8 +34,11 @@
                             [[${orderItem.id}]]
                         </div>
                         <div class="col-5" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                            <span class="badge rounded-pill text-bg-primary ">[[${orderItem.gameCategoryname}]]</span>
-                            [[${orderItem.name}]]
+                            <a th:href="@{|/course/detail/${orderItem.course.id}|}">
+                                <span class="badge rounded-pill text-bg-primary ">[[${orderItem.gameCategoryname}]]</span>
+                                [[${orderItem.name}]]
+                            </a>
+
                         </div>
                         <div class="col-3" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                             [[${orderItem.course.author.nickname}]]
