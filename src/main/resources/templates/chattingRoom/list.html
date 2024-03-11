@@ -147,7 +147,8 @@
 
             function leftBox(src, nickname, content) {
 
-                var htmlCode = '<div class="left-box mb-4">' +
+                var htmlCode =
+                '<div class="left-box mb-4">' +
                     '<div class="d-flex align-items-center">' +
                         '<div class="bg-white rounded-circle shadow" style=" width:30px; height:30px; overflow: hidden;">' +
                             '<img src="'+src+'" alt="..." style="width:100%; height:100%; object-fit:contain;">' +
@@ -156,11 +157,14 @@
                             nickname +
                         '</div>'+
                     '</div>' +
-                    '<div class="card mt-2 border-primary shadow">' +
-                        '<div class="card-body px-3 py-2">' +
-                            content +
+                    '<div>' +
+                        '<div class="card mt-2 border-primary shadow d-inline-block">' +
+                            '<div class="card-body px-3 py-2">' +
+                                content +
+                            '</div>' +
                         '</div>' +
                     '</div>' +
+
                 '</div>';
 
                 return htmlCode;
@@ -168,21 +172,24 @@
 
             function rightBox(src, nickname, content) {
 
-                var htmlCode = '<div class="right-box mb-4">' +
-                        '<div class="d-flex justify-content-end align-items-center">' +
-                            '<div class="me-1 text-secondary">' +
-                                nickname +
-                            '</div>' +
-                            '<div class="bg-white rounded-circle shadow" style=" width:30px; height:30px; overflow: hidden;">' +
-                                '<img src="'+src+'" alt="..." style="width:100%; height:100%; object-fit:contain;">' +
-                            '</div>' +
+                var htmlCode =
+                '<div class="right-box mb-4">' +
+                    '<div class="d-flex justify-content-end align-items-center">' +
+                        '<div class="me-1 text-secondary">' +
+                            nickname +
                         '</div>' +
-                        '<div class="card mt-2 border-success text-end shadow">'+
+                        '<div class="bg-white rounded-circle shadow" style=" width:30px; height:30px; overflow: hidden;">' +
+                            '<img src="'+src+'" alt="..." style="width:100%; height:100%; object-fit:contain;">' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="d-flex justify-content-end">' +
+                        '<div class="card mt-2 border-success text-end shadow d-inline-block">'+
                             '<div class="card-body px-3 py-2">' +
                                 content +
                             '</div>' +
                         '</div>' +
-                    '</div>';
+                    '</div>'+
+                '</div>';
 
                 return htmlCode;
             }
