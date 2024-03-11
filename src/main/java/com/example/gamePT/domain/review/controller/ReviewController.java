@@ -1,5 +1,7 @@
 package com.example.gamePT.domain.review.controller;
 
+import com.example.gamePT.domain.course.entity.Course;
+import com.example.gamePT.domain.course.service.CourseService;
 import com.example.gamePT.domain.review.entity.Review;
 import com.example.gamePT.domain.review.entity.ReviewCreateForm;
 import com.example.gamePT.domain.review.entity.ReviewPageNum;
@@ -25,12 +27,17 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
     private final UserService userService;
+    private final CourseService courseService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String create(@RequestBody ReviewCreateForm reviewCreateForm, Principal principal,
                          Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
         SiteUser author = this.userService.findByUsername(principal.getName());
+        Course course = this.courseService.findCourseById(reviewCreateForm.getCourseId());
+        if(!course.getBuyerList().contains(author)){
+            return "unable";
+        }
         Page<Review> reviewList = this.reviewService.create(author, reviewCreateForm.getCourseId(), reviewCreateForm.getContent(),
                 reviewCreateForm.getScore(), page);
         model.addAttribute("reviewList", reviewList);
