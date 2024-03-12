@@ -31,7 +31,7 @@
                        th:href="@{|/expert/modify/${@rq.getSiteUser().username}|}"
                        role="button">수정<i class="fa-solid fa-pen-to-square"></i></a>
                     <a th:if="${@rq.isLogin() and @rq.getSiteUser().username != siteUser.username}"
-                       class="btn btn-outline-primary" th:href="@{/}" role="button">상담신청<i
+                       class="btn btn-outline-primary" th:href="@{|/chattingRoom/create/${siteUser.id}|}" role="button">상담신청<i
                             class="fa-solid fa-comment-dots" ></i></a>
                 </div>
             </div>
