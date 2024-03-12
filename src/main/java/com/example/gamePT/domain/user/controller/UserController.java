@@ -3,6 +3,8 @@ package com.example.gamePT.domain.user.controller;
 import com.example.gamePT.domain.duoArticle.enity.DuoArticle;
 import com.example.gamePT.domain.order.entity.OrderEntity;
 import com.example.gamePT.domain.order.service.OrderService;
+import com.example.gamePT.domain.qna.entity.QnA;
+import com.example.gamePT.domain.qna.service.QnAService;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.request.SiteUserRequest;
 import com.example.gamePT.domain.user.response.SiteUserResponse;
@@ -29,6 +31,7 @@ public class UserController {
 
     private final UserService userService;
     private final OrderService orderService;
+    private final QnAService qnAService;
     private final Gson gson;
 
     // update
@@ -50,15 +53,27 @@ public class UserController {
         return "/user/update";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/qna/{pageNumber}")
+    public String qnaReload(@PathVariable(value = "pageNumber") int pageNumber, Model model){
+
+        SiteUser su = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Page<QnA> qnaList = this.qnAService.getListForMyPage(pageNumber, su);
+
+        model.addAttribute("qnaList", qnaList);
+
+        return "user/mypage::#qnaHistory";
+    }
+
     // mypage
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/mypage/{pageNumber}")
-    public String mypageReload(@PathVariable(value = "pageNumber") int pageNumber, Model model){
+    @GetMapping("/mypage/order/{pageNumber}")
+    public String orderReload(@PathVariable(value = "pageNumber") int pageNumber, Model model){
 
         SiteUser su = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Page<OrderEntity> paging = this.orderService.getList(pageNumber, su.getId());
 
-        model.addAttribute("paging", paging);
+        model.addAttribute("orderList", paging);
 
         return "user/mypage::#orderHistory";
     }
@@ -70,7 +85,10 @@ public class UserController {
         SiteUser su = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Page<OrderEntity> paging = this.orderService.getList(0, su.getId());
 
-        model.addAttribute("paging", paging);
+        Page<QnA> qnaList = this.qnAService.getListForMyPage(0, su);
+
+        model.addAttribute("orderList", paging);
+        model.addAttribute("qnaList", qnaList);
 
         return "/user/mypage";
     }
