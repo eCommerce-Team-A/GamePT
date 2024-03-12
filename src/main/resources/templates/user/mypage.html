@@ -180,6 +180,81 @@
 
                 <div class="col-8">
                     <div class="card w-100 Regular shadow border-0">
+                        <div id="qnaHistory" class="card w-100 Regular shadow border-0">
+                            <div class="card-header bg-white">
+                                <i class="fa-regular fa-circle-question"></i> QnA 내역
+                            </div>
+                            <ul class="list-group list-group-flush text-center my-3">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            번호
+                                        </div>
+                                        <div class="col-2">
+                                            답변여부
+                                        </div>
+                                        <div class="col-6">
+                                            제목
+                                        </div>
+                                        <div class="col-3">
+                                            생성일
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item" th:each="qna, loop : ${qnaList}">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            [[${qna.id}]]
+                                        </div>
+                                        <div class="col-2">
+                                            <div th:if="${qna.isAnswered}">
+                                                <i class="fa-regular fa-circle-check text-success"></i>
+                                            </div>
+                                            <div th:unless="${qna.isAnswered}">
+                                                <i class="fa-regular fa-circle-xmark text-danger"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <a th:href="@{|/qna/detail/${qna.id}|}">
+                                                [[${qna.title}]]
+                                            </a>
+                                        </div>
+                                        <div class="col-3">
+                                            [[${#temporals.format(qna.createDate, 'yy-MM-dd HH:mm')}]]
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- 페이징처리 시작 -->
+                            <div th:if="${!qnaList.isEmpty()}">
+                                <ul class="pagination pagination-sm justify-content-center d-flex justify-content-center">
+                                    <li class="page-item" th:classappend="${!qnaList.hasPrevious} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="qna-link page-link changePageButton"
+                                           th:value="${qnaList.number-1}">
+                                            <span>이전</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="page: ${#numbers.sequence(0, qnaList.totalPages-1)}"
+                                        th:if="${page >= qnaList.number-3 and page <= qnaList.number+3}"
+                                        th:classappend="${page == qnaList.number} ? 'active'"
+                                        class="page-item">
+                                        <a href="#" onclick="return false" class="qna-link page-link changePageButton"
+                                           th:value="${page}">[[${page} + 1]]</a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${!qnaList.hasNext} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="qna-link page-link changePageButton"
+                                           th:value="${qnaList.number+1}">
+                                            <span>다음</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- 페이징처리 끝 -->
+                        </div>
+                    </div>
+
+                    <div class="card w-100 Regular shadow border-0 mt-3">
                         <div id="orderHistory" class="card w-100 Regular shadow border-0">
                             <div class="card-header bg-white">
                                 <i class="fa-regular fa-credit-card"></i> 주문내역
@@ -201,7 +276,7 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li class="list-group-item" th:each="orderEntity, loop : ${paging}">
+                                <li class="list-group-item" th:each="orderEntity, loop : ${orderList}">
                                     <div class="row">
                                         <div class="col-1">
                                             [[${orderEntity.id}]]
@@ -230,24 +305,24 @@
                             </ul>
 
                             <!-- 페이징처리 시작 -->
-                            <div th:if="${!paging.isEmpty()}">
+                            <div th:if="${!orderList.isEmpty()}">
                                 <ul class="pagination pagination-sm justify-content-center d-flex justify-content-center">
-                                    <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
-                                        <a href="#" onclick="return false" class="page-link changePageButton"
-                                           th:value="${paging.number-1}">
+                                    <li class="page-item" th:classappend="${!orderList.hasPrevious} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="order-link page-link changePageButton"
+                                           th:value="${orderList.number-1}">
                                             <span>이전</span>
                                         </a>
                                     </li>
-                                    <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
-                                        th:if="${page >= paging.number-3 and page <= paging.number+3}"
-                                        th:classappend="${page == paging.number} ? 'active'"
+                                    <li th:each="page: ${#numbers.sequence(0, orderList.totalPages-1)}"
+                                        th:if="${page >= orderList.number-3 and page <= orderList.number+3}"
+                                        th:classappend="${page == orderList.number} ? 'active'"
                                         class="page-item">
-                                        <a href="#" onclick="return false" class="page-link changePageButton"
+                                        <a href="#" onclick="return false" class="order-link page-link changePageButton"
                                            th:value="${page}">[[${page} + 1]]</a>
                                     </li>
-                                    <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
-                                        <a href="#" onclick="return false" class="page-link changePageButton"
-                                           th:value="${paging.number+1}">
+                                    <li class="page-item" th:classappend="${!orderList.hasNext} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="order-link page-link changePageButton"
+                                           th:value="${orderList.number+1}">
                                             <span>다음</span>
                                         </a>
                                     </li>
@@ -255,7 +330,6 @@
                             </div>
                             <!-- 페이징처리 끝 -->
                         </div>
-
                     </div>
 
                 </div>
@@ -267,11 +341,31 @@
     <script th:inline="javascript">
         $(function () {
 
-            <!-- 주문내역 페이징 클릭시 이동 -->
-            $(document).on('click', '.page-link', function(event) {
+        <!-- 주문내역 페이징 클릭시 이동 -->
+            $(document).on('click', '.qna-link', function(event) {
                 $.ajax({
                     type : 'get',              // 타입 (get, post, put 등등)
-                    url : '/user/mypage/' + $(this).attr("value"),     // 요청할 서버url
+                    url : '/user/mypage/qna/' + $(this).attr("value"),     // 요청할 서버url
+                    async : true,               // 비동기화 여부 (default : true)
+                    headers : {                 // Http header
+                        "Content-Type" : "application/json",
+                        "X-HTTP-Method-Override" : "GET"
+                    },
+                    dataType : 'html',
+                    success : function(result) { // 결과 성공 콜백함수
+                        $("#qnaHistory").replaceWith(result);
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                    }
+                })
+            });
+
+            <!-- 주문내역 페이징 클릭시 이동 -->
+            $(document).on('click', '.order-link', function(event) {
+                $.ajax({
+                    type : 'get',              // 타입 (get, post, put 등등)
+                    url : '/user/mypage/order/' + $(this).attr("value"),     // 요청할 서버url
                     async : true,               // 비동기화 여부 (default : true)
                     headers : {                 // Http header
                         "Content-Type" : "application/json",
