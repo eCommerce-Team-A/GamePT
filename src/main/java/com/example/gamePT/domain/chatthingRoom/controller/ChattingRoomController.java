@@ -3,6 +3,8 @@ package com.example.gamePT.domain.chatthingRoom.controller;
 import com.example.gamePT.domain.chatthingRoom.entity.ChattingRoom;
 import com.example.gamePT.domain.chatthingRoom.serivce.ChattingRoomService;
 import com.example.gamePT.domain.image.service.ImageService;
+import com.example.gamePT.domain.user.entity.SiteUser;
+import com.example.gamePT.domain.user.service.UserService;
 import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 @RequestMapping("/chattingRoom")
 public class ChattingRoomController {
 
+    private final UserService userService;
     private final ChattingRoomService chattingRoomService;
     private final ImageService imageService;
     private final Gson gson;
@@ -46,6 +49,25 @@ public class ChattingRoomController {
         String expertImgPath = imageService.findByUser(chattingRoom.getExpert()).getPath();
 
         return new ChattingRoomResponse(chattingRoom, siteUserImgPath, expertImgPath);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/create/{siteUserId}")
+    public String createChattingRoom (@PathVariable(value = "siteUserId") Long expertUserId){
+
+        SiteUser expertUser = userService.findByUserId(expertUserId);
+        SiteUser logindUser = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        if(expertUser.getId() == logindUser.getId()){
+            return "history_back";
+        }
+        ChattingRoom cr = chattingRoomService.getChattingRoomsByBuyUserAndExpert(logindUser,expertUser);
+
+        if(cr == null){
+            chattingRoomService.create(logindUser,expertUser);
+        }
+
+        return "redirect:/chattingRoom/list";
     }
 
     @Setter
