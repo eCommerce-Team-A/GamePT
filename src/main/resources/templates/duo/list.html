@@ -376,7 +376,6 @@
                 url: '/api/getDuoArticleList/' + selectedLine,     // 요청할 url
                 success: function (result) { // 결과 성공 콜백함수
                     $("table").replaceWith(result);
-                    console.log(result.length);
                 },
                 error: function (request, status, error) { // 결과 에러 콜백함수
                     console.log(error)

@@ -26,7 +26,7 @@ public class RiotApiService {
         String tagLineApi = "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id";
         try {
             String encodedName = URLEncoder.encode(name, "UTF-8"); //공백을 처리하기 위해 인코딩
-                String encodedTag = URLEncoder.encode(tag, "UTF-8"); //공백을 처리하기 위해 인코딩
+            String encodedTag = URLEncoder.encode(tag, "UTF-8"); //공백을 처리하기 위해 인코딩
             String url = String.format("%s/%s/%s?api_key=%s", tagLineApi, encodedName, encodedTag, myKey);
             URL apiUrl = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
@@ -113,7 +113,8 @@ public class RiotApiService {
             //요청 성공 시
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                return objectMapper.readValue(connection.getInputStream(), new TypeReference<List<String>>() {});
+                return objectMapper.readValue(connection.getInputStream(), new TypeReference<List<String>>() {
+                });
             } else {
                 return null;
             }
@@ -155,7 +156,6 @@ public class RiotApiService {
         }
         return null;
     }
-
 
 
 }

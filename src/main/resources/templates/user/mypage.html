@@ -368,6 +368,8 @@
                 success: function (result) { // 결과 성공 콜백함수
                     $('.rankInfo-spinner').css("display", "none");
                     $('.rankInfo').css("display", "block");
+                    console.log(result);
+                    console.log(puuid);
                     if (result != null) {
                         $('#rankImg').attr("src", "/img/" + result.tier + ".png")
                         $('#tier-rank').text(result.tier + " " + result.rank)

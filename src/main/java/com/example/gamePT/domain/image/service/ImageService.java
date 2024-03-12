@@ -1,5 +1,6 @@
 package com.example.gamePT.domain.image.service;
 
+import com.example.gamePT.domain.expertRequest.entity.ExpertRequest;
 import com.example.gamePT.domain.image.entity.Image;
 import com.example.gamePT.domain.image.repository.ImageRepository;
 import com.example.gamePT.domain.user.entity.SiteUser;
@@ -27,10 +28,10 @@ public class ImageService {
         Image image = findByUser(loginedUser);
 
         String originalFileName = profileImg.getOriginalFilename();
-        String filePath = "user/" + UUID.randomUUID().toString() +"."+ originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-        File profileImgFile = new File(fileDirPath +"/"+ filePath);
+        String filePath = "user/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        File profileImgFile = new File(fileDirPath + "/" + filePath);
         profileImg.transferTo(profileImgFile);
-        filePath =  "/file/" + filePath;
+        filePath = "/file/" + filePath;
 
         image = image.toBuilder().path(filePath).originalFileName(originalFileName).relationId(loginedUser.getId()).build();
 
@@ -39,7 +40,7 @@ public class ImageService {
 
     public Image findByUser(SiteUser siteUser) {
 
-        return imageRepository.findByRelationEntityAndRelationId("siteUser",siteUser.getId()).get();
+        return imageRepository.findByRelationEntityAndRelationId("siteUser", siteUser.getId()).get();
     }
 
     public void saveUserProfile(SiteUser siteUser, MultipartFile profileImg) throws IOException {
@@ -55,10 +56,10 @@ public class ImageService {
             createFolder("user");
 
             originalFileName = profileImg.getOriginalFilename();
-            filePath = "user/" + UUID.randomUUID().toString() +"."+ originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-            File profileImgFile = new File(fileDirPath +"/"+ filePath);
+            filePath = "user/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            File profileImgFile = new File(fileDirPath + "/" + filePath);
             profileImg.transferTo(profileImgFile);
-            filePath =  "/file/" + filePath;
+            filePath = "/file/" + filePath;
         }
 
         Image userProfile = Image.builder().path(filePath).originalFileName(originalFileName).relationId(siteUser.getId()).relationEntity("siteUser").build();
@@ -66,26 +67,44 @@ public class ImageService {
         this.imageRepository.save(userProfile);
     }
 
-    public void createFolder(String folderName){
+    public void createFolder(String folderName) {
 
-        File folder = new File(fileDirPath+"\\"+folderName+"\\");
+        File folder = new File(fileDirPath + "\\" + folderName + "\\");
 
         // 해당 디렉토리가 없다면 디렉토리를 생성.
         if (!folder.exists()) {
-            try{
+            try {
                 folder.mkdirs();
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.getStackTrace();
             }
         }
     }
 
     public String getSiteUserImg(Long id) {
-        Optional<Image> profileImg = imageRepository.findByRelationEntityAndRelationId("siteUser",id);
+        Optional<Image> profileImg = imageRepository.findByRelationEntityAndRelationId("siteUser", id);
 
-        if(profileImg.isEmpty()) return  null;
+        if (profileImg.isEmpty()) return null;
 
         return profileImg.get().getPath();
+    }
+
+    public void saveRequestProfile(ExpertRequest expertRequest, MultipartFile requestImg) throws IOException {
+
+            this.createFolder("expert_request");
+            String originalFileName = requestImg.getOriginalFilename();
+            String path = "expert_request/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            File requestImgFile = new File(fileDirPath + "/" + path);
+            requestImg.transferTo(requestImgFile);
+
+        Image requestProfile = Image.builder()
+                .path(path)
+                .originalFileName(originalFileName)
+                .relationId(expertRequest.getId())
+                .relationEntity("expertRequest")
+                .build();
+
+        this.imageRepository.save(requestProfile);
     }
 
 
