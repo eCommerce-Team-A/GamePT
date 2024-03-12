@@ -3,6 +3,8 @@ package com.example.gamePT.domain.orderItem.controller;
 import com.example.gamePT.domain.cartItem.entity.CartItem;
 import com.example.gamePT.domain.cartItem.service.CartItemService;
 import com.example.gamePT.domain.orderItem.service.OrderItemService;
+import com.example.gamePT.domain.user.entity.SiteUser;
+import com.example.gamePT.domain.user.service.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -19,21 +21,22 @@ import java.util.List;
 public class OrderItemController {
 
     private final OrderItemService orderItemService;
+    private final UserService userService;
 
     @Getter
     @Setter
-    public static class OrderItemsRequest{
+    public static class OrderItemsRequest {
         private List<String> cartItem_ids;
         private Integer total_price;
     }
 
     @Getter
-    public static class OrderItemsCreateResponse{
+    public static class OrderItemsCreateResponse {
 
         private final String msg;
         private final Boolean isSuccess;
 
-        public OrderItemsCreateResponse(Boolean isSuccess, String msg){
+        public OrderItemsCreateResponse(Boolean isSuccess, String msg) {
             this.msg = msg;
             this.isSuccess = isSuccess;
         }
@@ -42,20 +45,21 @@ public class OrderItemController {
     // 장바구니 구매
     @PostMapping("/createByCart")
     @ResponseBody
-    public OrderItemsCreateResponse createByCart(@RequestBody OrderItemsRequest req){
-
+    public OrderItemsCreateResponse createByCart(@RequestBody OrderItemsRequest req, Principal principal
+    ) {
+        SiteUser buyer = this.userService.findByUsername(principal.getName());
         List<String> cartItem_ids = req.getCartItem_ids();
 
-        if(cartItem_ids.isEmpty()){
+        if (cartItem_ids.isEmpty()) {
             return new OrderItemsCreateResponse(false, "주문 항목 없음");
         }
 
-        return orderItemService.createByCart(cartItem_ids, req.getTotal_price());
+        return orderItemService.createByCart(cartItem_ids, req.getTotal_price(), buyer);
     }
 
     @Getter
     @Setter
-    public static class OrderItemRequest{
+    public static class OrderItemRequest {
         private Long course_id;
     }
 
@@ -63,8 +67,9 @@ public class OrderItemController {
     // 단건 구매
     @PostMapping("/create")
     @ResponseBody
-    public OrderItemsCreateResponse create(@RequestBody OrderItemRequest orderItemRequest){
+    public OrderItemsCreateResponse create(@RequestBody OrderItemRequest orderItemRequest, Principal principal) {
+        SiteUser buyer = this.userService.findByUsername(principal.getName());
 
-        return orderItemService.createByCourseId(orderItemRequest.course_id);
+        return orderItemService.createByCourseId(orderItemRequest.course_id, buyer);
     }
 }

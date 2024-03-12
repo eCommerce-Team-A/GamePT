@@ -2,6 +2,7 @@ package com.example.gamePT.domain.orderItem.entity;
 
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.order.entity.OrderEntity;
+import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,9 @@ public class OrderItem extends BaseEntity {
 
     @ManyToOne
     private OrderEntity orderEntity;
+
+    @ManyToOne
+    private SiteUser buyer;
 
     @ManyToOne
     private Course course;

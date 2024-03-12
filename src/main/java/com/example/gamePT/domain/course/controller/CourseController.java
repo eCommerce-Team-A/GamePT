@@ -5,6 +5,7 @@ import com.example.gamePT.domain.course.entity.CourseCreateForm;
 import com.example.gamePT.domain.course.service.CourseService;
 import com.example.gamePT.domain.expert.entity.SiteUserWithImg;
 import com.example.gamePT.domain.expert.service.ExpertService;
+import com.example.gamePT.domain.orderItem.service.OrderItemService;
 import com.example.gamePT.domain.review.entity.Review;
 import com.example.gamePT.domain.review.service.ReviewService;
 import com.example.gamePT.domain.user.entity.SiteUser;
@@ -29,6 +30,7 @@ public class CourseController {
     private final UserService userService;
     private final ReviewService reviewService;
     private final ExpertService expertService;
+    private final OrderItemService orderItemService;
 
     //강의 등록
     @PreAuthorize("isAuthenticated()")
@@ -56,15 +58,22 @@ public class CourseController {
 
     //강의 상세 페이지
     @GetMapping("/detail/{id}")
-    public String showCourseDetail(@PathVariable(value = "id") Long id, @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
+    public String showCourseDetail(@PathVariable(value = "id") Long id, @RequestParam(value = "page", defaultValue = "0") int page, Model model, Principal principal) {
         Course course = this.courseService.findCourseById(id);
+
         List<Course> courseListByAuthor = this.courseService.findCourseByAuthorId(course.getAuthor().getId());
         Page<Review> reviewList = this.reviewService.findByCourseId(id, page);
-
+        boolean isPurchased = false;
+        if (principal != null) {
+            SiteUser siteUser = this.userService.findByUsername(principal.getName());
+            if (orderItemService.isPurchasedBySiteUserId(siteUser.getId(),course.getId())) {
+                isPurchased = true;
+            }
+        }
         SiteUserWithImg expertData = toDto(course.getAuthor());
 
         model.addAttribute("expertData", expertData);
-
+        model.addAttribute("isPurchased", isPurchased);
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("courseListByAuthor", courseListByAuthor);
         model.addAttribute("course", course);
@@ -72,7 +81,7 @@ public class CourseController {
         return "course/course_detail";
     }
 
-    public SiteUserWithImg toDto(SiteUser expertUser){
+    public SiteUserWithImg toDto(SiteUser expertUser) {
 
         SiteUserWithImg SiteUserWithImgList = SiteUserWithImg.builder()
                 .siteUser(expertUser)

@@ -37,29 +37,29 @@ public class OrderItemService {
     private final CourseService courseService;
 
     @Transactional
-    public OrderItemController.OrderItemsCreateResponse createByCart(List<String> cartItem_ids, Integer total_price) {
+    public OrderItemController.OrderItemsCreateResponse createByCart(List<String> cartItem_ids, Integer total_price, SiteUser buyer) {
 
         SiteUser buyUser = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        if(buyUser.getPoint() < total_price){
-            return new OrderItemController.OrderItemsCreateResponse(false,"잔액 부족");
+        if (buyUser.getPoint() < total_price) {
+            return new OrderItemController.OrderItemsCreateResponse(false, "잔액 부족");
         }
 
         // 전체 주문 생성
         OrderEntity orderEntity = orderService.create(buyUser, total_price);
 
         // 주문 아이템 생성
-        for(String i : cartItem_ids){
+        for (String i : cartItem_ids) {
             Long id = Long.parseLong(i);
 
             CartItem ci = this.cartItemService.findById(id);
 
-            if(buyUser.getUsername().equals(ci.getCourse().getAuthor().getUsername())){
-                return new OrderItemController.OrderItemsCreateResponse(false,"자신의 강의는 구매 불가");
+            if (buyUser.getUsername().equals(ci.getCourse().getAuthor().getUsername())) {
+                return new OrderItemController.OrderItemsCreateResponse(false, "자신의 강의는 구매 불가");
             }
 
-            if(!ci.getBuyer().getUsername().equals(buyUser.getUsername())){
-                return new OrderItemController.OrderItemsCreateResponse(false,"잘못된 접근");
+            if (!ci.getBuyer().getUsername().equals(buyUser.getUsername())) {
+                return new OrderItemController.OrderItemsCreateResponse(false, "잘못된 접근");
             }
 
             OrderItem oi = OrderItem.builder()
@@ -68,21 +68,22 @@ public class OrderItemService {
                     .name(ci.getCourse().getName())
                     .price(ci.getCourse().getPrice())
                     .gameCategoryname(ci.getCourse().getGameCategoryname())
+                    .buyer(buyer)
                     .build();
 
             orderItemRepository.save(oi);
 
             // 생성 후 채팅창 만들기
-            ChattingRoom cr = chattingRoomService.getChattingRoomsByBuyUserAndExpert(buyUser,ci.getCourse().getAuthor());
+            ChattingRoom cr = chattingRoomService.getChattingRoomsByBuyUserAndExpert(buyUser, ci.getCourse().getAuthor());
 
-            if(cr == null){
+            if (cr == null) {
                 cr = chattingRoomService.create(buyUser, ci.getCourse().getAuthor());
             }
 
             // 전문가 채팅 보내기
             ChatLog cl = ChatLog.builder()
                     .chattingRoom(cr)
-                    .content(ci.getCourse().getName()+"을 구매해주셔서 감사합니다. \n 자세한 내용은 여기서 나누자~")
+                    .content(ci.getCourse().getName() + "을 구매해주셔서 감사합니다. \n 자세한 내용은 여기서 나누자~")
                     .isCheck(false)
                     .sender(ci.getCourse().getAuthor())
                     .build();
@@ -90,27 +91,27 @@ public class OrderItemService {
             chatLogService.save(cl);
 
             // 장바구니 삭제
-            cartItemService.deleteCartItemBy(ci.getId(),buyUser);
+            cartItemService.deleteCartItemBy(ci.getId(), buyUser);
 
         }
         buyUser = buyUser.toBuilder().point(buyUser.getPoint() - total_price).build();
         userService.save(buyUser);
 
-        return new OrderItemController.OrderItemsCreateResponse(true,"구매 완료");
+        return new OrderItemController.OrderItemsCreateResponse(true, "구매 완료");
     }
 
-    public OrderItemController.OrderItemsCreateResponse createByCourseId(Long courseId) {
+    public OrderItemController.OrderItemsCreateResponse createByCourseId(Long courseId, SiteUser buyer) {
 
         SiteUser buyUser = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Course course = courseService.findCourseById(courseId);
 
-        if(buyUser.getUsername().equals(course.getAuthor().getUsername())){
-            return new OrderItemController.OrderItemsCreateResponse(false,"자신의 강의는 구매 불가");
+        if (buyUser.getUsername().equals(course.getAuthor().getUsername())) {
+            return new OrderItemController.OrderItemsCreateResponse(false, "자신의 강의는 구매 불가");
         }
 
-        if(buyUser.getPoint() < course.getPrice()){
-            return new OrderItemController.OrderItemsCreateResponse(false,"잔액 부족");
+        if (buyUser.getPoint() < course.getPrice()) {
+            return new OrderItemController.OrderItemsCreateResponse(false, "잔액 부족");
         }
 
         // 전체 주문 생성
@@ -122,21 +123,22 @@ public class OrderItemService {
                 .name(course.getName())
                 .price(course.getPrice())
                 .gameCategoryname(course.getGameCategoryname())
+                .buyer(buyer)
                 .build();
 
         orderItemRepository.save(oi);
 
         // 생성 후 채팅창 만들기
-        ChattingRoom cr = chattingRoomService.getChattingRoomsByBuyUserAndExpert(buyUser,course.getAuthor());
+        ChattingRoom cr = chattingRoomService.getChattingRoomsByBuyUserAndExpert(buyUser, course.getAuthor());
 
-        if(cr == null){
+        if (cr == null) {
             cr = chattingRoomService.create(buyUser, course.getAuthor());
         }
 
         // 전문가 채팅 보내기
         ChatLog cl = ChatLog.builder()
                 .chattingRoom(cr)
-                .content(course.getName()+"을 구매해주셔서 감사합니다. \n 자세한 내용은 여기서 나누자~")
+                .content(course.getName() + "을 구매해주셔서 감사합니다. \n 자세한 내용은 여기서 나누자~")
                 .isCheck(false)
                 .sender(course.getAuthor())
                 .build();
@@ -146,6 +148,14 @@ public class OrderItemService {
         buyUser = buyUser.toBuilder().point(buyUser.getPoint() - course.getPrice()).build();
         userService.save(buyUser);
 
-        return new OrderItemController.OrderItemsCreateResponse(true,"구매 완료");
+        return new OrderItemController.OrderItemsCreateResponse(true, "구매 완료");
+    }
+
+    public boolean isPurchasedBySiteUserId(Long siteUserId, Long courseId) {
+        List<OrderItem> orderItem = this.orderItemRepository.findByBuyerIdAndCourseId(siteUserId, courseId);
+        if (orderItem.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }
