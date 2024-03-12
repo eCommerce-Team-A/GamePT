@@ -327,10 +327,6 @@
                          "score" : $('.rating__star.fas.fa-star').length
                      }),
                      success : function(result) { // 결과 성공 콜백함수
-                            if(result=="unable"){
-                                alert("강의 구매 후 리뷰 작성이 가능합니다.");
-                                return;
-                            }
                             $('#reviews').replaceWith(result);
                             $('.rating__star.fas.fa-star').removeClass('fas fa-star').addClass('far fa-star');
                             $('#reviewContent').val('');

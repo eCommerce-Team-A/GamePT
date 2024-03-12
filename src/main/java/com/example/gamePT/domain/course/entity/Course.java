@@ -2,14 +2,12 @@ package com.example.gamePT.domain.course.entity;
 
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.global.jpa.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.springframework.context.annotation.Lazy;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +23,4 @@ public class Course extends BaseEntity {
     private String curriculum;
     private Integer price;
     private boolean isActive;
-    @OneToMany
-    private List<SiteUser> buyerList;
 }

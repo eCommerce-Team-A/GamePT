@@ -7,7 +7,6 @@ import com.example.gamePT.domain.chatLog.service.ChatLogService;
 import com.example.gamePT.domain.chatthingRoom.entity.ChattingRoom;
 import com.example.gamePT.domain.chatthingRoom.serivce.ChattingRoomService;
 import com.example.gamePT.domain.course.entity.Course;
-import com.example.gamePT.domain.course.repository.CourseRepository;
 import com.example.gamePT.domain.course.service.CourseService;
 import com.example.gamePT.domain.order.entity.OrderEntity;
 import com.example.gamePT.domain.order.service.OrderService;
@@ -36,8 +35,6 @@ public class OrderItemService {
     private final ChattingRoomService chattingRoomService;
     private final ChatLogService chatLogService;
     private final CourseService courseService;
-
-    private final CourseRepository courseRepository;
 
     @Transactional
     public OrderItemController.OrderItemsCreateResponse createByCart(List<String> cartItem_ids, Integer total_price) {
@@ -148,13 +145,6 @@ public class OrderItemService {
 
         buyUser = buyUser.toBuilder().point(buyUser.getPoint() - course.getPrice()).build();
         userService.save(buyUser);
-
-
-
-        List<SiteUser> buyerList = course.getBuyerList();
-        buyerList.add(buyUser);
-        course = course.toBuilder().buyerList(buyerList).build();
-        courseRepository.save(course);
 
         return new OrderItemController.OrderItemsCreateResponse(true,"구매 완료");
     }
