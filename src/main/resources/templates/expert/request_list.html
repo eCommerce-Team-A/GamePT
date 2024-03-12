@@ -3,10 +3,10 @@
     <link rel="stylesheet" href="/css/duoArticle.css" type="text/css">
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5 Nanum">
-        <h1 class="text-center text-white display-6">듀오찾기</h1>
+        <h1 class="text-center text-white display-6">전문가 승인</h1>
         <ol class="breadcrumb justify-content-center mb-0">
             <li class="breadcrumb-item active text-white">홈</li>
-            <li class="breadcrumb-item active text-white">듀오찾기</li>
+            <li class="breadcrumb-item active text-white">전문가 승인</li>
         </ol>
     </div>
     <!-- Single Page Header End -->
@@ -14,29 +14,32 @@
 
     <div style="margin-top: 2rem; display: flex; justify-content: center; flex-wrap: wrap;">
 
-        <div id="bottom" style="border-radius:1px; width: 1320px; border: 1px solid gray;">
-            <table class="table table-hover Nanum" style="border-radius: 3px; height: 100%;">
+        <div id="bottom" style="border-radius:1px; width: 1100px; border: 1px solid gray;">
+            <table class="table Nanum" style="border-radius: 3px; height: 100%;">
                 <thead style="border: darkgray; text-align: center; border-radius: 3px;">
                 <tr style="font-size: 13px;">
                     <th scope="col">번호</th>
                     <th scope="col">ID</th>
-                    <th scope="col" style="width: 50%">소개</th>
+                    <th scope="col" style="width: 40%">소개</th>
                     <th scope="col">등록일</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody style="text-align: center">
                 <tr th:each="expertRequest, loop : ${expertRequestList}">
-                    <td >
+                    <td style="width: 5%">
                         <div class="article-element"><span th:text="${loop.count}"></span></div>
                     </td>
+                    <td style="width: 15%">
+                        <div class="article-element"><span th:text="${expertRequest.userName}"></span></div>
+                    </td>
+                    <td style="width: 40%">
+                        <div class="article-element">
+                            <a th:href="@{|/expert/request/${expertRequest.id}|}" class="d-inline-block text-truncate" style="max-width: 450px;"
+                                  th:text="${expertRequest.content}"></a>
+                        </div>
+                    </td>
                     <td style="width: 20%">
-                        <div class="article-element"><a href="/" th:text="${expertRequest.userName}"></a></div>
-                    </td>
-                    <td style="width: 50%">
-                        <div class="article-element"><span th:text="${expertRequest.content}" ></span></div>
-                    </td>
-                    <td>
                         <div class="article-element"><span th:text="${#temporals.format(expertRequest.createDate, 'yyyy-MM-dd')}"></span></div>
                     </td>
                     <td style="width: 10%">

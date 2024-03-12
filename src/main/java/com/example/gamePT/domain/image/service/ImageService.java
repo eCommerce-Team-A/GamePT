@@ -106,6 +106,12 @@ public class ImageService {
 
         this.imageRepository.save(requestProfile);
     }
+    public String getRequestImg(Long id) {
+        Optional<Image> profileImg = imageRepository.findByRelationEntityAndRelationId("expertRequest", id);
 
+        if (profileImg.isEmpty()) return null;
+
+        return profileImg.get().getPath();
+    }
 
 }

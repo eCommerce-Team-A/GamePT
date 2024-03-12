@@ -2,6 +2,7 @@ package com.example.gamePT.domain.expertRequest.controller;
 
 import com.example.gamePT.domain.expert.service.ExpertService;
 import com.example.gamePT.domain.expertRequest.entity.ExpertRequest;
+import com.example.gamePT.domain.expertRequest.entity.ExpertRequestWithUser;
 import com.example.gamePT.domain.expertRequest.service.ExpertRequestService;
 import com.example.gamePT.domain.image.service.ImageService;
 import com.example.gamePT.domain.user.entity.SiteUser;
@@ -47,6 +48,17 @@ public class ExpertRequestController {
         List<ExpertRequest> expertRequestList = this.expertRequestService.getExpertRequestList();
         model.addAttribute("expertRequestList", expertRequestList);
         return "expert/request_list";
+    }
+
+    @GetMapping("/{id}")
+    public String requestDetail(@PathVariable("id")Long id, Model model) {
+        ExpertRequest expertRequest = this.expertRequestService.getExpertRequestById(id);
+        String requestImg = this.imageService.getRequestImg(expertRequest.getId());
+        SiteUser siteUser = this.userService.findByUsername(expertRequest.getUserName());
+        String profile = this.imageService.getSiteUserImg(siteUser.getId());
+        ExpertRequestWithUser expertRequestWithUser = new ExpertRequestWithUser(siteUser, profile, expertRequest, requestImg);
+        model.addAttribute("expertRequestWithUser", expertRequestWithUser);
+        return "expert/request_detail";
     }
 
     @GetMapping("/approve/{id}")
