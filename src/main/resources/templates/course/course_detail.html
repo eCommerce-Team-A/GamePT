@@ -192,7 +192,12 @@
                                 구매 정보
                             </div>
                             <hr class="w-100 p-0 m-0">
-                            <div class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
+                            <div th:if="${course.discountRate}==0" class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
+                            <div th:if="${course.discountRate}!=0" >
+                                <span style="text-decoration:line-through" th:text="${course.price/course.discountRate}">-></span>
+                                <div class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
+                            </div>
+
                             <div class="m-2 mx-4 fw-bold mt-1" th:if="${@rq.isLogin()}">
                                 내 보유 포인트 : [[${@rq.getSiteUser != null ? @rq.getSiteUser.point : null }]]
                             </div>
