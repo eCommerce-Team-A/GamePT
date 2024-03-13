@@ -91,11 +91,12 @@ public class ImageService {
 
     public void saveRequestProfile(ExpertRequest expertRequest, MultipartFile requestImg) throws IOException {
 
-            this.createFolder("expert_request");
-            String originalFileName = requestImg.getOriginalFilename();
-            String path = "expert_request/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-            File requestImgFile = new File(fileDirPath + "/" + path);
-            requestImg.transferTo(requestImgFile);
+        this.createFolder("expert_request");
+        String originalFileName = requestImg.getOriginalFilename();
+        String path = "expert_request/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        File requestImgFile = new File(fileDirPath + "/" + path);
+        requestImg.transferTo(requestImgFile);
+        path = "/file/" + path;
 
         Image requestProfile = Image.builder()
                 .path(path)
@@ -106,6 +107,7 @@ public class ImageService {
 
         this.imageRepository.save(requestProfile);
     }
+
     public String getRequestImg(Long id) {
         Optional<Image> profileImg = imageRepository.findByRelationEntityAndRelationId("expertRequest", id);
 
