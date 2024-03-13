@@ -1,5 +1,6 @@
 package com.example.gamePT.domain.review.controller;
 
+import com.example.gamePT.domain.orderItem.service.OrderItemService;
 import com.example.gamePT.domain.review.entity.Review;
 import com.example.gamePT.domain.review.entity.ReviewCreateForm;
 import com.example.gamePT.domain.review.entity.ReviewPageNum;

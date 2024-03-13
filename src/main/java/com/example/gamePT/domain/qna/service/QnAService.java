@@ -88,4 +88,10 @@ public class QnAService {
         this.qnARepository.save(qnA);
     }
 
+    public Page<QnA> getListForMyPage(int page, SiteUser su) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return this.qnARepository.findAllByAuthor(su, pageable);
+    }
 }

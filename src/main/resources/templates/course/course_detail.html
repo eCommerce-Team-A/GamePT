@@ -305,7 +305,10 @@
                     alert("자신의 강의에는 리뷰를 작성할 수 없습니다.");
                     return;
                 }
-
+                if(![[${isPurchased}]]){
+                    alert("강의 구매 후 리뷰 작성이 가능합니다.");
+                    return;
+                }
                 var token = $("meta[name='_csrf']").attr("content");
                 var header = $("meta[name='_csrf_header']").attr("content");
                 console.log(1)
