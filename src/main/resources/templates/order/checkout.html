@@ -1,15 +1,28 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="mb-3">
+    <div style="display: flex; justify-content: center; margin-top: 150px;">
+        <h4 class="Nanum" th:text="결제금액"></h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                   onchange="selectAmount(this)" value="5000">
+            <label class="form-check-label" for="flexRadioDefault1">
+                5,000
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                   onchange="selectAmount(this)" value="10000">
+            <label class="form-check-label" for="flexRadioDefault2">
+                10,000
+            </label>
+        </div>
+    </div>
     <!-- 주문서 영역 -->
-    <div class="wrapper" style="margin-top: 150px;">
-        <div
-                class="box_section"
-                style="
-          padding: 40px 30px 50px 30px;
+    <div id="hiddenDiv" class="wrapper" style="display: none;">
+        <div class="box_section"
+             style="padding: 40px 30px 50px 30px;
           margin-top: 30px;
-          margin-bottom: 50px;
-        "
-        >
+          margin-bottom: 50px;">
             <!-- 결제 UI -->
             <div id="payment-method"></div>
             <!-- 이용약관 UI -->
@@ -42,7 +55,21 @@
         const coupon = document.getElementById("coupon-box");
         const generateRandomString = () =>
             window.btoa(Math.random()).slice(0, 20);
-        const amount = 50000;
+        let amount;
+
+        function selectAmount(radioButton) {
+            amount = radioButton.value;
+            const hiddenDiv = document.getElementById('hiddenDiv');
+            console.log(amount);
+            if (amount !== null) {
+                hiddenDiv.style.display = 'block'; // div 표시
+            } else {
+                hiddenDiv.style.display = 'none'; // div 숨김
+            }
+        }
+
+
+
         // ------  결제위젯 초기화 ------
         // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
         // TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.

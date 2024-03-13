@@ -50,10 +50,10 @@ public class WidgetController {
             amount = (String) requestData.get("amount");
         } catch (ParseException e) {
             throw new RuntimeException(e);
-        };
+        }
 
 
-//        orderService.checkAmount(orderId, amount);
+        orderService.checkAmount(orderId, amount);
 
 
         JSONObject obj = new JSONObject();
