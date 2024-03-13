@@ -1,9 +1,13 @@
 package com.example.gamePT.domain.widget.Controller;
 
+import com.example.gamePT.domain.orderPoint.entity.OrderPoint;
+import com.example.gamePT.domain.orderPoint.servcie.OrderPointService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +27,13 @@ import java.util.Base64;
 
 @Controller
 @RequestMapping("/widget")
+@RequiredArgsConstructor
 public class WidgetController {
+
+    private final OrderPointService orderPointService;
+
+    @Value("${secret.paymentKey}")
+    private String PAYMENT_KEY;
 
     @GetMapping("")
     public String pointPayment(){
@@ -53,13 +63,12 @@ public class WidgetController {
 
         // TODO: 개발자센터에 로그인해서 내 결제위젯 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
         // @docs https://docs.tosspayments.com/reference/using-api/api-keys
-        String widgetSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
 
         // 토스페이먼츠 API는 시크릿 키를 사용자 ID로 사용하고, 비밀번호는 사용하지 않습니다.
         // 비밀번호가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
         // @docs https://docs.tosspayments.com/reference/using-api/authorization#%EC%9D%B8%EC%A6%9D
         Base64.Encoder encoder = Base64.getEncoder();
-        byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes("UTF-8"));
+        byte[] encodedBytes = encoder.encode((PAYMENT_KEY + ":").getBytes("UTF-8"));
         String authorizations = "Basic " + new String(encodedBytes, 0, encodedBytes.length);
 
         // 결제 승인 API를 호출하세요.
@@ -71,7 +80,6 @@ public class WidgetController {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
-
 
         OutputStream outputStream = connection.getOutputStream();
         outputStream.write(obj.toString().getBytes("UTF-8"));
@@ -85,6 +93,12 @@ public class WidgetController {
         Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
+
+        OrderPoint op = orderPointService.findById(Long.parseLong(orderId));
+
+        if(op == null){
+            return ResponseEntity.status(400).body(jsonObject);
+        }
 
         return ResponseEntity.status(code).body(jsonObject);
     }

@@ -121,6 +121,9 @@
             const button = document.getElementById("payment-button"); // 결제하기 버튼
 
             button.addEventListener("click", function () {
+
+
+
               tossPayments.requestPayment("카드", {
                 amount: Number($(".btn-check:checked").attr("value")),
                 orderId: "rR2XfvS4GKgLPTm3u6dhy", // 쇼핑몰 내에서 정해진 주문 번호

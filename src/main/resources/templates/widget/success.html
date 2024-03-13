@@ -46,10 +46,6 @@
           amount: urlParams.get("amount"),
         };
 
-        console.log(token);
-        console.log(header);
-
-
         const response = await fetch("/widget/confirm", {
           method: "POST",
           headers : {                 // Http header
@@ -62,11 +58,11 @@
 
         const json = await response.json();
 
-<!--        if (!response.ok) {-->
-<!--          // TODO: 결제 실패 비즈니스 로직을 구현하세요.-->
-<!--          console.log(json);-->
-<!--          window.location.href = `/widget/fail?message=${json.message}&code=${json.code}`;-->
-<!--        }-->
+        if (!response.ok) {
+          // TODO: 결제 실패 비즈니스 로직을 구현하세요.
+          console.log(json);
+          window.location.href = `/widget/fail?message=${json.message}&code=${json.code}`;
+        }
 
         // TODO: 결제 성공 비즈니스 로직을 구현하세요.
         console.log(json);
