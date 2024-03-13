@@ -53,7 +53,7 @@ public class WidgetController {
         };
 
 
-        orderService.checkAmount(orderId, amount);
+//        orderService.checkAmount(orderId, amount);
 
 
         JSONObject obj = new JSONObject();
@@ -90,11 +90,11 @@ public class WidgetController {
         boolean isSuccess = code == 200 ? true : false;
 
 
-        if (isSuccess) {
-            orderService.setPaymentComplete(orderId);
-        }else {
-            throw new RuntimeException("결제 승인 실패");
-        }
+//        if (isSuccess) {
+//            orderService.setPaymentComplete(orderId);
+//        }else {
+//            throw new RuntimeException("결제 승인 실패");
+//        }
 
         InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
 
