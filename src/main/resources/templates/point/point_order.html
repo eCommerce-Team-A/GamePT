@@ -1,0 +1,33 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="mb-3">
+
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">포인트 충전</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item active text-white">홈</li>
+            <li class="breadcrumb-item active text-white">포인트 충전</li>
+        </ol>
+    </div>
+    <!-- Single Page Header End -->
+    <div class="container-fluid py-5">
+        <div class="container pt-2">
+            <div class="card border-0 shadow">
+                <div class=" card-body">
+                    <form th:action="@{/point/order}" method="post">
+                        <div class="form-item">
+                            <label class="form-label my-3">충전하고싶은 포인트 <sup>*</sup></label>
+                            <input type="number" name="orderAmount" class="form-control" placeholder="예) 5000 (단위는 생략해주세요.)">
+                        </div>
+                        <div class="form-item">
+                            <button type="submit"
+                                    class="btn border-secondary py-2 my-5 w-100 text-primary">결제하기
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
