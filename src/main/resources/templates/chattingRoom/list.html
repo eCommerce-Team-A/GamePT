@@ -41,9 +41,13 @@
                             <i class="fa-regular fa-comments"></i> 채팅 리스트
                         </div>
                         <div class="list-group text-center rounded-0" id="list-tab" role="tablist">
+
                             <div th:each="room : ${chattingRooms}">
-                                <a th:if="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" ><i class="fa-regular fa-comment"></i> [[${room.expert.nickname}]] 님</a>
-                                <a th:unless="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" ><i class="fa-regular fa-comment"></i>  [[${room.siteUser.nickname}]] 님</a>
+                                <a th:if="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" >
+                                    <i class="fa-regular fa-comment"></i> [[${room.expert.nickname}]] 님
+                                </a>
+                                <a th:unless="${room.siteUser.username == @rq.siteUser.username}" class="list-group-item list-group-item-action py-3" th:value="${room.id}" data-bs-toggle="list" href="#" >
+                                    <i class="fa-regular fa-comment"></i>  [[${room.siteUser.nickname}]] 님</a>
                             </div>
                         </div>
                     </div>
@@ -53,7 +57,10 @@
                                  채팅방을 선택해 주세요
                             </div>
                             <div id="chat" class="h-100" style="display:none; position:relative;">
-                                <div id="chattingArea" style="height:520px; overflow: auto;">
+                                <h5 id="chat-header" class="text-center Nanum">
+
+                                </h5>
+                                <div id="chattingArea" style="height:480px; overflow: auto;">
 
                                 </div>
                                 <div class="w-100" style="position: absolute; bottom:0;">
@@ -74,6 +81,7 @@
     <script th:inline="javascript">
 
         $(function() {
+
 
             var websocket = "";
             var roomNum = "";
@@ -218,6 +226,12 @@
 
                         var htmlCode = "";
 
+                        if(result.chattingRoom.expert.username+"" == [[${@rq.getSiteUser().username}]]){
+                            $("#chat-header").html(result.chattingRoom.siteUser.nickname +'님과 의 대화 <a href="#" class="chattingRoom-del" value="'+result.chattingRoom.id+'" onclick="return false;"><i class="fa-regular fa-trash-can text-danger"></i></a>')
+                        }else{
+                            $("#chat-header").html(result.chattingRoom.expert.nickname + '님과 의 대화 <a href="#" class="chattingRoom-del" value="'+result.chattingRoom.id+'" onclick="return false;"><i class="fa-regular fa-trash-can text-danger"></i></a>')
+                        }
+
                         for( var chat of chatLogs ){
                             if(chat.sender.nickname == [[${@rq.getSiteUser().nickname}]]){
                                 htmlCode += rightBox([[${@rq.getProfileImg()}]], chat.sender.nickname, chat.content)
@@ -240,6 +254,18 @@
                     }
                 })
             }
+
+            $(document).on("click",".chattingRoom-del",function(){
+
+                if(!confirm("정말 해당 채팅을 삭제할꺼에요? 복구 안돼요!")){
+                    return false;
+                }
+
+            <!--    삭제 메서드    -->
+
+               alert($(this).attr("value"));
+
+            });
 
         });
     </script>
