@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RiotApiService {
 
-    @Value("${secret.myKey}")
+    @Value("${secret.riotKey}")
     private String myKey;
 
 

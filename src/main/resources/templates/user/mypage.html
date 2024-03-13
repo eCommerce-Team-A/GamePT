@@ -100,8 +100,11 @@
                                 <div>
                                     [[${@rq.getSiteUser().email}]]
                                 </div>
-                                <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
                                     [[${@rq.getSiteUser().point}]]
+                                    <a th:href="@{/payment}" type="button" class="btn btn-sm btn-outline-success" style="border: none;">
+                                        충전
+                                    </a>
                                 </div>
                             </div>
 
