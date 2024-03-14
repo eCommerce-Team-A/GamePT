@@ -1,4 +1,4 @@
-package com.example.gamePT.domain.rebate.config;
+package com.example.gamePT.global.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

@@ -1,6 +1,6 @@
-package com.example.gamePT.domain.rebate.controller;
+package com.example.gamePT.global.batch.controller;
 
-import com.example.gamePT.domain.rebate.service.BatchService;
+import com.example.gamePT.global.batch.service.BatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
