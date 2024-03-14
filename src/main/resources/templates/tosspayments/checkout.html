@@ -25,7 +25,7 @@
           margin-bottom: 50px;
         "
       >
-        <h4 style="font-size:35px">[[${point.orderAmount}]]원 결제</h4>
+        <h4 style="font-size:35px">[[${order.orderAmount}]]원 결제</h4>
         <!-- 결제 UI -->
         <div id="payment-method"></div>
         <!-- 이용약관 UI -->
@@ -58,7 +58,7 @@
       const coupon = document.getElementById("coupon-box");
       const generateRandomString = () =>
         window.btoa(Math.random()).slice(0, 20);
-      const amount = [[${point.orderAmount}]];
+      const amount = [[${order.orderAmount}]];
       // ------  결제위젯 초기화 ------
       // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
       // TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.

@@ -1,6 +1,10 @@
 package com.example.gamePT.domain.tossPayments.controller;
 
+import com.example.gamePT.domain.tossPayments.request.TossPaymentsRequest;
+import com.example.gamePT.domain.user.entity.SiteUser;
+import com.example.gamePT.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,11 +20,14 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.util.Base64;
 
 @Controller
+@RequiredArgsConstructor
 public class TossPaymentsController {
 
+    private final UserService userService;
     @Value("${secret.tosspayments.key}")
     private String API_KEY;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -99,12 +106,13 @@ public class TossPaymentsController {
         return "tosspayments/success";
     }
 
-//    @GetMapping("/index")
-//    public String index(HttpServletRequest request, Model model) throws Exception {
-//        int point = 500000;
-//        model.addAttribute("point",point);
-//        return "tosspayments/checkout";
-//    }
+    @RequestMapping("/payments/index")
+    public String index(HttpServletRequest request, TossPaymentsRequest.Order order, Model model, Principal principal) throws Exception {
+        SiteUser siteUser = this.userService.findByUsername(principal.getName());
+        model.addAttribute("customer", siteUser);
+        model.addAttribute("order", order);
+        return "tosspayments/checkout";
+    }
 
     /**
      * 인증실패처리
@@ -124,4 +132,5 @@ public class TossPaymentsController {
 
         return "tosspayments/fail";
     }
+
 }

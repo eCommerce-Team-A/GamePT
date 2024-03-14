@@ -52,6 +52,9 @@ dependencies {
 
 	// json simple (tossPayments)
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+	// spring batch
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
 }
 
 tasks.named('test') {
