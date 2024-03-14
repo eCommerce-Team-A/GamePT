@@ -5,7 +5,9 @@ import com.example.gamePT.domain.orderPoint.servcie.OrderPointService;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,7 +28,11 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/widget")
@@ -98,8 +104,12 @@ public class WidgetController {
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
 
+        if(!isSuccess){
+            return ResponseEntity.status(code).body(jsonObject);
+        }
+
         SiteUser su = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        orderPointService.create(su,orderId, Integer.parseInt(amount));
+        OrderPoint op = orderPointService.create(su,orderId, Integer.parseInt(amount));
 
         su = su.toBuilder()
                 .point(su.getPoint() + Integer.parseInt(amount))
@@ -107,7 +117,12 @@ public class WidgetController {
 
         userService.save(su);
 
-        return ResponseEntity.status(code).body(jsonObject);
+        JSONObject responseJson = new JSONObject();
+        responseJson.put("totalPoint", su.getPoint());
+        responseJson.put("amount", op.getPoint());
+        responseJson.put("payDate", op.getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString());
+
+        return ResponseEntity.status(code).body(responseJson);
     }
 
     /**
