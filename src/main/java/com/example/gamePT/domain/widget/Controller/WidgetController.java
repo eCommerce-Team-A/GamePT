@@ -2,6 +2,8 @@ package com.example.gamePT.domain.widget.Controller;
 
 import com.example.gamePT.domain.orderPoint.entity.OrderPoint;
 import com.example.gamePT.domain.orderPoint.servcie.OrderPointService;
+import com.example.gamePT.domain.user.entity.SiteUser;
+import com.example.gamePT.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -9,6 +11,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +34,7 @@ import java.util.Base64;
 public class WidgetController {
 
     private final OrderPointService orderPointService;
+    private final UserService userService;
 
     @Value("${secret.paymentKey}")
     private String PAYMENT_KEY;
@@ -94,11 +98,14 @@ public class WidgetController {
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
 
-        OrderPoint op = orderPointService.findById(Long.parseLong(orderId));
+        SiteUser su = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        orderPointService.create(su,orderId, Integer.parseInt(amount));
 
-        if(op == null){
-            return ResponseEntity.status(400).body(jsonObject);
-        }
+        su = su.toBuilder()
+                .point(su.getPoint() + Integer.parseInt(amount))
+                .build();
+
+        userService.save(su);
 
         return ResponseEntity.status(code).body(jsonObject);
     }

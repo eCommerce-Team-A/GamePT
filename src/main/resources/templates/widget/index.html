@@ -118,15 +118,14 @@
 
             const clientKey = "test_ck_24xLea5zVAWZKOz0p79K8QAMYNwW";
             const tossPayments = TossPayments(clientKey);
+            const generateRandomString = () =>
+                    window.btoa(Math.random()).slice(0, 20);
             const button = document.getElementById("payment-button"); // 결제하기 버튼
 
             button.addEventListener("click", function () {
-
-
-
               tossPayments.requestPayment("카드", {
                 amount: Number($(".btn-check:checked").attr("value")),
-                orderId: "rR2XfvS4GKgLPTm3u6dhy", // 쇼핑몰 내에서 정해진 주문 번호
+                orderId: generateRandomString(), // 쇼핑몰 내에서 정해진 주문 번호
                 orderName: "GamePT 포인트 결제",
                 customerName: [[${@rq.getSiteUser().username}]],
                 successUrl: "http://localhost:8010/widget/success",
@@ -138,10 +137,8 @@
             $("#totalPoint").text(Number([[${@rq.getSiteUser.point}]]) + Number($(".btn-check:checked").attr("value")));
 
             $(".btn-check").change(function(){
-
                 $("#chargePoint").text($(".btn-check:checked").attr("value"));
                 $("#totalPoint").text(Number([[${@rq.getSiteUser.point}]]) + Number($(".btn-check:checked").attr("value")));
-
             });
 
             $(".chargeButton").on("click",function(){

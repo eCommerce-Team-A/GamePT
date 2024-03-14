@@ -13,12 +13,12 @@ import java.util.Optional;
 public class OrderPointService {
     private final OrderPointRepository orderPointRepository;
 
-    public OrderPoint create(SiteUser siteUser, int point){
+    public OrderPoint create(SiteUser siteUser,String orderId, int point){
 
         OrderPoint op = OrderPoint.builder()
                 .siteUser(siteUser)
+                .orderId(orderId)
                 .point(point)
-                .isComplete(false)
                 .build();
 
         orderPointRepository.save(op);

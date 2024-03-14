@@ -19,7 +19,7 @@ public class OrderPoint extends BaseEntity {
     @ManyToOne
     private SiteUser siteUser;
 
-    private Integer point;
+    private String orderId;
 
-    private Boolean isComplete ;
+    private Integer point;
 }
