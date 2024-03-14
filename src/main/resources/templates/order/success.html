@@ -11,10 +11,11 @@
                 />
                 결제 성공
             </h2>
-
             <p id="paymentKey"></p>
             <p id="orderId"></p>
             <p id="amount"></p>
+            <p id="customerName"></p>
+            <a class="btn btn-sm btn-outline-secondary" th:href="@{/user/mypage}" role="button">뒤로</a>
         </div>
     </div>
     <script>
@@ -29,6 +30,7 @@
                 paymentKey: urlParams.get("paymentKey"),
                 orderId: urlParams.get("orderId"),
                 amount: urlParams.get("amount"),
+                customerName: urlParams.get("customerName"),
             };
 
             const response = await fetch("/confirm", {
@@ -57,11 +59,13 @@
         const paymentKeyElement = document.getElementById("paymentKey");
         const orderIdElement = document.getElementById("orderId");
         const amountElement = document.getElementById("amount");
+        const customerNameElement = document.getElementById("customerName");
 
         orderIdElement.textContent = "주문번호: " + urlParams.get("orderId");
         amountElement.textContent = "결제 금액: " + urlParams.get("amount");
         paymentKeyElement.textContent =
             "paymentKey: " + urlParams.get("paymentKey");
+        customerNameElement.textContent = "주문자: " + urlParams.get("customerName");
     </script>
 </div>
 </html>

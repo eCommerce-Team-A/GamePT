@@ -271,17 +271,24 @@ public class UserService {
     public Page<SiteUser> getUserListByAuthorization(String authorization, int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page,8,Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 8, Sort.by(sorts));
 
-        return this.userRepository.findByAuthorization(authorization,pageable);
+        return this.userRepository.findByAuthorization(authorization, pageable);
     }
 
     public List<SiteUser> getUserListByAuthorizationForMain(String authorization) {
         return this.userRepository.findTop5ByAuthorizationOrderByCreateDateDesc(authorization);
     }
+
     public List<SiteUser> getUserListAll() {
         return this.userRepository.findAll();
     }
 
-
+    public void setPointPayment(String amount, String username) {
+        SiteUser siteUser = this.findByUsername(username);
+        SiteUser successUser = siteUser.toBuilder()
+                .point(siteUser.getPoint() + Integer.parseInt(amount))
+                .build();
+        this.userRepository.save(successUser);
+    }
 }

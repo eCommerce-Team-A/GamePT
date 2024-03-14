@@ -2,6 +2,7 @@ package com.example.gamePT.domain.payment.controller;
 
 
 import com.example.gamePT.domain.order.service.OrderService;
+import com.example.gamePT.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -33,6 +34,7 @@ public class WidgetController {
     @Value("${secret.tosskey}")
     private String API_KEY;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final UserService userService;
     private final OrderService orderService;
 
     @RequestMapping(value = "/confirm")
@@ -42,12 +44,14 @@ public class WidgetController {
         String orderId;
         String amount;
         String paymentKey;
+        String customerName;
         try {
             // 클라이언트에서 받은 JSON 요청 바디입니다.
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
             paymentKey = (String) requestData.get("paymentKey");
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
+            customerName = (String) requestData.get("customerName");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -60,6 +64,7 @@ public class WidgetController {
         obj.put("orderId", orderId);
         obj.put("amount", amount);
         obj.put("paymentKey", paymentKey);
+        obj.put("customerName", customerName);
 
         // TODO: 개발자센터에 로그인해서 내 결제위젯 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
         // @docs https://docs.tosspayments.com/reference/using-api/api-keys
@@ -89,12 +94,8 @@ public class WidgetController {
         int code = connection.getResponseCode();
         boolean isSuccess = code == 200 ? true : false;
 
+        this.userService.setPointPayment(amount, customerName);
 
-//        if (isSuccess) {
-//            orderService.setPaymentComplete(orderId);
-//        }else {
-//            throw new RuntimeException("결제 승인 실패");
-//        }
 
         InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
 
@@ -108,6 +109,7 @@ public class WidgetController {
 
     /**
      * 인증성공처리
+     *
      * @param request
      * @param model
      * @return
@@ -125,6 +127,7 @@ public class WidgetController {
 
     /**
      * 인증실패처리
+     *
      * @param request
      * @param model
      * @return
