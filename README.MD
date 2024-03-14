@@ -36,8 +36,7 @@
 
 ## 🔥 트러블 슈팅
 
-## 1.
-
+## 📢 1.
 
 ### 이슈 내역
 - 채팅 전송 문제
@@ -139,7 +138,8 @@ $(".list-group-item").click(function(){
 });
 ```
 
-## 2.
+## 📢 2.
+
 ### 이슈 내역
 - 라인 별로 articleList 를 나오게 하려 했으나, 해당 데이터를 html에 넘기지 못함
 
@@ -286,5 +286,89 @@ function findByLine() {
 ```
 - 위와 같이 컨트롤러에서 해당 경로를 지정하여 id가duoArticle부분만 업데이트 하고 script에서 해당 경로를 기존 태그 요소들을 새로 불러온 요소와 교체함
 
+## 📢 3.
+
+### 이슈 설명
+
+- 리뷰 작성하기 버튼을 누르면 해당 작성 내용이 스크립트의 ajax 비동기요청을 통해 서버측으로 저장이 되고, 해당 리뷰 데이터를 서버가 넘겨 받아 DB에 저장 후, 최신화된 리뷰 내역(reviewList)를 뽑아 View 측으로 전달이 되어 해당 리뷰 부분만 바뀌는 형식이었다.
+
+- 하지만 실제 코드의 리뷰생성 메서드는 DB에서 리뷰내역을 뽑고 새로 작성된 리뷰를 저장하는 형식이었다.
+
+- 그럼에도 불구하고 실제 서비스에는 문제가 없이 작성한 리뷰가 추가되어 출력이 되었다.
+
+- 마지막으로 /course/detail 엔드포인트로 불필요한 요청이 한번 더 일어남.
+
+### 문제점 설명
+
+- 리뷰 작성시 실행되는 ajax 일부분
+```HTML
+
+url : '/review/create'    // 요청할 서버url
+
+$("#reviews").load(window.location.href + " #reviews");    
+ // 결과 성공 콜백함수
+
+window.location.href 란?      
+//현재 페이지의 엔드포인트이다. /course/detail/(강의 id번호) 가 되겠다.
+```
+- load() 함수는 jQuery의 ajax기능을 사용하여 
+   데이터를 가져오는 역할을 하는데 이때 요청을 한번 더 보내는 것이다.
+
+
+- 리뷰 컨트롤러 일부분 (서버 측)
+```java
+public String create(Model model, ... , ...){
+
+ ...
+       List<Review> reviewList = reviewService.findByCourseId(id값)
+        // 리뷰내역 불러오기
+       reviewService.create(작성자,별점,리뷰내용);
+        // 작성한 리뷰 저장하기
+
+       model.addAttribute("reviewList", reviewList);
+        // 모델에 리뷰내역리스트 객체 저장하기
+ ...
+}
+```
+
+- 강의 상세 페이지 일부분 (서버 측)
+```java
+@GetMapping("/detail/{id}")
+    public String showCourseDetail(... , Model model) {
+
+ ...
+        List<Review> reviewList = reviewService.findByCourseId(id값);    
+        // 페이지 처음 요청했을때 띄워야 해서 리뷰를 불러옴.
+
+        model.addAttribute("reviewList", reviewList); 
+        // 모델에 리뷰내역리스트 객체 저장하기 (이 부분 때문에 (reviewList)가 최신화가 되어버렸던 것이다.)
+ ...
+    }
+```
+
+## 🚥 해결
+
+- 작성한 리뷰를 저장하고 최신화된 리뷰내역을 뽑아올 수 있도록 리뷰 컨트롤러의 로직을 수정했다.
+```java
+public String create(Model model, ... , ...){
+
+ ...
+       reviewService.create(작성자,별점,리뷰내용);      // 작성한 리뷰 저장하기
+       List<Review> reviewList = reviewService.findByCourseId(id값)    // 리뷰내역 불러오기
+
+       model.addAttribute("reviewList", reviewList);    // 모델에 리뷰내역리스트 객체 저장하기
+
+       return "course/course_detail::#reviews";      // course_detail의 id를 reviews를 가진 부분만 데이터 재 전달.
+ ...
+}
+```
+
+- 이후, 불필요한 /course/detail(강의 상세페이지) 요청을 하지 않기 위해 콜백함수를 replaceWith로 수정해 주었다.
+```html
+success : function(result) {
+        $('#reviews').replaceWith(result);  
+        // (return "course/course_detail::#reviews";) 로 받은 result 데이터로 원래 reviews 부분을 최신화 하여 삽입.
+}
+```
 
 
