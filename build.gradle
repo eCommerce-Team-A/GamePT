@@ -50,12 +50,6 @@ dependencies {
 
 	// Apache HttpClient
 	implementation 'org.apache.httpcomponents:httpclient:4.5.14'
-
-	// json simple (tossPayments)
-	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-
-	// spring batch
-	implementation 'org.springframework.boot:spring-boot-starter-batch'
 }
 
 tasks.named('test') {
