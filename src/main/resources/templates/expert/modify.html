@@ -38,23 +38,32 @@
                         <div class="my-2 fw-bold" style="display:flex; justify-content:space-between; font-size:18px;">
                             <span style="margin-left: 10px"><i class="fa-solid fa-award" style="color: goldenrod; margin-right: 5px;"></i>경력</span>
                         </div>
+
                         <hr class="w-100 m-0">
+
                         <div class="m-2" style="display: flex; justify-content: space-between; align-items: center;"
-                             th:each="career : ${careerList}" th:if="${career.category != null}">
+                             th:each="careerWithCategory : ${careerWithCategoryList}" th:if="${careerWithCategoryList != null}">
                             <div>
-                                <span th:text="|${career.category}, |"></span>
-                                <span th:text="${career.content}"></span>
+                                <i th:class="|fa-solid fa-${careerWithCategory.category.icon} m-2|"
+                                   th:if="${careerWithCategory.category.icon != 'youtube'}" th:style="|color: ${careerWithCategory.category.color};|"></i>
+                                <i th:class="|fa-brands fa-${careerWithCategory.category.icon} m-2|"
+                                   th:if="${careerWithCategory.category.icon == 'youtube'}" th:style="|color: ${careerWithCategory.category.color};|"></i>
+                                <span th:text="${careerWithCategory.career.content}"></span>
                             </div>
                             <div >
                                 <a class="btn btn-sm btn-outline-secondary" style="padding: 5px"
-                                   th:href="@{|/career/delete/${career.id}|}" role="button">
+                                   th:href="@{|/career/delete/${careerWithCategory.career.id}|}" role="button">
                                     <i style="margin: 2px;" class="fa-solid fa-minus"></i></a>
                             </div>
                         </div>
                         <div>
                             <div style="display: flex; justify-content: center; padding: 5px; align-items: center;">
                                 <div style="display: flex; margin-right: 5px;">
-                                    <input style="width: 50%;" name="category" type="text" class="form-control" placeholder="카테고리">
+                                    <select name="category" class="form-select" aria-label="Default select example" >
+                                        <option selected>카테고리</option>
+                                        <option th:value="${category.id}" th:each="category : ${categoryList}" th:text="${category.category}">
+                                        </option>
+                                    </select>
                                     <input style="width: 60%;" name="content" type="text" class="form-control" placeholder="경력">
                                 </div>
                                 <div style="width: 20%; display: flex; justify-content: flex-end; margin-right: 2.5px;">
