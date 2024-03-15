@@ -17,6 +17,10 @@ import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -161,4 +165,11 @@ public class OrderItemService {
         }
         return true;
     }
+    public Page<OrderItem> findByAuthor(int page,SiteUser siteUser){
+
+        Pageable pageable = PageRequest.of(page,5);
+
+        return this.orderItemRepository.findByAuthor(siteUser,pageable);
+    }
+
 }
