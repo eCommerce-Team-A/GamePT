@@ -14,9 +14,16 @@
 
     <!-- Fruits Shop Start-->
     <div class="container-fluid fruite py-5">
-        <div class="container d-flex justify-content-end">
+        <div class="container d-flex justify-content-between">
             <a th:if="${@rq.isLogin() and @rq.getSiteUser().authorization == 'Expert'}"
                href="/course/create" class="btn btn-primary btn-sm">강의 등록</a>
+            <select class="form-select" style="width:10%" aria-label="sortCourse">
+                <option selected>등록 순</option>
+                <option value="mostReview">리뷰 많은 순</option>
+                <option value="mostRate">평점 순</option>
+                <option value="highPrice">가격 높은 순</option>
+                <option value="lowPrice">가격 낮은 순</option>
+            </select>
         </div>
         <div class="container mt-4 pb-5">
 
