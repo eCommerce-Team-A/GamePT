@@ -24,5 +24,8 @@ spring:
           timeout: 5000
           starttls:
             enable: true
+  batch:
+    jdbc:
+      initialize-schema: always
 custom:
   fileDirPath: C:\gamePT\file_upload

@@ -5,6 +5,8 @@ import com.example.gamePT.domain.expertRequest.entity.ExpertRequest;
 import com.example.gamePT.domain.expertRequest.service.ExpertRequestService;
 import com.example.gamePT.domain.order.entity.OrderEntity;
 import com.example.gamePT.domain.order.service.OrderService;
+import com.example.gamePT.domain.orderPoint.entity.OrderPoint;
+import com.example.gamePT.domain.orderPoint.servcie.OrderPointService;
 import com.example.gamePT.domain.qna.entity.QnA;
 import com.example.gamePT.domain.qna.service.QnAService;
 import com.example.gamePT.domain.user.entity.SiteUser;
@@ -34,6 +36,7 @@ public class UserController {
     private final UserService userService;
     private final OrderService orderService;
     private final QnAService qnAService;
+    private final OrderPointService orderPointService;
     private final Gson gson;
     private final ExpertRequestService expertRequestService;
 
@@ -54,6 +57,18 @@ public class UserController {
     public String update(SiteUserRequest.Update updateForm){
 
         return "/user/update";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/orderPoint/{pageNumber}")
+    public String orderPointReload(@PathVariable(value = "pageNumber") int pageNumber, Model model){
+
+        SiteUser su = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Page<OrderPoint> op = this.orderPointService.getListForMyPage(pageNumber, su);
+
+        model.addAttribute("orderPointList", op);
+
+        return "user/mypage::#orderPointHistory";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -87,11 +102,12 @@ public class UserController {
 
         SiteUser su = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Page<OrderEntity> paging = this.orderService.getList(0, su.getId());
-
         Page<QnA> qnaList = this.qnAService.getListForMyPage(0, su);
+        Page<OrderPoint> orderPointList = this.orderPointService.getListForMyPage(0,su);
 
         model.addAttribute("orderList", paging);
         model.addAttribute("qnaList", qnaList);
+        model.addAttribute("orderPointList", orderPointList);
 
         return "/user/mypage";
     }
