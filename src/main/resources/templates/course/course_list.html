@@ -30,17 +30,28 @@
                             </div>
                         </a>
                         <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                             style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; top: 10px; left: 10px;" th:text="${course.gameCategoryname}">
+                             style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; top: 10px; left: 10px;"
+                             th:text="${course.gameCategoryname}">
                         </div>
                         <div class="p-4 border border-top-0 rounded-bottom">
                             <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class="mb-3">
                                 <a th:href="@{|/course/detail/${course.id}|}"
                                    th:text="${course.name}"></a>
                             </h4>
-                            <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" th:text="${course.introduce}"></p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <p class="text-dark fs-7 fw-bold mb-0"
+                            <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                               th:text="${course.introduce}"></p>
+                            <div th:if="${course.discountRate}==0" class="flex-lg-wrap">
+                                <p style="font-size:19px;" class=" fs-7 fw-bold mb-0"
                                    th:text="@{|${course.price} 포인트|}"></p>
+                            </div>
+                            <div th:if="${course.discountRate}!=0" class="flex-lg-wrap">
+                                <i style="color:red;" class="fa-solid fa-arrow-down"></i>
+                                <span style="font-size:19px; color:red;" class="fw-bold mb-0"
+                                      th:text="@{|${course.discountRate}%|}"></span>
+                                <span style="font-size:19px;" class="fw-bold mb-0"
+                                      th:text="@{|${course.price-course.price*course.discountRate/100} 포인트|}"></span>
+                                <span style="color:darkgray;" class="text-decoration-line-through fw-bold mb-0"
+                                      th:text="@{|${course.price}|}"></span>
                             </div>
                             <br>
                             <a th:href="@{|/course/detail/${course.id}|}"
