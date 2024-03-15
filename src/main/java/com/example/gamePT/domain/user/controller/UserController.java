@@ -1,5 +1,7 @@
 package com.example.gamePT.domain.user.controller;
 
+import com.example.gamePT.domain.careerCategory.entity.Category;
+import com.example.gamePT.domain.careerCategory.service.CategoryService;
 import com.example.gamePT.domain.duoArticle.enity.DuoArticle;
 import com.example.gamePT.domain.expertRequest.entity.ExpertRequest;
 import com.example.gamePT.domain.expertRequest.service.ExpertRequestService;
@@ -39,6 +41,7 @@ public class UserController {
     private final OrderPointService orderPointService;
     private final Gson gson;
     private final ExpertRequestService expertRequestService;
+    private final CategoryService categoryService;
 
     // update
     @PreAuthorize("isAuthenticated()")
@@ -162,11 +165,13 @@ public class UserController {
         Page<OrderEntity> paging = this.orderService.getList(0, su.getId());
         Page<QnA> qnaList = this.qnAService.getQnAList(0);
         List<ExpertRequest> expertRequestList = this.expertRequestService.getExpertRequestList();
+        List<Category> categoryList = this.categoryService.getCategoryList();
 
 
         model.addAttribute("orderList", paging);
         model.addAttribute("qnaList", qnaList);
         model.addAttribute("expertRequestList", expertRequestList);
+        model.addAttribute("categoryList", categoryList);
         return "admin/main";
     }
 }
