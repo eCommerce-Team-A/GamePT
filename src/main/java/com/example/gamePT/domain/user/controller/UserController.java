@@ -1,6 +1,8 @@
 package com.example.gamePT.domain.user.controller;
 
 import com.example.gamePT.domain.duoArticle.enity.DuoArticle;
+import com.example.gamePT.domain.expertRequest.entity.ExpertRequest;
+import com.example.gamePT.domain.expertRequest.service.ExpertRequestService;
 import com.example.gamePT.domain.order.entity.OrderEntity;
 import com.example.gamePT.domain.order.service.OrderService;
 import com.example.gamePT.domain.orderPoint.entity.OrderPoint;
@@ -36,6 +38,7 @@ public class UserController {
     private final QnAService qnAService;
     private final OrderPointService orderPointService;
     private final Gson gson;
+    private final ExpertRequestService expertRequestService;
 
     // update
     @PreAuthorize("isAuthenticated()")
@@ -153,4 +156,17 @@ public class UserController {
         return "/user/login";
     }
 
+    @GetMapping("/admin")
+    public String adminPage(Model model) {
+        SiteUser su = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Page<OrderEntity> paging = this.orderService.getList(0, su.getId());
+        Page<QnA> qnaList = this.qnAService.getQnAList(0);
+        List<ExpertRequest> expertRequestList = this.expertRequestService.getExpertRequestList();
+
+
+        model.addAttribute("orderList", paging);
+        model.addAttribute("qnaList", qnaList);
+        model.addAttribute("expertRequestList", expertRequestList);
+        return "admin/main";
+    }
 }
