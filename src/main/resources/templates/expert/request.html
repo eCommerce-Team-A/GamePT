@@ -73,10 +73,14 @@
                             <li>기재하신 정보는 GamePT 운영팀의 검수를 거친 후 승인을 받게 됩니다.</li>
                         </ul>
                     </div>
-                    <form class="was-validated" th:action="@{/expert/request}" method="post">
+                    <form class="was-validated" th:action="@{/expert/request}" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
                             <textarea class="form-control" id="validationTextarea" style="width: 100%; height: 16.25rem;"
-                                      placeholder="소개" required  name="introduce"></textarea>
+                                      placeholder="소개" required name="introduce"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control form-control profileImg" id="validationImg"
+                                   type="file" accept="image/gif,image/jpeg,image/png" required name="profileImg">
                         </div>
                         <div style="display: flex; justify-content: flex-end;">
                             <a style="margin-right: 10px;" href="/" class="btn btn-outline-secondary">뒤로</a>

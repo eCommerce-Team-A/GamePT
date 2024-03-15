@@ -1,0 +1,326 @@
+<html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div layout:fragment="content" class="mb-3">
+    <link rel="stylesheet" href="/css/duoArticle.css" type="text/css">
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5 Nanum">
+        <h1 class="text-center text-white display-6">관리자</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item active text-white">홈</li>
+            <li class="breadcrumb-item active text-white">관리자</li>
+        </ol>
+    </div>
+    <!-- Single Page Header End -->
+
+
+    <div class="container-fluid mt-5">
+        <div class="container mx-auto">
+
+            <div class="row mt-4">
+                <div class="col-4" style="width: 25%;">
+                    <div class="card w-100 Regular shadow border-0">
+                        <div class="card-header bg-white d-flex justify-content-between">
+                            <div class="Nanum">GamePT</div>
+                        </div>
+
+                        <ul class="nav flex-column">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                                        data-bs-target="#home-tab-pane" type="button" role="tab"
+                                        aria-controls="home-tab-pane"
+                                        aria-selected="true"
+                                        style="border-radius: 10px; width: 100%; text-align: start;">
+                                    <i class="fa-solid fa-house" style="margin-right: 5px;"></i> 사이트 편집
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="qna-tab" data-bs-toggle="tab"
+                                        data-bs-target="#qna-tab-pane" type="button" role="tab"
+                                        aria-controls="qna-tab-pane"
+                                        aria-selected="true"
+                                        style="border-radius: 10px; width: 100%; text-align: start;">
+                                    <i class="fa-regular fa-circle-question" style="margin-right: 5px;"></i> QnA
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="rebate-tab" data-bs-toggle="tab"
+                                        data-bs-target="#rebate-tab-pane" type="button" role="tab"
+                                        aria-controls="rebate-tab-pane" aria-selected="false"
+                                        style="border-radius: 10px; width: 100%; text-align: start;">
+                                    <i class="fa-regular fa-credit-card" style="margin-right: 5px;"></i> 정산
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="request-tab" data-bs-toggle="tab"
+                                        data-bs-target="#request-tab-pane" type="button" role="tab"
+                                        aria-controls="request-tab-pane" aria-selected="false"
+                                        style="border-radius: 10px; width: 100%; text-align: start;">
+                                    <i class="fa-solid fa-graduation-cap" style="margin-right: 5px;"></i> 전문가 승인
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tab-content col-8" style="width: 75%;">
+
+                    <div class="tab-pane fade show active card w-100 Regular shadow border-0" id="home-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="home-tab" tabindex="0">
+                        <div id="homeHistory" class="card w-100 Regular shadow border-0">
+                            <div class="card-header bg-white">
+                                <i class="fa-solid fa-house" style="margin-right: 5px;"></i>카테고리
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade card w-100 Regular shadow border-0" id="qna-tab-pane" role="tabpanel"
+                         aria-labelledby="qna-tab"
+                         tabindex="0">
+                        <div id="qnaHistory" class="card w-100 Regular shadow border-0">
+                            <div class="card-header bg-white">
+                                <i class="fa-regular fa-circle-question"></i> QnA 내역
+                            </div>
+                            <ul class="list-group list-group-flush text-center my-3">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            번호
+                                        </div>
+                                        <div class="col-2">
+                                            답변여부
+                                        </div>
+                                        <div class="col-6">
+                                            제목
+                                        </div>
+                                        <div class="col-3">
+                                            생성일
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item" th:each="qna, loop : ${qnaList}">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            [[${qna.id}]]
+                                        </div>
+                                        <div class="col-2">
+                                            <div th:if="${qna.isAnswered}">
+                                                <i class="fa-regular fa-circle-check text-success"></i>
+                                            </div>
+                                            <div th:unless="${qna.isAnswered}">
+                                                <i class="fa-regular fa-circle-xmark text-danger"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <a th:href="@{|/qna/detail/${qna.id}|}">
+                                                [[${qna.title}]]
+                                            </a>
+                                        </div>
+                                        <div class="col-3">
+                                            [[${#temporals.format(qna.createDate, 'yy-MM-dd HH:mm')}]]
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- 페이징처리 시작 -->
+                            <div th:if="${!qnaList.isEmpty()}">
+                                <ul class="pagination pagination-sm justify-content-center d-flex justify-content-center">
+                                    <li class="page-item" th:classappend="${!qnaList.hasPrevious} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="qna-link page-link changePageButton"
+                                           th:value="${qnaList.number-1}">
+                                            <span>이전</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="page: ${#numbers.sequence(0, qnaList.totalPages-1)}"
+                                        th:if="${page >= qnaList.number-3 and page <= qnaList.number+3}"
+                                        th:classappend="${page == qnaList.number} ? 'active'"
+                                        class="page-item">
+                                        <a href="#" onclick="return false" class="qna-link page-link changePageButton"
+                                           th:value="${page}">[[${page} + 1]]</a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${!qnaList.hasNext} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="qna-link page-link changePageButton"
+                                           th:value="${qnaList.number+1}">
+                                            <span>다음</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- 페이징처리 끝 -->
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade card w-100 Regular shadow border-0" id="rebate-tab-pane" role="tabpanel"
+                         aria-labelledby="rebate-tab"
+                         tabindex="0">
+                        <div id="orderHistory" class="card w-100 Regular shadow border-0">
+                            <div class="card-header bg-white">
+                                <i class="fa-regular fa-credit-card"></i> 정산 내역
+                            </div>
+                            <ul class="list-group list-group-flush text-center my-3">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            번호
+                                        </div>
+                                        <div class="col-6">
+                                            구매품명
+                                        </div>
+                                        <div class="col-2">
+                                            총 가격
+                                        </div>
+                                        <div class="col-3">
+                                            구매 일시
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-1">
+                                        </div>
+                                        <div class="col-6">
+                                            <a>
+                                            </a>
+                                            <a>
+                                            </a>
+                                        </div>
+                                        <div class="col-2">
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- 페이징처리 시작 -->
+                            <div th:if="${!orderList.isEmpty()}">
+                                <ul class="pagination pagination-sm justify-content-center d-flex justify-content-center">
+                                    <li class="page-item" th:classappend="${!orderList.hasPrevious} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="order-link page-link changePageButton"
+                                           th:value="${orderList.number-1}">
+                                            <span>이전</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="page: ${#numbers.sequence(0, orderList.totalPages-1)}"
+                                        th:if="${page >= orderList.number-3 and page <= orderList.number+3}"
+                                        th:classappend="${page == orderList.number} ? 'active'"
+                                        class="page-item">
+                                        <a href="#" onclick="return false" class="order-link page-link changePageButton"
+                                           th:value="${page}">[[${page} + 1]]</a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${!orderList.hasNext} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="order-link page-link changePageButton"
+                                           th:value="${orderList.number+1}">
+                                            <span>다음</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- 페이징처리 끝 -->
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade card w-100 Regular shadow border-0" id="request-tab-pane" role="tabpanel"
+                         aria-labelledby="request-tab" tabindex="0">
+                        <div id="requestHistory" class="card w-100 Regular shadow border-0">
+                            <div class="card-header bg-white">
+                                <i class="fa-solid fa-graduation-cap"></i> 요청 내역
+                            </div>
+
+                            <ul class="list-group list-group-flush text-center my-3">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            번호
+                                        </div>
+                                        <div class="col-2">
+                                            ID
+                                        </div>
+                                        <div class="col-5">
+                                            소개
+                                        </div>
+                                        <div class="col-2">
+                                            등록일
+                                        </div>
+                                        <div class="col-2">
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item" th:each="expertRequest, loop : ${expertRequestList}">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            [[${loop.count}]]
+                                        </div>
+                                        <div class="col-2">
+                                            [[${expertRequest.userName}]]
+                                        </div>
+                                        <div class="col-5">
+                                            <a th:href="@{|/expert/request/${expertRequest.id}|}"
+                                               class="d-inline-block text-truncate" style="max-width: 450px;"
+                                               th:text="${expertRequest.content}"></a>
+                                        </div>
+                                        <div class="col-2">
+                                            [[${#temporals.format(expertRequest.createDate, 'yyyy-MM-dd')}]]
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="article-element">
+                                                <a class="btn btn-sm btn-outline-primary"
+                                                   th:href="@{|/expert/request/approve/${expertRequest.id}|}"
+                                                   style="margin-right: 6px;">승인</a>
+                                                <a class="btn btn-sm btn-outline-secondary"
+                                                   th:href="@{|/expert/request/reject/${expertRequest.id}|}">거부</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!--                            <table class="table table-hover" style="border-radius: 3px; height: 100%;">-->
+                            <!--                                <thead style="border: darkgray; text-align: center; border-radius: 3px;">-->
+                            <!--                                <tr style="font-size: 13px;">-->
+                            <!--                                    <th scope="col">번호</th>-->
+                            <!--                                    <th scope="col">ID</th>-->
+                            <!--                                    <th scope="col" style="width: 30%">소개</th>-->
+                            <!--                                    <th scope="col">등록일</th>-->
+                            <!--                                    <th></th>-->
+                            <!--                                </tr>-->
+                            <!--                                </thead>-->
+                            <!--                                <tbody style="text-align: center">-->
+                            <!--                                <tr th:each="expertRequest, loop : ${expertRequestList}">-->
+                            <!--                                    <td style="width: 5%">-->
+                            <!--                                        <div class="article-element"><span th:text="${loop.count}"></span></div>-->
+                            <!--                                    </td>-->
+                            <!--                                    <td style="width: 15%">-->
+                            <!--                                        <div class="article-element"><span th:text="${expertRequest.userName}"></span></div>-->
+                            <!--                                    </td>-->
+                            <!--                                    <td style="width: 30%">-->
+                            <!--                                        <div class="article-element">-->
+                            <!--                                            <a th:href="@{|/expert/request/${expertRequest.id}|}" class="d-inline-block text-truncate" style="max-width: 450px;"-->
+                            <!--                                               th:text="${expertRequest.content}"></a>-->
+                            <!--                                        </div>-->
+                            <!--                                    </td>-->
+                            <!--                                    <td style="width: 15%">-->
+                            <!--                                        <div class="article-element"><span th:text="${#temporals.format(expertRequest.createDate, 'yyyy-MM-dd')}"></span></div>-->
+                            <!--                                    </td>-->
+                            <!--                                    <td style="width: 15%">-->
+                            <!--                                        <div class="article-element">-->
+                            <!--                                            <a class="btn btn-sm btn-outline-primary" th:href="@{|/expert/request/approve/${expertRequest.id}|}" style="margin-right: 6px;">승인</a>-->
+                            <!--                                            <a class="btn btn-sm btn-outline-secondary" th:href="@{|/expert/request/reject/${expertRequest.id}|}">거부</a>-->
+                            <!--                                        </div>-->
+                            <!--                                    </td>-->
+                            <!--                                </tr>-->
+                            <!--                                </tbody>-->
+                            <!--                            </table>-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</html>
+
