@@ -11,4 +11,5 @@ public class CourseCreateForm {//임시로 (전문가 이름) 삽입 추후 site
     private String introduce;
     private String curriculum;
     private Integer price;
+    private int discountRate;
 }

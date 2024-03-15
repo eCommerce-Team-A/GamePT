@@ -37,19 +37,31 @@
 
                     <div class="row py-3" th:each="cartItem : ${cartList}">
                         <div class="col-1 d-flex justify-content-center align-items-center">
-                            <input th:if="${cartItem.course.isActive}" class="form-check-input mt-0 item-checkBox" type="checkbox" th:value="${cartItem.id}" th:price="${cartItem.course.price}" aria-label="Checkbox for following text input">
+                            <input th:if="${cartItem.course.isActive}" class="form-check-input mt-0 item-checkBox" type="checkbox" th:value="${cartItem.id}" th:price="${cartItem.course.price-cartItem.course.price*cartItem.course.discountRate/100}" aria-label="Checkbox for following text input">
                             <span th:if="!${cartItem.course.isActive}">구매불가</span>
                         </div>
-                        <div class="col-5" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                        <div class="col-5 d-flex justify-content-center align-items-center" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                             <a th:href="@{|/course/detail/${cartItem.course.id}|}"><span class="badge rounded-pill text-bg-primary ">[[${cartItem.course.gameCategoryname}]]</span> [[${cartItem.course.name}]]<span th:if="!${cartItem.course.isActive}"> (폐지됨)</span></span></a>
                         </div>
-                        <div class="col-3" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                        <div class="col-3 d-flex justify-content-center align-items-center" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                             [[${cartItem.course.author.nickname}]]
                         </div>
                         <div class="col-2">
-                            [[${cartItem.course.price}]] point
+                            <div th:if="${cartItem.course.discountRate}==0" class="flex-lg-wrap">
+                                <div style="font-size:16px;" class="mb-0"
+                                     th:text="@{|${cartItem.course.price} 포인트|}"></div>
+                            </div>
+                            <div th:if="${cartItem.course.discountRate}!=0" class="flex-lg-wrap">
+                                <i style="color:red;" class="fa-solid fa-arrow-down"></i>
+                                <span style="font-size:16px; color:red;" class=" mb-0"
+                                      th:text="@{|${cartItem.course.discountRate}%|}"></span>
+                                <span style="color:darkgray;" class="text-decoration-line-through mb-0"
+                                      th:text="@{|${cartItem.course.price}|}"></span>
+                                <div style="font-size:16px;" class=" mb-0"
+                                     th:text="@{|${cartItem.course.price-cartItem.course.price*cartItem.course.discountRate/100} 포인트|}"></div>
+                            </div>
                         </div>
-                        <div class="col-1">
+                        <div class="col-1 d-flex justify-content-center align-items-center">
                             <a href="#" class="deleteButton" th:value="${cartItem.id}"><i class="fa-regular fa-trash-can text-danger fa-lg"></i></a>
                         </div>
                     </div>

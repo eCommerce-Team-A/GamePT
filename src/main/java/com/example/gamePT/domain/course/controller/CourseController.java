@@ -51,7 +51,7 @@ public class CourseController {
             return "course/course_create";
         }
         Course course = this.courseService.createCourse(author, courseCreateForm.getGameCategoryname(), courseCreateForm.getName(),
-                courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice());
+                courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice(), courseCreateForm.getDiscountRate());
 
         return String.format("redirect:/course/detail/%s", course.getId());
     }
@@ -66,7 +66,7 @@ public class CourseController {
         boolean isPurchased = false;
         if (principal != null) {
             SiteUser siteUser = this.userService.findByUsername(principal.getName());
-            if (orderItemService.isPurchasedBySiteUserId(siteUser.getId(),course.getId())) {
+            if (orderItemService.isPurchasedBySiteUserId(siteUser.getId(), course.getId())) {
                 isPurchased = true;
             }
         }
@@ -117,7 +117,7 @@ public class CourseController {
     public String updateCourse(@PathVariable(value = "id") Long id, @Valid CourseCreateForm courseCreateForm,
                                BindingResult bindingResult, Model model) {
         Course course = this.courseService.updateCourse(id, courseCreateForm.getGameCategoryname(), courseCreateForm.getName(),
-                courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice());
+                courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice(), courseCreateForm.getDiscountRate());
 
         return "redirect:/course/detail/" + id;
     }

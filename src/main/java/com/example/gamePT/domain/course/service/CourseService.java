@@ -26,7 +26,7 @@ public class CourseService {
     }
 
 
-    public Course createCourse(SiteUser author, String gameCategoryname, String name, String introduce, String curriculum, Integer price) {
+    public Course createCourse(SiteUser author, String gameCategoryname, String name, String introduce, String curriculum, Integer price, int discountRate) {
         Course course = Course.builder()
                 .author(author)
                 .gameCategoryname(gameCategoryname)
@@ -34,6 +34,7 @@ public class CourseService {
                 .introduce(introduce)
                 .curriculum(curriculum)
                 .price(price)
+                .discountRate(discountRate)
                 .isActive(true)
                 .build();
         this.courseRepository.save(course);
@@ -62,7 +63,7 @@ public class CourseService {
     }
 
     public Course updateCourse(Long id, String gameCategoryname, String name,
-                               String introduce, String curriculum, Integer price) {
+                               String introduce, String curriculum, Integer price, int discountRate) {
         Course _course = findCourseById(id);
         Course course = _course.toBuilder()
                 .gameCategoryname(gameCategoryname)
@@ -70,6 +71,7 @@ public class CourseService {
                 .introduce(introduce)
                 .curriculum(curriculum)
                 .price(price)
+                .discountRate(discountRate)
                 .isActive(true)
                 .build();
         this.courseRepository.save(course);
