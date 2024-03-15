@@ -4,8 +4,14 @@ import com.example.gamePT.domain.orderPoint.entity.OrderPoint;
 import com.example.gamePT.domain.orderPoint.repository.OrderPointRepository;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,6 +41,17 @@ public class OrderPointService {
         }
 
         return op.get();
+    }
+
+    public Page<OrderPoint> getListForMyPage(int page, SiteUser su) {
+        List<Sort.Order> sorts = new ArrayList<>();
+
+        sorts.add(Sort.Order.desc("createDate"));
+
+        Pageable pageable = PageRequest.of(page,5,Sort.by(sorts));
+
+        return this.orderPointRepository.findAllBySiteUser(su,pageable);
+
     }
 
 }
