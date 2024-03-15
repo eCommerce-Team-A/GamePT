@@ -45,4 +45,8 @@ public class ChattingRoomService {
     public ChattingRoom getChattingRoomById(Long id) {
         return chattingRoomRepository.findById(id).get();
     }
+
+    public void delete(ChattingRoom cr) {
+        chattingRoomRepository.delete(cr);
+    }
 }
