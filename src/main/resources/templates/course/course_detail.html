@@ -65,10 +65,10 @@
                                 </div>
                             </nav>
                             <div class="tab-content mb-5 p-4">
-                                <div class="tab-pane active" id="nav-introduce" role="tabpanel"
+                                <div style="white-space:pre;" class="tab-pane active" id="nav-introduce" role="tabpanel"
                                      aria-labelledby="nav-introduce-tab" th:text="${course.introduce}">
                                 </div>
-                                <div class="tab-pane" id="nav-curriculum" role="tabpanel"
+                                <div style="white-space:pre;" class="tab-pane" id="nav-curriculum" role="tabpanel"
                                      aria-labelledby="nav-curriculum-tab" th:text="${course.curriculum}">
                                 </div>
                                 <div class="tab-pane" id="nav-review" role="tabpanel"
@@ -118,7 +118,7 @@
                                                     <span th:text="@{|${#temporals.format(review.createDate, 'yy-MM-dd HH:mm')}|}"></span>
                                                 </div>
                                             </div>
-                                            <p class="mt-4" th:text="${review.content}"></p>
+                                            <div style="white-space:pre;" class="mt-4" th:text="${review.content}"></div>
                                             <hr>
                                         </div>
                                         <div th:if="${!reviewList.isEmpty()}">
