@@ -117,11 +117,25 @@
                     "content" : $("#msg").val(),
                     "username" : [[${@rq.getSiteUser().username}]],
                     "nickname" : [[${@rq.getSiteUser().nickname}]],
-                    "profile" : [[${@rq.getProfileImg()}]]
+                    "profile" : [[${@rq.getProfileImg()}]],
+                    "isDelete" : false,
                 };
 
                 websocket.send(JSON.stringify(data));
 
+                msg.value = '';
+            }
+
+            function roomDelete(){
+                var data = {
+                    "roomNumber" : roomNum,
+                    "content" : $("#msg").val(),
+                    "username" : [[${@rq.getSiteUser().username}]],
+                    "nickname" : [[${@rq.getSiteUser().nickname}]],
+                    "profile" : [[${@rq.getProfileImg()}]],
+                    "isDelete" : true,
+                };
+                websocket.send(JSON.stringify(data));
                 msg.value = '';
             }
 
@@ -134,6 +148,14 @@
                 var temp = JSON.parse(msg.data);
 
                 if(temp.hasOwnProperty('sessionId')){
+                    return;
+                }
+
+                if(temp.isDelete == "true"){
+                    alert("채팅방이 삭제되었습니다.");
+
+                    location.reload();
+
                     return;
                 }
 
@@ -261,9 +283,9 @@
                     return false;
                 }
 
-            <!--    삭제 메서드    -->
+                roomDelete();
 
-               alert($(this).attr("value"));
+<!--               alert($(this).attr("value"));-->
 
             });
 

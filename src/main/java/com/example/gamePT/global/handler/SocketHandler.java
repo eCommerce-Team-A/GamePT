@@ -74,6 +74,11 @@ public class SocketHandler extends TextWebSocketHandler {
                 WebSocketSession wss = (WebSocketSession) temp.get(k);
                 if(wss != null) {
                     try {
+                        if(obj.get("isDelete").equals("true")){
+                            rls.remove(temp);
+                            chattingRoomService.delete(cr);
+                        }
+
                         TextMessage textMessage = new TextMessage(gson.toJson(obj));
                         wss.sendMessage(textMessage);
 
@@ -119,6 +124,7 @@ public class SocketHandler extends TextWebSocketHandler {
         JSONObject obj = new JSONObject();
         obj.put("type", "getId");
         obj.put("sessionId", session.getId());
+        obj.put("isDelete", false);
         session.sendMessage(new TextMessage(obj.toJSONString()));
     }
 
