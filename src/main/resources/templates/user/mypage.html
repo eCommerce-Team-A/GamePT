@@ -332,6 +332,75 @@
                         </div>
                     </div>
 
+                    <div class="card w-100 Regular shadow border-0 mt-3">
+                        <div id="orderPointHistory" class="card w-100 Regular shadow border-0">
+                            <div class="card-header bg-white">
+                                <i class="fa-solid fa-coins"></i> 포인트 결제내역
+                            </div>
+                            <ul class="list-group list-group-flush text-center my-3">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            번호
+                                        </div>
+                                        <div class="col-5">
+                                            주문번호
+                                        </div>
+                                        <div class="col-3">
+                                            구매 포인트
+                                        </div>
+                                        <div class="col-3">
+                                            구매 일시
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item" th:each="orderPoint, loop : ${orderPointList}">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            [[${orderPoint.id}]]
+                                        </div>
+                                        <div class="col-5">
+                                            [[${orderPoint.orderId}]]
+                                        </div>
+                                        <div class="col-3">
+                                            [[${orderPoint.point}]]
+
+                                        </div>
+                                        <div class="col-3">
+                                            [[${#temporals.format(orderPoint.createDate, 'yy-MM-dd HH:mm')}]]
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- 페이징처리 시작 -->
+                            <div th:if="${!orderPointList.isEmpty()}">
+                                <ul class="pagination pagination-sm justify-content-center d-flex justify-content-center">
+                                    <li class="page-item" th:classappend="${!orderPointList.hasPrevious} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="orderPoint-link page-link changePageButton"
+                                           th:value="${orderPointList.number-1}">
+                                            <span>이전</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="page: ${#numbers.sequence(0, orderPointList.totalPages-1)}"
+                                        th:if="${page >= orderPointList.number-3 and page <= orderPointList.number+3}"
+                                        th:classappend="${page == orderPointList.number} ? 'active'"
+                                        class="page-item">
+                                        <a href="#" onclick="return false" class="orderPoint-link page-link changePageButton"
+                                           th:value="${page}">[[${page} + 1]]</a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${!orderPointList.hasNext} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="orderPoint-link page-link changePageButton"
+                                           th:value="${orderPointList.number+1}">
+                                            <span>다음</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- 페이징처리 끝 -->
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -341,7 +410,27 @@
     <script th:inline="javascript">
         $(function () {
 
-        <!-- 주문내역 페이징 클릭시 이동 -->
+
+            <!-- 포인트결제 내역 페이징 클릭시 이동 -->
+            $(document).on('click', '.orderPoint-link', function(event) {
+                $.ajax({
+                    type : 'get',              // 타입 (get, post, put 등등)
+                    url : '/user/mypage/orderPoint/' + $(this).attr("value"),     // 요청할 서버url
+                    async : true,               // 비동기화 여부 (default : true)
+                    headers : {                 // Http header
+                        "Content-Type" : "application/json",
+                        "X-HTTP-Method-Override" : "GET"
+                    },
+                    dataType : 'html',
+                    success : function(result) { // 결과 성공 콜백함수
+                        $("#orderPointHistory").replaceWith(result);
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                    }
+                })
+            });
+        <!-- QnA 내역 페이징 클릭시 이동 -->
             $(document).on('click', '.qna-link', function(event) {
                 $.ajax({
                     type : 'get',              // 타입 (get, post, put 등등)
