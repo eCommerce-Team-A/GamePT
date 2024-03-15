@@ -135,6 +135,81 @@
                         </div>
                     </div>
 
+                    <div th:if="${siteUser.username == @rq.getLoginedSiteUserUsername()}" class="card w-100 Regular shadow border-0 mt-3">
+                        <div id="orderItemHistory" class="card w-100 Regular shadow border-0">
+                            <div class="card-header fs-5 fw-bold">
+                                <i class="fa-solid fa-dollar-sign me-2"></i>
+                                판매 내역 ([[${orderItemList.totalElements}]])
+                            </div>
+                            <ul class="list-group list-group-flush text-center my-3">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            번호
+                                        </div>
+                                        <div class="col-5">
+                                            판매 강의명
+                                        </div>
+                                        <div class="col-2">
+                                            판매 포인트
+                                        </div>
+                                        <div class="col-2">
+                                            구매자
+                                        </div>
+                                        <div class="col-2">
+                                            판매 일시
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item" th:each="orderItem, loop : ${orderItemList}">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            [[${orderItem.id}]]
+                                        </div>
+                                        <div class="col-5">
+                                            [[${orderItem.name}]]
+                                        </div>
+                                        <div class="col-2">
+                                            [[${orderItem.price}]]
+                                        </div>
+                                        <div class="col-2">
+                                            [[${orderItem.buyer.nickname}]]
+                                        </div>
+                                        <div class="col-2">
+                                            [[${#temporals.format(orderItem.createDate, 'yy-MM-dd HH:mm')}]]
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <!-- 페이징처리 시작 -->
+                            <div th:if="${!orderItemList.isEmpty()}">
+                                <ul class="pagination pagination-sm justify-content-center d-flex justify-content-center">
+                                    <li class="page-item" th:classappend="${!orderItemList.hasPrevious} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="orderItem-link page-link changePageButton"
+                                           th:value="${orderItemList.number-1}">
+                                            <span>이전</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="page: ${#numbers.sequence(0, orderItemList.totalPages-1)}"
+                                        th:if="${page >= orderItemList.number-3 and page <= orderItemList.number+3}"
+                                        th:classappend="${page == orderItemList.number} ? 'active'"
+                                        class="page-item">
+                                        <a href="#" onclick="return false" class="orderItem-link page-link changePageButton"
+                                           th:value="${page}">[[${page} + 1]]</a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${!orderItemList.hasNext} ? 'disabled'">
+                                        <a href="#" onclick="return false" class="orderItem-link page-link changePageButton"
+                                           th:value="${orderItemList.number+1}">
+                                            <span>다음</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- 페이징처리 끝 -->
+
+
+                        </div>
+                    </div>
                 </div>
 
 
@@ -144,6 +219,26 @@
     </div>
     <script th:inline="javascript">
         $(function () {
+            <!-- 판매 내역 페이징 클릭시 이동 -->
+            $(document).on('click', '.orderItem-link', function(event) {
+                $.ajax({
+                    type : 'get',              // 타입 (get, post, put 등등)
+                    url : '/expert/detail/orderItem/' + $(this).attr("value"),     // 요청할 서버url
+                    async : true,               // 비동기화 여부 (default : true)
+                    headers : {                 // Http header
+                        "Content-Type" : "application/json",
+                        "X-HTTP-Method-Override" : "GET"
+                    },
+                    dataType : 'html',
+                    success : function(result) { // 결과 성공 콜백함수
+                        $("#orderItemHistory").replaceWith(result);
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                    }
+                })
+            });
+
             <!-- 소환사 정보 요청 -->
             $.ajax({
                 type: 'get',              // 타입 (get, post, put 등등)
