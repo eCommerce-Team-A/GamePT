@@ -51,28 +51,47 @@
                 </div>
                 <div class="tab-content mt-3">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
-                        <div class="row g-4">
-                            <div class="col-3" th:each="course : ${courseList}">
-                                <a href="#" th:href="@{|/course/detail/${course.id}|}">
-                                    <div class="rounded position-relative fruite-item">
+                        <div class="row row-cols-4 g-4 justify-content-start">
+                            <div class="col" th:each="course : ${courseList}">
+                                <div class="rounded position-relative fruite-item">
+                                    <a th:href="@{|/course/detail/${course.id}|}">
                                         <div class="fruite-img">
-                                            <img th:src=@{|/img/forMainCourse/${@rq.getRandomImage()}|} class="img-fluid w-100 rounded-top"
-                                                 alt="">
+                                            <img th:src=@{|/img/forMainCourse/${@rq.getRandomImage()}|}
+                                                 class="img-fluid w-100 rounded-top" alt="">
                                         </div>
-                                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                             style="top: 10px; left: 10px;">[[${course.gameCategoryname}]]
-                                        </div>
-                                        <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                            <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">[[${course.name}]]</h4>
-                                            <div class="mt-3" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">[[${course.introduce}]]</div>
-                                            <div class="text-center mt-3">
-                                                <p class="text-dark fs-5 fw-bold mb-0">[[${course.price}]] point</p>
-                                            </div>
-                                        </div>
+                                    </a>
+                                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                         style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; top: 10px; left: 10px;"
+                                         th:text="${course.gameCategoryname}">
                                     </div>
-                                </a>
+                                    <div class="p-4 border border-top-0 rounded-bottom">
+                                        <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class="mb-3">
+                                            <a th:href="@{|/course/detail/${course.id}|}"
+                                               th:text="${course.name}"></a>
+                                        </h4>
+                                        <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                           th:text="${course.introduce}"></p>
+                                        <div th:if="${course.discountRate}==0" class="flex-lg-wrap">
+                                            <p style="font-size:19px;" class=" fs-7 fw-bold mb-0"
+                                               th:text="@{|${course.price} 포인트|}"></p>
+                                        </div>
+                                        <div th:if="${course.discountRate}!=0" class="flex-lg-wrap">
+                                            <i style="color:red;" class="fa-solid fa-arrow-down"></i>
+                                            <span style="font-size:19px; color:red;" class="fw-bold mb-0"
+                                                  th:text="@{|${course.discountRate}%|}"></span>
+                                            <span style="font-size:19px;" class="fw-bold mb-0"
+                                                  th:text="@{|${course.price-course.price*course.discountRate/100} 포인트|}"></span>
+                                            <span style="color:darkgray;" class="text-decoration-line-through fw-bold mb-0"
+                                                  th:text="@{|${course.price}|}"></span>
+                                        </div>
+                                        <br>
+                                        <a th:href="@{|/course/detail/${course.id}|}"
+                                           class="btn border border-secondary rounded-pill px-3 text-primary"
+                                           style="display:block;">상세
+                                            보기</a>
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
