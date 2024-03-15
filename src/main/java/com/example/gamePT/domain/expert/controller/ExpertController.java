@@ -8,12 +8,16 @@ import com.example.gamePT.domain.expert.entity.CourseScore;
 import com.example.gamePT.domain.expert.entity.Expert;
 import com.example.gamePT.domain.expert.entity.SiteUserWithImg;
 import com.example.gamePT.domain.expert.service.ExpertService;
+import com.example.gamePT.domain.orderItem.entity.OrderItem;
+import com.example.gamePT.domain.orderItem.service.OrderItemService;
+import com.example.gamePT.domain.qna.entity.QnA;
 import com.example.gamePT.domain.review.service.ReviewService;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +34,7 @@ public class ExpertController {
     private final ReviewService reviewService;
     private final CareerService careerService;
     private final ExpertService expertService;
+    private final OrderItemService orderItemService;
 
 
     //전문가 목록
@@ -61,6 +66,18 @@ public class ExpertController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/detail/orderItem/{pageNumber}")
+    public String qnaReload(@PathVariable(value = "pageNumber") int pageNumber, Model model){
+
+        SiteUser su = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Page<OrderItem> orderItemList = this.orderItemService.findByAuthor(pageNumber,su);
+
+        model.addAttribute("orderItemList", orderItemList);
+
+        return "expert/detail::#orderItemHistory";
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{username}")
     public String modifyExpert(@PathVariable("username") String username, Model model) {
         this.passData(username, model);
@@ -81,6 +98,7 @@ public class ExpertController {
         String profileImg = this.userService.getProfileImg(siteUser.getId());
         List<Career> careerList = this.careerService.getCareerListByExpertId(expert.getId());
         List<Course> courseList = this.courseService.findCourseByAuthorId(siteUser.getId());
+        Page<OrderItem> orderItemList = this.orderItemService.findByAuthor(0,siteUser);
         List<CourseScore> courseScoreList = new ArrayList<>();
         for (Course course : courseList) {
             CourseScore courseScore = new CourseScore(this.reviewService.getScoreAvg(course.getId()), course);
@@ -90,6 +108,7 @@ public class ExpertController {
         model.addAttribute("introduce", expert.getIntroduce());
         model.addAttribute("profileImg", profileImg);
         model.addAttribute("courseScoreList", courseScoreList);
+        model.addAttribute("orderItemList", orderItemList);
         model.addAttribute("careerList", careerList);
     }
 
