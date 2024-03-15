@@ -154,9 +154,34 @@
                 </div>
 
                 <div class="col-lg-4 col-xl-3 p-0 ">
-                    <div class="sticky-sm-top " style="top:110px;">
+                    <div class="sticky-sm-top" style="top:110px;">
+                        <div class="card border-0 shadow col-lg-12">
+                            <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
+                                구매 정보
+                            </div>
+                            <hr class="w-100 p-0 m-0">
+                            <div class="m-2 mx-4 flex-lg-wrap" th:if="${course.discountRate}!=0">
+                                <i style="color:red;" class="fa-solid fa-arrow-down"></i>
+                                <span style="font-size:19px; color:red;" class="fw-bold mb-0"
+                                      th:text="@{|${course.discountRate}%|}"></span>
+                                <span style="color:darkgray;" class="text-decoration-line-through fw-bold mb-0"
+                                      th:text="@{|${course.price}|}"></span>
+                                <div style="font-size:19px;" class="fw-bold mb-0"
+                                     th:text="@{|${course.price-course.price*course.discountRate/100} 포인트|}"></div>
+                            </div>
+                            <div class="m-2 mx-4 fw-bold mt-1" th:if="${@rq.isLogin()}">
+                                보유 포인트 : [[${@rq.getSiteUser != null ? @rq.getSiteUser.point : null }]]
+                            </div>
+                            <button th:if="${@rq.isLogin()}" id="orderButton" href="#" class="btn mx-4"
+                                    style="background-color: #0D6EFD; color:white;">구매하기
+                            </button>
+                            <button th:if="${@rq.isLogin()}" class="btn my-1 mb-3 mx-4" id="addCart"
+                                    style="background-color: #0D6EFD; color:white;">
+                                장바구니 담기
+                            </button>
+                        </div>
                         <a th:href="@{|/expert/detail/${expertData.siteUser.username}|}"
-                           class="d-flex flex-column justify-content-between alin-items-between card bg-white shadow border-0">
+                           class="d-flex flex-column justify-content-between alin-items-between card bg-white shadow border-0 mt-3">
                             <div class="card-header bg-white text-center fw-bold" style="font-size:18px;">
                                 담당 전문가
                             </div>
@@ -187,25 +212,6 @@
                                 </div>
                             </div>
                         </a>
-                        <div class="card border-0 shadow col-lg-12 mt-3 ">
-                            <div class="my-2 fw-bold" style="display:flex; justify-content:center; font-size:18px;">
-                                구매 정보
-                            </div>
-                            <hr class="w-100 p-0 m-0">
-                            <div class="m-2 mx-4 fw-bold" th:text="@{|강의 가격 : ${course.price} 포인트|}"></div>
-                            <div class="m-2 mx-4 fw-bold mt-1" th:if="${@rq.isLogin()}">
-                                내 보유 포인트 : [[${@rq.getSiteUser != null ? @rq.getSiteUser.point : null }]]
-                            </div>
-                            <button th:if="${@rq.isLogin()}" id="orderButton" href="#" class="btn mx-4"
-                                    style="background-color: #0D6EFD; color:white;">구매하기
-                            </button>
-                            <button th:if="${@rq.isLogin()}" class="btn my-1 mb-3 mx-4" id="addCart"
-                                    style="background-color: #0D6EFD; color:white;">
-                                장바구니 담기
-                            </button>
-
-
-                        </div>
                     </div>
 
                 </div>
