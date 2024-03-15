@@ -62,11 +62,13 @@ public class OrderItemService {
                 return new OrderItemController.OrderItemsCreateResponse(false, "잘못된 접근");
             }
 
+            int discountedPrice = ci.getCourse().getPrice()-ci.getCourse().getPrice()*ci.getCourse().getDiscountRate()/100;
+
             OrderItem oi = OrderItem.builder()
                     .course(ci.getCourse())
                     .orderEntity(orderEntity)
                     .name(ci.getCourse().getName())
-                    .price(ci.getCourse().getPrice())
+                    .price(discountedPrice)
                     .gameCategoryname(ci.getCourse().getGameCategoryname())
                     .buyer(buyer)
                     .build();
@@ -114,14 +116,15 @@ public class OrderItemService {
             return new OrderItemController.OrderItemsCreateResponse(false, "잔액 부족");
         }
 
+        int discountedPrice = course.getPrice()-course.getPrice()*course.getDiscountRate()/100;
         // 전체 주문 생성
-        OrderEntity orderEntity = orderService.create(buyUser, course.getPrice());
+        OrderEntity orderEntity = orderService.create(buyUser, discountedPrice);
 
         OrderItem oi = OrderItem.builder()
                 .course(course)
                 .orderEntity(orderEntity)
                 .name(course.getName())
-                .price(course.getPrice())
+                .price(discountedPrice)
                 .gameCategoryname(course.getGameCategoryname())
                 .buyer(buyer)
                 .build();
@@ -145,7 +148,7 @@ public class OrderItemService {
 
         chatLogService.save(cl);
 
-        buyUser = buyUser.toBuilder().point(buyUser.getPoint() - course.getPrice()).build();
+        buyUser = buyUser.toBuilder().point(buyUser.getPoint() - discountedPrice).build();
         userService.save(buyUser);
 
         return new OrderItemController.OrderItemsCreateResponse(true, "구매 완료");

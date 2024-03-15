@@ -160,6 +160,10 @@
                                 구매 정보
                             </div>
                             <hr class="w-100 p-0 m-0">
+                            <div class="m-2 mx-4 flex-lg-wrap" th:if="${course.discountRate}==0">
+                                <div style="font-size:19px;" class="fw-bold mb-0"
+                                     th:text="@{|${course.price} 포인트|}"></div>
+                            </div>
                             <div class="m-2 mx-4 flex-lg-wrap" th:if="${course.discountRate}!=0">
                                 <i style="color:red;" class="fa-solid fa-arrow-down"></i>
                                 <span style="font-size:19px; color:red;" class="fw-bold mb-0"
@@ -248,7 +252,7 @@
 
             $('#orderButton').on("click", function(){
 
-                var pp = [[${course.price}]];
+                var pp = [[${course.price-course.price*course.discountRate/100}]];
 
                 var authorName = "[[${course.author.username}]]";
                 var courseIsActive = [[${course.isActive}]];
