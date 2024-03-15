@@ -36,38 +36,43 @@
                 <form th:action="@{|/career/add/${siteUser.username}|}" class="col-lg-4" method="post">
                     <div class="card border-0 shadow col-lg-12 sticky-sm-top" style="top:115px;">
                         <div class="my-2 fw-bold" style="display:flex; justify-content:space-between; font-size:18px;">
-                            <span style="margin-left: 10px"><i class="fa-solid fa-award" style="color: goldenrod; margin-right: 5px;"></i>경력</span>
+                            <span style="margin-left: 10px"><i class="fa-solid fa-award"
+                                                               style="color: goldenrod; margin-right: 5px;"></i>경력</span>
                         </div>
 
                         <hr class="w-100 m-0">
-
                         <div class="m-2" style="display: flex; justify-content: space-between; align-items: center;"
-                             th:each="careerWithCategory : ${careerWithCategoryList}" th:if="${careerWithCategoryList != null}">
+                             th:each="careerWithCategory : ${careerWithCategoryList}"
+                             th:if="${careerWithCategoryList != null}">
                             <div>
                                 <i th:class="|fa-solid fa-${careerWithCategory.category.icon} m-2|"
-                                   th:if="${careerWithCategory.category.icon != 'youtube'}" th:style="|color: ${careerWithCategory.category.color};|"></i>
+                                   th:if="${careerWithCategory.category.icon != 'youtube'}"
+                                   th:style="|color: ${careerWithCategory.category.color};|"></i>
                                 <i th:class="|fa-brands fa-${careerWithCategory.category.icon} m-2|"
-                                   th:if="${careerWithCategory.category.icon == 'youtube'}" th:style="|color: ${careerWithCategory.category.color};|"></i>
+                                   th:if="${careerWithCategory.category.icon == 'youtube'}"
+                                   th:style="|color: ${careerWithCategory.category.color};|"></i>
                                 <span th:text="${careerWithCategory.career.content}"></span>
                             </div>
-                            <div >
-                                <a class="btn btn-sm btn-outline-secondary" style="padding: 5px"
+                            <div>
+                                <a class="btn btn-sm btn-outline-secondary" style="border: hidden;"
                                    th:href="@{|/career/delete/${careerWithCategory.career.id}|}" role="button">
-                                    <i style="margin: 2px;" class="fa-solid fa-minus"></i></a>
+                                    <i class="fa-solid fa-minus"></i></a>
                             </div>
                         </div>
-                        <div>
+                        <div class="m-1">
                             <div style="display: flex; justify-content: center; padding: 5px; align-items: center;">
-                                <div style="display: flex; margin-right: 5px;">
-                                    <select name="category" class="form-select" aria-label="Default select example" >
+                                <div style="display: flex; height: 33px;">
+                                    <select style="width: 35%;" name="category" class="form-select"
+                                            aria-label="Default select example">
                                         <option selected>카테고리</option>
-                                        <option th:value="${category.id}" th:each="category : ${categoryList}" th:text="${category.category}">
+                                        <option th:value="${category.id}" th:each="category : ${categoryList}"
+                                                th:text="${category.category}">
                                         </option>
                                     </select>
-                                    <input style="width: 60%;" name="content" type="text" class="form-control" placeholder="경력">
-                                </div>
-                                <div style="width: 20%; display: flex; justify-content: flex-end; margin-right: 2.5px;">
-                                    <button  type="submit" class="btn btn-sm btn-outline-primary" style="padding: 5px">
+                                    <input style="width: 65%;" name="content" type="text" class="form-control"
+                                           placeholder="경력">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary"
+                                            style="margin-right: -3px; width:33px; padding: 5px; border: hidden;">
                                         <i style="margin: 2px;" class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
@@ -87,7 +92,8 @@
                                 [[${introduce == null ? "아직 등록된 소개가 없어요" : introduce}]]
                                 <form th:action="@{|/expert/modify/${siteUser.username}|}" method="post">
 
-                                    <textarea id="introduce" name="introduce" cols="90" rows="7" class="form-control mt-3"
+                                    <textarea id="introduce" name="introduce" cols="90" rows="7"
+                                              class="form-control mt-3"
                                               th:placeholder="${introduce}"></textarea>
                                     <button type="submit"
                                             class="btn btn-sm btn-outline-primary float-end my-2">저장
@@ -104,10 +110,12 @@
                             </div>
                             <div class="card-body">
                                 <div th:each="courseScore : ${courseScoreList}">
-                                    <a class="rounded my-2 bg-secondary bg-opacity-10" th:href="@{|/course/detail/${courseScore.course.id}|}"
+                                    <a class="rounded my-2 bg-secondary bg-opacity-10"
+                                       th:href="@{|/course/detail/${courseScore.course.id}|}"
                                        style="display: flex; align-items: center; font-size: 21px;">
                                         <img class="ms-2" th:src="@{|/img/forMainCourse/${@rq.getRandomImage()}|}"
-                                             alt="" style="width:100px; height:100px; border-radius: 7%; object-fit: cover;">
+                                             alt=""
+                                             style="width:100px; height:100px; border-radius: 7%; object-fit: cover;">
                                         <div style="display: flex; flex-direction: column; margin-left: 15px">
                                                     <span th:text="${courseScore.course.name}"
                                                           style="margin: 5px;"></span>
