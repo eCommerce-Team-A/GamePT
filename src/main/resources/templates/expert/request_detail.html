@@ -1,0 +1,58 @@
+<html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div layout:fragment="content" class="mb-3">
+    <link rel="stylesheet" href="/css/duoArticle.css" type="text/css">
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5 Nanum">
+        <h1 class="text-center text-white display-6">전문가 승인</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item active text-white">홈</li>
+            <li class="breadcrumb-item active text-white">전문가 승인</li>
+            <li class="breadcrumb-item active text-white">상세페이지</li>
+        </ol>
+    </div>
+    <!-- Single Page Header End -->
+    <div class="container-fluid mt-3" style="width: 1100px;">
+        <div class="container pt-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center" style="align-items: flex-end;">
+                    <img class="shadow" th:src="${expertRequestWithUser.profile}" alt="..."
+                         style="width:90px; height:90px; border-radius: 50%;">
+                    <h2 class="fw-bold ms-4" th:text="${expertRequestWithUser.siteUser.nickname}"></h2>
+                </div>
+                <div class="d-flex align-items-center">
+
+                </div>
+            </div>
+            <div style="margin-top: 2rem; display: flex; justify-content: center; flex-wrap: wrap;">
+                <div id="bottom" style="border-radius:1px; width: 1100px;">
+                    <div class="col-lg-8 " style="width: 100%;">
+                        <div class="card p-0 border-0 shadow">
+                            <div class="card-header fs-5 fw-bold"
+                                 style="display: flex; justify-content: space-between;">
+                                <span>소개</span>
+                                <div>
+                                    <a class="btn btn-sm btn-outline-primary"
+                                       th:href="@{|/expert/request/approve/${expertRequestWithUser.expertRequest.id}|}"
+                                       style="margin-right: 6px;">승인</a>
+                                    <a class="btn btn-sm btn-outline-secondary"
+                                       th:href="@{|/expert/request/reject/${expertRequestWithUser.expertRequest.id}|}">거부</a>
+                                </div>
+                            </div>
+
+                            <div class="card-body" style="display: flex; flex-direction: column; align-items: center;">
+                                <img th:src="${expertRequestWithUser.requestImg}" alt="..."
+                                     style="width:85%; border-radius: 1%;">
+                                <div style="width: 100%; margin-top: 10px; white-space: pre;">
+                                    <span th:text="${expertRequestWithUser.expertRequest.content}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</html>
+

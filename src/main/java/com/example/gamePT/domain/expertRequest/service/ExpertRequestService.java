@@ -12,12 +12,13 @@ import java.util.List;
 public class ExpertRequestService {
     private final ExpertRequestRepository expertRequestRepository;
 
-    public void createExpertRequest(String userName, String content) {
+    public ExpertRequest createExpertRequest(String userName, String content) {
         ExpertRequest expertRequest = ExpertRequest.builder()
                 .userName(userName)
                 .content(content)
                 .build();
-        this.expertRequestRepository.save(expertRequest);
+                this.expertRequestRepository.save(expertRequest);
+        return this.getExpertRequestById(expertRequest.getId());
     }
 
     public List<ExpertRequest> getExpertRequestList() {
