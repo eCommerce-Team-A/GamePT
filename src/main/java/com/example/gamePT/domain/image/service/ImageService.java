@@ -1,5 +1,6 @@
 package com.example.gamePT.domain.image.service;
 
+import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.expertRequest.entity.ExpertRequest;
 import com.example.gamePT.domain.image.entity.Image;
 import com.example.gamePT.domain.image.repository.ImageRepository;
@@ -116,4 +117,62 @@ public class ImageService {
         return profileImg.get().getPath();
     }
 
+
+    public void saveIntroduceImg(Course course, MultipartFile introduceImg) throws IOException {
+
+        this.createFolder("course_introduce");
+        if (introduceImg.isEmpty()) return;
+
+        String originalFileName = introduceImg.getOriginalFilename();
+        String path = "course_introduce/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        File introduceImgFile = new File(fileDirPath + "/" + path);
+        introduceImg.transferTo(introduceImgFile);
+        path = "/file/" + path;
+
+        Image courseIntroduceImg = Image.builder()
+                .path(path)
+                .originalFileName(originalFileName)
+                .relationId(course.getId())
+                .relationEntity("courseIntroduce")
+                .build();
+
+        this.imageRepository.save(courseIntroduceImg);
+    }
+
+    public String getIntroduceImg(Long id) {
+        Optional<Image> profileImg = imageRepository.findByRelationEntityAndRelationId("courseIntroduce", id);
+
+        if (profileImg.isEmpty()) return null;
+
+        return profileImg.get().getPath();
+    }
+
+    public void saveCurriculumImg(Course course, MultipartFile curriculumImg) throws IOException {
+
+        this.createFolder("course_curriculum");
+        if (curriculumImg.isEmpty()) return;
+
+        String originalFileName = curriculumImg.getOriginalFilename();
+        String path = "course_curriculum/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        File curriculumImgFile = new File(fileDirPath + "/" + path);
+        curriculumImg.transferTo(curriculumImgFile);
+        path = "/file/" + path;
+
+        Image courseCurriculumImg = Image.builder()
+                .path(path)
+                .originalFileName(originalFileName)
+                .relationId(course.getId())
+                .relationEntity("courseCurriculum")
+                .build();
+
+        this.imageRepository.save(courseCurriculumImg);
+    }
+
+    public String getCurriculumImg(Long id) {
+        Optional<Image> profileImg = imageRepository.findByRelationEntityAndRelationId("courseCurriculum", id);
+
+        if (profileImg.isEmpty()) return null;
+
+        return profileImg.get().getPath();
+    }
 }

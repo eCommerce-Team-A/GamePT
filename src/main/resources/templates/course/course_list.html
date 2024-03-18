@@ -55,7 +55,7 @@
                                 <p style="font-size:19px;" class=" fs-7 fw-bold mb-0"
                                    th:text="@{|${course.price} 포인트|}"></p>
                             </div>
-                            <div th:if="${course.discountRate}!=0" class="flex-lg-wrap">
+                            <div th:if="${course.discountRate}!=0" class="flex-lg-wrap mt-3">
                                 <i style="color:red;" class="fa-solid fa-arrow-down"></i>
                                 <span style="font-size:19px; color:red;" class="fw-bold mb-0"
                                       th:text="@{|${course.discountRate}%|}"></span>
