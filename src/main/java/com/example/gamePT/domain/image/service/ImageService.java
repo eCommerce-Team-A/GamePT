@@ -140,11 +140,11 @@ public class ImageService {
     }
 
     public String getIntroduceImg(Long id) {
-        Optional<Image> profileImg = imageRepository.findByRelationEntityAndRelationId("courseIntroduce", id);
+        Optional<Image> introduceImg = imageRepository.findByRelationEntityAndRelationId("courseIntroduce", id);
 
-        if (profileImg.isEmpty()) return null;
+        if (introduceImg.isEmpty()) return null;
 
-        return profileImg.get().getPath();
+        return introduceImg.get().getPath();
     }
 
     public void saveCurriculumImg(Course course, MultipartFile curriculumImg) throws IOException {
@@ -169,10 +169,10 @@ public class ImageService {
     }
 
     public String getCurriculumImg(Long id) {
-        Optional<Image> profileImg = imageRepository.findByRelationEntityAndRelationId("courseCurriculum", id);
+        Optional<Image> curriculumImg = imageRepository.findByRelationEntityAndRelationId("courseCurriculum", id);
 
-        if (profileImg.isEmpty()) return null;
+        if (curriculumImg.isEmpty()) return null;
 
-        return profileImg.get().getPath();
+        return curriculumImg.get().getPath();
     }
 }

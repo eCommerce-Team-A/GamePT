@@ -123,8 +123,11 @@ public class CourseController {
         if (principal == null || !principal.getName().equals(course.getAuthor().getUsername())) {
             return "redirect:/";
         }
+        String introduceImg = this.imageService.getIntroduceImg(course.getId());
+        String curriculumImg = this.imageService.getCurriculumImg(course.getId());
         model.addAttribute("course", course);
-
+        model.addAttribute("introduceImg",introduceImg);
+        model.addAttribute("curriculumImg",curriculumImg);
         return "course/course_update";
     }
 
