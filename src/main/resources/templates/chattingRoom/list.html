@@ -163,7 +163,7 @@
 
                 if(temp.username != [[${@rq.getSiteUser().username}]]){
 
-                    htmlCode += leftBox(temp.profile, temp.nickname, temp.content)
+                    htmlCode += leftBox(temp.profile, temp.nickname, temp.content, temp.isCheck)
                 }
                 else{
                     htmlCode += rightBox(temp.profile, temp.nickname, temp.content)
@@ -175,7 +175,7 @@
 
             }
 
-            function leftBox(src, nickname, content) {
+            function leftBox(src, nickname, content,isCheck) {
 
                 var htmlCode =
                 '<div class="left-box mb-4">' +
@@ -192,10 +192,14 @@
                             '<div class="card-body px-3 py-2">' +
                                 content +
                             '</div>' +
-                        '</div>' +
-                    '</div>' +
+                        '</div>'
 
-                '</div>';
+
+                if(isCheck == "false"){
+                    htmlCode += '<i class="fa-solid fa-circle text-danger"></i>';
+                }
+
+                htmlCode += '</div></div>';
 
                 return htmlCode;
             }

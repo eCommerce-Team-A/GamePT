@@ -51,11 +51,11 @@ public class CourseService {
         return _course.get();
     }
 
-    public Page<Course> findAll(int page) {
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 8, Sort.by(sorts));
-        return this.courseRepository.findAll(pageable);
+    public Page<Course> findAllByKeyword(int page, String kw) {
+
+        Pageable pageable = PageRequest.of(page, 8);
+
+        return this.courseRepository.findAllByKeyword(pageable, kw);
     }
 
     public List<Course> findCourseByAuthorId(Long id) {
