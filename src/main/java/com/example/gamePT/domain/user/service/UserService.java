@@ -268,6 +268,15 @@ public class UserService {
         this.userRepository.save(siteUser);
     }
 
+    // 전문가 리스트 검색
+    public Page<SiteUser> getUserListByAuthorizationAndKw(String kw, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page,8,Sort.by(sorts));
+
+        return this.userRepository.findByAuthorizationAndKw(kw,pageable);
+    }
+
     public Page<SiteUser> getUserListByAuthorization(String authorization, int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
@@ -275,6 +284,7 @@ public class UserService {
 
         return this.userRepository.findByAuthorization(authorization,pageable);
     }
+
 
     public List<SiteUser> getUserListByAuthorizationForMain(String authorization) {
         return this.userRepository.findTop5ByAuthorizationOrderByCreateDateDesc(authorization);
