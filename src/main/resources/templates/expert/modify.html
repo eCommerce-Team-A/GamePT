@@ -33,7 +33,7 @@
             </div>
 
             <div class="row mb-5">
-                <form th:action="@{|/career/add/${siteUser.username}|}" class="col-lg-4" method="post">
+                <form th:action="@{|/career/add/${siteUser.username}|}" class="col-lg-4 was-validated" method="post">
                     <div class="card border-0 shadow col-lg-12 sticky-sm-top" style="top:115px;">
                         <div class="my-2 fw-bold" style="display:flex; justify-content:space-between; font-size:18px;">
                             <span style="margin-left: 10px"><i class="fa-solid fa-award"
@@ -42,35 +42,33 @@
 
                         <hr class="w-100 m-0">
                         <div class="m-2" style="display: flex; justify-content: space-between; align-items: center;"
-                             th:each="careerWithCategory : ${careerWithCategoryList}"
-                             th:if="${careerWithCategoryList != null}">
-                            <div>
-                                <i th:class="|fa-solid fa-${careerWithCategory.category.icon} m-2|"
-                                   th:if="${careerWithCategory.category.icon != 'youtube'}"
-                                   th:style="|color: ${careerWithCategory.category.color};|"></i>
-                                <i th:class="|fa-brands fa-${careerWithCategory.category.icon} m-2|"
-                                   th:if="${careerWithCategory.category.icon == 'youtube'}"
-                                   th:style="|color: ${careerWithCategory.category.color};|"></i>
-                                <span th:text="${careerWithCategory.career.content}"></span>
+                             th:each="career : ${careerList}" th:if="${careerList != null}">
+                            <div >
+                                <i th:class="|fa-solid fa-${career.icon} m-2|"
+                                   th:if="${career.icon != 'youtube'}"
+                                   th:style="|color: ${career.color};|"></i>
+                                <i th:class="|fa-brands fa-${career.icon} m-2|"
+                                   th:if="${career.icon == 'youtube'}"
+                                   th:style="|color: ${career.color};|"></i>
+                                <span th:text="${career.content}"></span>
                             </div>
                             <div>
                                 <a class="btn btn-sm btn-outline-secondary" style="border: hidden;"
-                                   th:href="@{|/career/delete/${careerWithCategory.career.id}|}" role="button">
+                                   th:href="@{|/career/delete/${career.id}|}" role="button">
                                     <i class="fa-solid fa-minus"></i></a>
                             </div>
                         </div>
                         <div class="m-1">
                             <div style="display: flex; justify-content: center; padding: 5px; align-items: center;">
-                                <div style="display: flex; height: 33px;">
-                                    <select style="width: 35%;" name="category" class="form-select"
-                                            aria-label="Default select example">
-                                        <option selected>카테고리</option>
+                                <div style="display: flex; height: 33px; width: 100%;">
+                                    <select style="width: 38%;" name="category" class="form-select" required aria-label="select example">
+                                        <option placeholder="경력" value="">카테고리</option>
                                         <option th:value="${category.id}" th:each="category : ${categoryList}"
                                                 th:text="${category.category}">
                                         </option>
                                     </select>
-                                    <input style="width: 65%;" name="content" type="text" class="form-control"
-                                           placeholder="경력">
+                                    <input style="width: 62%;" name="content" type="text" class="form-control is-invalid"
+                                           placeholder="경력" required>
                                     <button type="submit" class="btn btn-sm btn-outline-primary"
                                             style="margin-right: -3px; width:33px; padding: 5px; border: hidden;">
                                         <i style="margin: 2px;" class="fa-solid fa-plus"></i></button>

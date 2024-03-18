@@ -116,8 +116,11 @@
                         </div>
 
                         <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class=" Nanum mt-3 fs-6" th:if="${#lists.size(siteUserWithImg.expert.careerList) != 0}">
-                            <i class="fa-solid fa-crown text-success ms-3 me-2 fa-lg"></i>
-                            <span>[[${#lists.size(siteUserWithImg.expert.careerList) != 0 ? siteUserWithImg.expert.careerList[0].category: null}]]</span>
+                            <i th:class="|fa-solid fa-${siteUserWithImg.expert.careerList[0].icon} m-2|"
+                               th:if="${siteUserWithImg.expert.careerList[0].icon != 'youtube'}" th:style="|color: ${siteUserWithImg.expert.careerList[0].color};|"></i>
+                            <i th:class="|fa-brands fa-${siteUserWithImg.expert.careerList[0].icon} m-2|"
+                               th:if="${siteUserWithImg.expert.careerList[0].icon == 'youtube'}" th:style="|color: ${siteUserWithImg.expert.careerList[0].color};|"></i>
+<!--                            <span>[[${#lists.size(siteUserWithImg.expert.careerList) != 0 ? siteUserWithImg.expert.careerList[0].category: null}]]</span>-->
                             <span>
                                     [[${#lists.size(siteUserWithImg.expert.careerList) != 0 ? siteUserWithImg.expert.careerList[0].content: null}]]
                                 </span>
