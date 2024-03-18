@@ -2,6 +2,8 @@ package com.example.gamePT.domain.career.controller;
 
 import com.example.gamePT.domain.career.entity.Career;
 import com.example.gamePT.domain.career.service.CareerService;
+import com.example.gamePT.domain.careerCategory.entity.Category;
+import com.example.gamePT.domain.careerCategory.service.CategoryService;
 import com.example.gamePT.domain.course.service.CourseService;
 import com.example.gamePT.domain.expert.entity.Expert;
 import com.example.gamePT.domain.expert.service.ExpertService;
@@ -19,6 +21,7 @@ public class CareerController {
     private final CareerService careerService;
     private final UserService userService;
     private final ExpertService expertService;
+    private final CategoryService categoryService;
 
 
 
@@ -27,7 +30,9 @@ public class CareerController {
                             @RequestParam("category") Long categoryId, @RequestParam("content") String content) {
         SiteUser siteUser = this.userService.findByUsername(username);
         Expert expert = this.expertService.getExpertBySiteUserId(siteUser.getId());
-        this.careerService.createCareer(categoryId, content, expert);
+        Category category = this.categoryService.getCategoryById(categoryId);
+        this.careerService.createCareer(category.getCategory(),category.getIcon(), category.getColor(),
+                content, expert);
         return String.format("redirect:/expert/modify/%s", username);
     }
 
