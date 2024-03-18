@@ -65,13 +65,18 @@
 <!--                                         th:text="${course.gameCategoryname}">-->
 <!--                                    </div>-->
                                     <div class="p-4 border border-top-0 rounded-bottom">
-                                        <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class="mb-3">
+                                        <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                             <a th:href="@{|/course/detail/${course.id}|}"
                                                th:text="${course.name}"></a>
                                         </h4>
-                                        <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-                                           th:text="${course.introduce}"></p>
-                                        <div th:if="${course.discountRate}==0" class="flex-lg-wrap">
+                                        <div  style="display: flex; align-items: center;">
+                                            <i th:each="num : ${#numbers.sequence(1,5)}"
+                                               class="review__rating fas fa-star"></i>
+                                            <span class="Nanum m-1" th:text="|(${#lists.size(course.reviewList)})|"></span>
+                                        </div>
+<!--                                        <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"-->
+<!--                                           th:text="${course.introduce}"></p>-->
+                                        <div th:if="${course.discountRate}==0" class="flex-lg-wrap mt-3">
                                             <p style="font-size:19px;" class=" fs-7 fw-bold mb-0"
                                                th:text="@{|${course.price} 포인트|}"></p>
                                         </div>

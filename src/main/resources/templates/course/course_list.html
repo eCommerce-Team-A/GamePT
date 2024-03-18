@@ -40,11 +40,11 @@
                             </div>
                         </a>
                         <div class="p-4 border border-top-0 rounded-bottom">
-                            <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class="mb-3">
+                            <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                 <a th:href="@{|/course/detail/${course.id}|}"
                                    th:text="${course.name}"></a>
                             </h4>
-                            <div style="margin-top: -5px;">
+                            <div>
                                 <i th:each="num : ${#numbers.sequence(1,5)}"
                                    class="review__rating fas fa-star"></i>
                                 <span class="Nanum" th:text="|(${#lists.size(course.reviewList)})|"></span>
