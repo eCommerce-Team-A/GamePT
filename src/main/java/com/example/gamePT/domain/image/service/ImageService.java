@@ -175,4 +175,34 @@ public class ImageService {
 
         return curriculumImg.get().getPath();
     }
+
+    public void updateCourseIntroduce(Course course, MultipartFile introduceImg) throws IOException {
+
+        Image image = imageRepository.findByRelationEntityAndRelationId("courseIntroduce", course.getId()).get();
+
+        String originalFileName = introduceImg.getOriginalFilename();
+        String filePath = "user/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        File profileImgFile = new File(fileDirPath + "/" + filePath);
+        introduceImg.transferTo(profileImgFile);
+        filePath = "/file/" + filePath;
+
+        image = image.toBuilder().path(filePath).originalFileName(originalFileName).relationId(course.getId()).build();
+
+        imageRepository.save(image);
+    }
+
+    public void updateCoursecurriculum(Course course, MultipartFile curriculumImg) throws IOException {
+
+        Image image = imageRepository.findByRelationEntityAndRelationId("courseCurriculum", course.getId()).get();
+
+        String originalFileName = curriculumImg.getOriginalFilename();
+        String filePath = "user/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        File profileImgFile = new File(fileDirPath + "/" + filePath);
+        curriculumImg.transferTo(profileImgFile);
+        filePath = "/file/" + filePath;
+
+        image = image.toBuilder().path(filePath).originalFileName(originalFileName).relationId(course.getId()).build();
+
+        imageRepository.save(image);
+    }
 }
