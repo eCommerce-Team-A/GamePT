@@ -105,7 +105,6 @@
 //
 //            Course cu = Course.builder().
 //                    author(su2).
-//                    gameCategoryname("LOL").
 //                    name(su2.getNickname() + "의 기가막힌 강의").
 //                    introduce(su2.getNickname() + "강의의 예시 데이터에요. 같이 잘 해보아요!").
 //                    curriculum(su2.getNickname() + "의 강의는 고객이 만족할때까지 쉬지 않고 계속해요").

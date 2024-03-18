@@ -17,13 +17,12 @@
 
 
     <!-- Single Product Start -->
-    <div class="container-fluid mt-3">
+    <div class="Nanum container-fluid mt-3">
         <div class="container pt-5">
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <div class="d-flex align-items-center">
                     <h2 th:if="${course.isActive}" class="fw-bold" th:text="${course.name}"></h2>
                     <h2 th:if="!${course.isActive}" class="fw-bold" th:text="@{|${course.name}(폐지된 강의입니다.)|}"></h2>
-                    <div class="badge rounded-pill text-bg-primary ms-2">[[${course.gameCategoryname}]]</div>
                 </div>
                 <div class="d-flex align-items-center">
                     <a class="btn btn-primary" th:href="@{|/course/update/${course.id}|}" role="button"
@@ -43,7 +42,7 @@
 
                         <div class="card p-0 border-0 shadow">
                             <nav>
-                                <div class="nav nav-tabs" style="display:flex;justify-content: space-around;">
+                                <div class="Nanum nav nav-tabs" style="display:flex;justify-content: space-around;">
                                     <button class="nav-link active border-white border-bottom-0" style="width:33%;"
                                             type="button"
                                             role="tab"
@@ -65,11 +64,21 @@
                                 </div>
                             </nav>
                             <div class="tab-content mb-5 p-4">
-                                <div style="white-space:pre;" class="tab-pane active" id="nav-introduce" role="tabpanel"
-                                     aria-labelledby="nav-introduce-tab" th:text="${course.introduce}">
+                                <div class="tab-pane active" id="nav-introduce" role="tabpanel" aria-labelledby="nav-introduce-tab">
+                                    <div style="display: flex; flex-direction: column; align-items: center;">
+                                        <img th:src="${introduceImg}" alt="..." style="width:85%; border-radius: 1%;">
+                                    </div>
+                                    <div class="Nanum mt-3" style="display: flex; justify-content: center;">
+                                        <span style="white-space:pre; width: 85%;" th:text="${course.introduce}"></span>
+                                    </div>
                                 </div>
-                                <div style="white-space:pre;" class="tab-pane" id="nav-curriculum" role="tabpanel"
-                                     aria-labelledby="nav-curriculum-tab" th:text="${course.curriculum}">
+                                <div class="tab-pane" id="nav-curriculum" role="tabpanel" aria-labelledby="nav-curriculum-tab">
+                                    <div style="display: flex; flex-direction: column; align-items: center;">
+                                        <img th:src="${curriculumImg}" alt="..." style="width:85%; border-radius: 1%;">
+                                    </div>
+                                    <div class="Nanum mt-3" style="display: flex; justify-content: center;">
+                                        <span style="white-space:pre; width: 85%" th:text="${course.curriculum}"></span>
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="nav-review" role="tabpanel"
                                      aria-labelledby="nav-review-tab">
@@ -118,7 +127,8 @@
                                                     <span th:text="@{|${#temporals.format(review.createDate, 'yy-MM-dd HH:mm')}|}"></span>
                                                 </div>
                                             </div>
-                                            <div style="white-space:pre;" class="mt-4" th:text="${review.content}"></div>
+                                            <div style="white-space:pre;" class="mt-4"
+                                                 th:text="${review.content}"></div>
                                             <hr>
                                         </div>
                                         <div th:if="${!reviewList.isEmpty()}">
@@ -233,9 +243,6 @@
                                 <img th:src=@{|/img/forMainCourse/${@rq.getRandomImage()}|}
                                      class="vesitable-img w-100 rounded-top" alt="">
                             </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                 style="top: 10px; right: 10px;" th:text="${relateCourse.gameCategoryname}">
-                            </div>
                             <div class="p-4 rounded-bottom">
                                 <h4 th:text="${relateCourse.author.nickname}"></h4>
                                 <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
@@ -248,9 +255,9 @@
         </div>
     </div>
     <script>
-        $(function() {
+        $(function () {
 
-            $('#orderButton').on("click", function(){
+            $('#orderButton').on("click", function () {
 
                 var pp = [[${course.price-course.price*course.discountRate/100}]];
 
@@ -259,22 +266,22 @@
                 var buyUserName = "[[${@rq.getSiteUser != null ? @rq.getSiteUser.username : null }]]";
                 var buyUserPoint = [[${@rq.getSiteUser != null ? @rq.getSiteUser.point : null }]];
 
-                if(!courseIsActive){
+                if (!courseIsActive) {
                     alert("폐지된 강의는 구매할 수 없습니다.");
                     return;
                 }
 
-                if(buyUserName == authorName ){
+                if (buyUserName == authorName) {
                     alert("자신의 강의는 구매할 수 없습니다.");
                     return;
                 }
 
-                if(buyUserPoint - pp < 0 ){
+                if (buyUserPoint - pp < 0) {
                     alert("포인트가 부족합니다. 충전 후 이용해 주세요.");
                     return;
                 }
 
-                if(!confirm("정말 "+pp+"포인트를 소모하여 해당 강의를 구매하시겠습니까?")){
+                if (!confirm("정말 " + pp + "포인트를 소모하여 해당 강의를 구매하시겠습니까?")) {
                     return;
                 }
 
@@ -282,40 +289,40 @@
                 var header = $("meta[name='_csrf_header']").attr("content");
 
                 $.ajax({
-                    type : 'post',              // 타입 (get, post, put 등등)
-                    url : '/orderItem/create',     // 요청할 서버url
-                    async : true,               // 비동기화 여부 (default : true)
-                    beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                    type: 'post',              // 타입 (get, post, put 등등)
+                    url: '/orderItem/create',     // 요청할 서버url
+                    async: true,               // 비동기화 여부 (default : true)
+                    beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                         xhr.setRequestHeader(header, token);
                     },
-                    headers : {                 // Http header
-                        "Content-Type" : "application/json",
-                        "X-HTTP-Method-Override" : "POST"
+                    headers: {                 // Http header
+                        "Content-Type": "application/json",
+                        "X-HTTP-Method-Override": "POST"
                     },
-                    dataType : 'json',          // 받을 데이터 타입 (html, xml, json, text 등등)
-                    data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
-                        "course_id" : [[${course.id}]]
+                    dataType: 'json',          // 받을 데이터 타입 (html, xml, json, text 등등)
+                    data: JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                        "course_id": [[${course.id}]]
                     }),
-                    success : function(result) { // 결과 성공 콜백함수
-                       alert(result.msg);
-                       window.location.href = '/chattingRoom/list';
+                    success: function (result) { // 결과 성공 콜백함수
+                        alert(result.msg);
+                        window.location.href = '/chattingRoom/list';
                     },
-                    error : function(request, status, error) { // 결과 에러 콜백함수
-                            console.log(error)
+                    error: function (request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
                     }
                 })
             });
 
 
-            $('#postReview').on("click", function(){
+            $('#postReview').on("click", function () {
                 var authorName = "[[${course.author.username}]]";
                 var buyUserName = "[[${@rq.getSiteUser != null ? @rq.getSiteUser.username : null }]]";
 
-                if(buyUserName == authorName ){
+                if (buyUserName == authorName) {
                     alert("자신의 강의에는 리뷰를 작성할 수 없습니다.");
                     return;
                 }
-                if(![[${isPurchased}]]){
+                if (![[${isPurchased}]]) {
                     alert("강의 구매 후 리뷰 작성이 가능합니다.");
                     return;
                 }
@@ -323,33 +330,34 @@
                 var header = $("meta[name='_csrf_header']").attr("content");
                 console.log(1)
                 $.ajax({
-                     type : 'post',              // 타입 (get, post, put 등등)
-                     url : '/review/create',     // 요청할 서버url
-                     async : true,               // 비동기화 여부 (default : true)
-                     beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                         xhr.setRequestHeader(header, token);
-                     },
-                     headers : {                 // Http header
-                         "Content-Type" : "application/json",
-                         "X-HTTP-Method-Override" : "POST"
-                     },
-                     dataType : 'text',          // 데이터 타입 (html, xml, json, text 등등)
-                     data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
-                         "courseId" : [[${course.id}]],
-                         "content" : $('#reviewContent').val().trim(),
-                         "score" : $('.rating__star.fas.fa-star').length
-                     }),
-                     success : function(result) { // 결과 성공 콜백함수
-                            $('#reviews').replaceWith(result);
-                            $('.rating__star.fas.fa-star').removeClass('fas fa-star').addClass('far fa-star');
-                            $('#reviewContent').val('');
-                     },
-                     error : function(request, status, error) { // 결과 에러 콜백함수
-                             console.log(error);
-                     }
+                    type: 'post',              // 타입 (get, post, put 등등)
+                    url: '/review/create',     // 요청할 서버url
+                    async: true,               // 비동기화 여부 (default : true)
+                    beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                        xhr.setRequestHeader(header, token);
+                    },
+                    headers: {                 // Http header
+                        "Content-Type": "application/json",
+                        "X-HTTP-Method-Override": "POST"
+                    },
+                    dataType: 'text',          // 데이터 타입 (html, xml, json, text 등등)
+                    data: JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                        "courseId": [[${course.id}]],
+                        "content": $('#reviewContent').val().trim(),
+                        "score": $('.rating__star.fas.fa-star').length
+                    }),
+                    success: function (result) { // 결과 성공 콜백함수
+                        $('#reviews').replaceWith(result);
+                        $('.rating__star.fas.fa-star').removeClass('fas fa-star').addClass('far fa-star');
+                        $('#reviewContent').val('');
+                    },
+                    error: function (request, status, error) { // 결과 에러 콜백함수
+                        console.log(error);
+                    }
                 })
             });
             const ratingStars = [...document.getElementsByClassName("rating__star")];
+
             function executeRating(stars) {
                 const starClassActive = "rating__star fas fa-star";
                 const starClassUnactive = "rating__star far fa-star";
@@ -371,68 +379,68 @@
             executeRating(ratingStars);
 
         });
-        $('#addCart').on("click", function(){
-                var token = $("meta[name='_csrf']").attr("content");
-                var header = $("meta[name='_csrf_header']").attr("content");
+        $('#addCart').on("click", function () {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
 
-                var courseIsActive = [[${course.isActive}]];
+            var courseIsActive = [[${course.isActive}]];
 
-                if(!courseIsActive){
-                    alert("폐지된 강의는 장바구니에 담을 수 없습니다.");
-                    return;
+            if (!courseIsActive) {
+                alert("폐지된 강의는 장바구니에 담을 수 없습니다.");
+                return;
+            }
+
+            $.ajax({
+                type: 'get',              // 타입 (get, post, put 등등)
+                url: '/cart/add/[[${course.id}]]',     // 요청할 서버url
+                async: true,               // 비동기화 여부 (default : true)
+                beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {                 // Http header
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "POST"
+                },
+                success: function (result) { // 결과 성공 콜백함수
+                    if (result == "success") {
+                        alert("장바구니에 담았습니다.");
+                    } else if (result == "myCourse") {
+                        alert("자신의 강의는 장바구니에 담을 수 없습니다.");
+                    } else {
+                        alert("이미 장바구니에 있는 강의입니다.")
+                    }
+                },
+                error: function (request, status, error) { // 결과 에러 콜백함수
+                    console.log(error);
                 }
-
-                $.ajax({
-                     type : 'get',              // 타입 (get, post, put 등등)
-                     url : '/cart/add/[[${course.id}]]',     // 요청할 서버url
-                     async : true,               // 비동기화 여부 (default : true)
-                     beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                         xhr.setRequestHeader(header, token);
-                     },
-                     headers : {                 // Http header
-                         "Content-Type" : "application/json",
-                         "X-HTTP-Method-Override" : "POST"
-                     },
-                     success : function(result) { // 결과 성공 콜백함수
-                            if(result=="success"){
-                                alert("장바구니에 담았습니다.");
-                            } else if(result == "myCourse"){
-                                alert("자신의 강의는 장바구니에 담을 수 없습니다.");
-                            }
-                            else{
-                                alert("이미 장바구니에 있는 강의입니다.")
-                            }
-                     },
-                     error : function(request, status, error) { // 결과 에러 콜백함수
-                             console.log(error);
-                     }
-                })
+            })
         });
-        function reviewPage(pageNum){
+
+        function reviewPage(pageNum) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             $.ajax({
-                    type : 'post',              // 타입 (get, post, put 등등)
-                    url : '/review/list/[[${course.id}]]',     // 요청할 서버url
-                    async : true,               // 비동기화 여부 (default : true)
-                    beforeSend : function(xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                            xhr.setRequestHeader(header, token);
-                    },
-                    headers : {                 // Http header
-                            "Content-Type" : "application/json",
-                            "X-HTTP-Method-Override" : "POST"
-                    },
-                    dataType : 'text',          // 데이터 타입 (html, xml, json, text 등등)
-                    data : JSON.stringify({     // 보낼 데이터 (Object , String, Array)
-                            "page":pageNum
-                    }),
-                    success : function(result) { // 결과 성공 콜백함수
-                            $('#reviews').replaceWith(result);
-                    },
-                    error : function(request, status, error) { // 결과 에러 콜백함수
-                            console.log(error)
-                    }
-                })
+                type: 'post',              // 타입 (get, post, put 등등)
+                url: '/review/list/[[${course.id}]]',     // 요청할 서버url
+                async: true,               // 비동기화 여부 (default : true)
+                beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {                 // Http header
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "POST"
+                },
+                dataType: 'text',          // 데이터 타입 (html, xml, json, text 등등)
+                data: JSON.stringify({     // 보낼 데이터 (Object , String, Array)
+                    "page": pageNum
+                }),
+                success: function (result) { // 결과 성공 콜백함수
+                    $('#reviews').replaceWith(result);
+                },
+                error: function (request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
+                }
+            })
         }
     </script>
 </div>

@@ -73,7 +73,6 @@ public class OrderItemService {
                     .orderEntity(orderEntity)
                     .name(ci.getCourse().getName())
                     .price(discountedPrice)
-                    .gameCategoryname(ci.getCourse().getGameCategoryname())
                     .buyer(buyer)
                     .build();
 
@@ -129,7 +128,6 @@ public class OrderItemService {
                 .orderEntity(orderEntity)
                 .name(course.getName())
                 .price(discountedPrice)
-                .gameCategoryname(course.getGameCategoryname())
                 .buyer(buyer)
                 .build();
 

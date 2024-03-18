@@ -3,8 +3,10 @@ package com.example.gamePT.domain.course.controller;
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.entity.CourseCreateForm;
 import com.example.gamePT.domain.course.service.CourseService;
+import com.example.gamePT.domain.expert.entity.Expert;
 import com.example.gamePT.domain.expert.entity.SiteUserWithImg;
 import com.example.gamePT.domain.expert.service.ExpertService;
+import com.example.gamePT.domain.image.service.ImageService;
 import com.example.gamePT.domain.orderItem.service.OrderItemService;
 import com.example.gamePT.domain.review.entity.Review;
 import com.example.gamePT.domain.review.service.ReviewService;
@@ -18,7 +20,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -31,6 +35,7 @@ public class CourseController {
     private final ReviewService reviewService;
     private final ExpertService expertService;
     private final OrderItemService orderItemService;
+    private final ImageService imageService;
 
     //강의 등록
     @PreAuthorize("isAuthenticated()")
@@ -45,13 +50,16 @@ public class CourseController {
     // 강의 등록
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String createCourse(@Valid CourseCreateForm courseCreateForm, BindingResult bindingResult, Principal principal) {
+    public String createCourse(@Valid CourseCreateForm courseCreateForm, BindingResult bindingResult, Principal principal,
+                               @RequestParam(value = "introduceImg") MultipartFile introduceImg, @RequestParam(value = "curriculumImg") MultipartFile curriculumImg) throws IOException {
         SiteUser author = this.userService.findByUsername(principal.getName());
         if (bindingResult.hasErrors()) {
             return "course/course_create";
         }
-        Course course = this.courseService.createCourse(author, courseCreateForm.getGameCategoryname(), courseCreateForm.getName(),
+        Course course = this.courseService.createCourse(author, courseCreateForm.getName(),
                 courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice(), courseCreateForm.getDiscountRate());
+        this.imageService.saveIntroduceImg(course, introduceImg);
+        this.imageService.saveCurriculumImg(course, curriculumImg);
 
         return String.format("redirect:/course/detail/%s", course.getId());
     }
@@ -72,11 +80,18 @@ public class CourseController {
         }
         SiteUserWithImg expertData = toDto(course.getAuthor());
 
+        String introduceImg = this.imageService.getIntroduceImg(course.getId());
+        String curriculumImg = this.imageService.getCurriculumImg(course.getId());
+
+
         model.addAttribute("expertData", expertData);
         model.addAttribute("isPurchased", isPurchased);
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("courseListByAuthor", courseListByAuthor);
         model.addAttribute("course", course);
+
+        model.addAttribute("introduceImg",introduceImg);
+        model.addAttribute("curriculumImg",curriculumImg);
 
         return "course/course_detail";
     }
@@ -94,7 +109,7 @@ public class CourseController {
 
     @GetMapping("/list")
     public String courseList(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
-            Page<Course> courseList = this.courseService.findAllByKeyword(page,kw);
+        Page<Course> courseList = this.courseService.findAllByKeyword(page, kw);
         model.addAttribute("courseList", courseList);
         model.addAttribute("kw", kw);
 
@@ -117,7 +132,7 @@ public class CourseController {
     @PostMapping("/update/{id}")
     public String updateCourse(@PathVariable(value = "id") Long id, @Valid CourseCreateForm courseCreateForm,
                                BindingResult bindingResult, Model model) {
-        Course course = this.courseService.updateCourse(id, courseCreateForm.getGameCategoryname(), courseCreateForm.getName(),
+        Course course = this.courseService.updateCourse(id, courseCreateForm.getName(),
                 courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice(), courseCreateForm.getDiscountRate());
 
         return "redirect:/course/detail/" + id;
