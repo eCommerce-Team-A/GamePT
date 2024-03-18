@@ -53,8 +53,6 @@ public class SocketHandler extends TextWebSocketHandler {
                 .sender(userService.findByUsername((String) obj.get("username")))
                 .build();
 
-        chatLogService.save(chatLog);
-
         String rN = (String) obj.get("roomNumber"); //방의 번호를 받는다.
         HashMap<String, Object> temp = new HashMap<String, Object>();
         if(rls.size() > 0) {
@@ -65,6 +63,13 @@ public class SocketHandler extends TextWebSocketHandler {
                     break;
                 }
             }
+
+            if(temp.size() > 2){
+                chatLog.toBuilder().isCheck(true).build();
+            }
+
+            chatLogService.save(chatLog);
+
             //해당 방의 세션들만 찾아서 메시지를 발송해준다.
             for(String k : temp.keySet()) {
                 if(k.equals("roomNumber")) { //다만 방번호일 경우에는 건너뛴다.
