@@ -26,10 +26,9 @@ public class CourseService {
     }
 
 
-    public Course createCourse(SiteUser author, String gameCategoryname, String name, String introduce, String curriculum, Integer price, int discountRate) {
+    public Course createCourse(SiteUser author, String name, String introduce, String curriculum, Integer price, int discountRate) {
         Course course = Course.builder()
                 .author(author)
-                .gameCategoryname(gameCategoryname)
                 .name(name)
                 .introduce(introduce)
                 .curriculum(curriculum)
@@ -62,11 +61,10 @@ public class CourseService {
         return this.courseRepository.findCourseByAuthorId(id);
     }
 
-    public Course updateCourse(Long id, String gameCategoryname, String name,
+    public Course updateCourse(Long id,  String name,
                                String introduce, String curriculum, Integer price, int discountRate) {
         Course _course = findCourseById(id);
         Course course = _course.toBuilder()
-                .gameCategoryname(gameCategoryname)
                 .name(name)
                 .introduce(introduce)
                 .curriculum(curriculum)

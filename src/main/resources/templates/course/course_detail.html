@@ -23,7 +23,6 @@
                 <div class="d-flex align-items-center">
                     <h2 th:if="${course.isActive}" class="fw-bold" th:text="${course.name}"></h2>
                     <h2 th:if="!${course.isActive}" class="fw-bold" th:text="@{|${course.name}(폐지된 강의입니다.)|}"></h2>
-                    <div class="badge rounded-pill text-bg-primary ms-2">[[${course.gameCategoryname}]]</div>
                 </div>
                 <div class="d-flex align-items-center">
                     <a class="btn btn-primary" th:href="@{|/course/update/${course.id}|}" role="button"
@@ -232,9 +231,6 @@
                             <div>
                                 <img th:src=@{|/img/forMainCourse/${@rq.getRandomImage()}|}
                                      class="vesitable-img w-100 rounded-top" alt="">
-                            </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                 style="top: 10px; right: 10px;" th:text="${relateCourse.gameCategoryname}">
                             </div>
                             <div class="p-4 rounded-bottom">
                                 <h4 th:text="${relateCourse.author.nickname}"></h4>

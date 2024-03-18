@@ -3,6 +3,7 @@ package com.example.gamePT.domain.course.controller;
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.entity.CourseCreateForm;
 import com.example.gamePT.domain.course.service.CourseService;
+import com.example.gamePT.domain.expert.entity.Expert;
 import com.example.gamePT.domain.expert.entity.SiteUserWithImg;
 import com.example.gamePT.domain.expert.service.ExpertService;
 import com.example.gamePT.domain.orderItem.service.OrderItemService;
@@ -50,7 +51,7 @@ public class CourseController {
         if (bindingResult.hasErrors()) {
             return "course/course_create";
         }
-        Course course = this.courseService.createCourse(author, courseCreateForm.getGameCategoryname(), courseCreateForm.getName(),
+        Course course = this.courseService.createCourse(author, courseCreateForm.getName(),
                 courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice(), courseCreateForm.getDiscountRate());
 
         return String.format("redirect:/course/detail/%s", course.getId());
@@ -116,7 +117,7 @@ public class CourseController {
     @PostMapping("/update/{id}")
     public String updateCourse(@PathVariable(value = "id") Long id, @Valid CourseCreateForm courseCreateForm,
                                BindingResult bindingResult, Model model) {
-        Course course = this.courseService.updateCourse(id, courseCreateForm.getGameCategoryname(), courseCreateForm.getName(),
+        Course course = this.courseService.updateCourse(id,  courseCreateForm.getName(),
                 courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice(), courseCreateForm.getDiscountRate());
 
         return "redirect:/course/detail/" + id;
