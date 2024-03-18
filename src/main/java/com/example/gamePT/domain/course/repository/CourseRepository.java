@@ -20,7 +20,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             + "   c.name like %:kw% "
             + "   or c.curriculum like %:kw% "
             + "   or c.introduce like %:kw% "
-            + "   or c.gameCategoryname like %:kw% "
             + "order by c.createDate DESC")
     Page<Course> findAllByKeyword( Pageable pageable, @Param("kw") String kw);
 
