@@ -44,13 +44,13 @@
                         </div>
 
                         <div class="card-body">
-                            <div class="m2" th:each="careerWithCategory : ${careerWithCategoryList}">
+                            <div class="m2" th:each="career : ${careerList}" th:if="${careerList != null}">
                                 <div class="Nanum fs-6 d-flex flex align-items-center">
-                                        <i th:class="|fa-solid fa-${careerWithCategory.category.icon} m-2|"
-                                           th:if="${careerWithCategory.category.icon != 'youtube'}" th:style="|color: ${careerWithCategory.category.color};|"></i>
-                                        <i th:class="|fa-brands fa-${careerWithCategory.category.icon} m-2|"
-                                           th:if="${careerWithCategory.category.icon == 'youtube'}" th:style="|color: ${careerWithCategory.category.color};|"></i>
-                                        <span th:text="${careerWithCategory.career.content}"></span>
+                                        <i th:class="|fa-solid fa-${career.icon} m-2|"
+                                           th:if="${career.icon != 'youtube'}" th:style="|color: ${career.color};|"></i>
+                                        <i th:class="|fa-brands fa-${career.icon} m-2|"
+                                           th:if="${career.icon == 'youtube'}" th:style="|color: ${career.color};|"></i>
+                                        <span th:text="${career.content}"></span>
                                 </div>
                             </div>
                         </div>

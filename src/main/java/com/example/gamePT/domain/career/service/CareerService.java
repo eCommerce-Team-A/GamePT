@@ -1,15 +1,12 @@
 package com.example.gamePT.domain.career.service;
 
 import com.example.gamePT.domain.career.entity.Career;
-import com.example.gamePT.domain.career.entity.CareerWithCategory;
 import com.example.gamePT.domain.career.repository.CareerRepository;
-import com.example.gamePT.domain.careerCategory.entity.Category;
 import com.example.gamePT.domain.careerCategory.repository.CategoryRepository;
 import com.example.gamePT.domain.expert.entity.Expert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,9 +28,11 @@ public class CareerService {
         return career.get();
     }
 
-    public Career createCareer(Long categoryId, String content, Expert expert) {
+    public Career createCareer(String category, String icon, String color, String content, Expert expert) {
         Career career = Career.builder()
-                .categoryId(categoryId)
+                .category(category)
+                .icon(icon)
+                .color(color)
                 .content(content)
                 .expert(expert)
                 .build();

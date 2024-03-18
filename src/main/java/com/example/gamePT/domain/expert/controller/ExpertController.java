@@ -1,7 +1,6 @@
 package com.example.gamePT.domain.expert.controller;
 
 import com.example.gamePT.domain.career.entity.Career;
-import com.example.gamePT.domain.career.entity.CareerWithCategory;
 import com.example.gamePT.domain.career.service.CareerService;
 import com.example.gamePT.domain.careerCategory.entity.Category;
 import com.example.gamePT.domain.careerCategory.service.CategoryService;
@@ -100,7 +99,7 @@ public class ExpertController {
         SiteUser siteUser = this.userService.findByUsername(username);
         Expert expert = this.expertService.getExpertBySiteUserId(siteUser.getId());
         String profileImg = this.userService.getProfileImg(siteUser.getId());
-        List<CareerWithCategory> careerWithCategoryList = this.getCareerWithCategoryList(this.careerService.getCareerListByExpertId(expert.getId()));
+        List<Career> careerList = this.careerService.getCareerListByExpertId(expert.getId());
         Page<OrderItem> orderItemList = this.orderItemService.findByAuthor(0,siteUser);
         List<Category> categoryList = this.categoryService.getCategoryList();
         List<CourseScore> courseScoreList = this.getCourseScoreList(this.courseService.findCourseByAuthorId(siteUser.getId()));
@@ -110,7 +109,7 @@ public class ExpertController {
         model.addAttribute("profileImg", profileImg);
         model.addAttribute("courseScoreList", courseScoreList);
         model.addAttribute("orderItemList", orderItemList);
-        model.addAttribute("careerWithCategoryList", careerWithCategoryList);
+        model.addAttribute("careerList", careerList);
         model.addAttribute("categoryList", categoryList);
     }
 
@@ -122,12 +121,5 @@ public class ExpertController {
         }
         return courseScoreList;
     }
-    public List<CareerWithCategory> getCareerWithCategoryList(List<Career> careerList) {
-        List<CareerWithCategory> careerWithCategoryList = new ArrayList<>();
-        for (Career career : careerList) {
-            CareerWithCategory careerWithCategory = new CareerWithCategory(career, this.categoryService.getCategoryById(career.getCategoryId()));
-            careerWithCategoryList.add(careerWithCategory);
-        }
-        return careerWithCategoryList;
-    }
+
 }
