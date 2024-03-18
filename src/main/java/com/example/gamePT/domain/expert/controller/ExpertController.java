@@ -1,7 +1,10 @@
 package com.example.gamePT.domain.expert.controller;
 
 import com.example.gamePT.domain.career.entity.Career;
+import com.example.gamePT.domain.career.entity.CareerWithCategory;
 import com.example.gamePT.domain.career.service.CareerService;
+import com.example.gamePT.domain.careerCategory.entity.Category;
+import com.example.gamePT.domain.careerCategory.service.CategoryService;
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.service.CourseService;
 import com.example.gamePT.domain.expert.entity.CourseScore;
@@ -35,6 +38,7 @@ public class ExpertController {
     private final CareerService careerService;
     private final ExpertService expertService;
     private final OrderItemService orderItemService;
+    private final CategoryService categoryService;
 
 
     //전문가 목록
@@ -96,20 +100,34 @@ public class ExpertController {
         SiteUser siteUser = this.userService.findByUsername(username);
         Expert expert = this.expertService.getExpertBySiteUserId(siteUser.getId());
         String profileImg = this.userService.getProfileImg(siteUser.getId());
-        List<Career> careerList = this.careerService.getCareerListByExpertId(expert.getId());
-        List<Course> courseList = this.courseService.findCourseByAuthorId(siteUser.getId());
+        List<CareerWithCategory> careerWithCategoryList = this.getCareerWithCategoryList(this.careerService.getCareerListByExpertId(expert.getId()));
         Page<OrderItem> orderItemList = this.orderItemService.findByAuthor(0,siteUser);
-        List<CourseScore> courseScoreList = new ArrayList<>();
-        for (Course course : courseList) {
-            CourseScore courseScore = new CourseScore(this.reviewService.getScoreAvg(course.getId()), course);
-            courseScoreList.add(courseScore);
-        }
+        List<Category> categoryList = this.categoryService.getCategoryList();
+        List<CourseScore> courseScoreList = this.getCourseScoreList(this.courseService.findCourseByAuthorId(siteUser.getId()));
+
         model.addAttribute("siteUser", siteUser);
         model.addAttribute("introduce", expert.getIntroduce());
         model.addAttribute("profileImg", profileImg);
         model.addAttribute("courseScoreList", courseScoreList);
         model.addAttribute("orderItemList", orderItemList);
-        model.addAttribute("careerList", careerList);
+        model.addAttribute("careerWithCategoryList", careerWithCategoryList);
+        model.addAttribute("categoryList", categoryList);
     }
 
+    public List<CourseScore> getCourseScoreList(List<Course> courseList) {
+        List<CourseScore> courseScoreList = new ArrayList<>();
+        for (Course course : courseList) {
+            CourseScore courseScore = new CourseScore(this.reviewService.getScoreAvg(course.getId()), course);
+            courseScoreList.add(courseScore);
+        }
+        return courseScoreList;
+    }
+    public List<CareerWithCategory> getCareerWithCategoryList(List<Career> careerList) {
+        List<CareerWithCategory> careerWithCategoryList = new ArrayList<>();
+        for (Career career : careerList) {
+            CareerWithCategory careerWithCategory = new CareerWithCategory(career, this.categoryService.getCategoryById(career.getCategoryId()));
+            careerWithCategoryList.add(careerWithCategory);
+        }
+        return careerWithCategoryList;
+    }
 }

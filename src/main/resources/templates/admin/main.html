@@ -1,6 +1,8 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 <div layout:fragment="content" class="mb-3">
-    <link rel="stylesheet" href="/css/duoArticle.css" type="text/css">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5 Nanum">
         <h1 class="text-center text-white display-6">관리자</h1>
@@ -67,8 +69,37 @@
                          role="tabpanel"
                          aria-labelledby="home-tab" tabindex="0">
                         <div id="homeHistory" class="card w-100 Regular shadow border-0">
-                            <div class="card-header bg-white">
-                                <i class="fa-solid fa-house" style="margin-right: 5px;"></i>카테고리
+                            <div class="card-header bg-white"
+                                 style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <i class="fa-solid fa-house" style="margin-right: 5px;"></i>경력 카테고리
+                                </div>
+                                <form th:action="@{/category/create}" method="post"
+                                      style="display: flex; height: 33px; border: lightgray solid 1px; border-radius: 5px;">
+                                    <div style="display: flex;">
+                                        <input style="border: hidden;"
+                                               name="category" type="text" class="form-control" placeholder="카테고리">
+                                        <button style="border: hidden;"
+                                           type="submit" class="btn btn-sm btn-outline-primary">
+                                            <i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="m-1" style="display: flex; flex-wrap: wrap;">
+                                <div class="m-3"
+                                     style="display: flex; align-items: center; border: #4e5968 solid 2px; border-radius: 5px;"
+                                     th:each="category : ${categoryList}">
+                                    <i th:class="|fa-solid fa-${category.icon} m-2|"
+                                       th:if="${category.icon != 'youtube'}" th:style="|color: ${category.color};|"></i>
+                                    <i th:class="|fa-brands fa-${category.icon} m-2|"
+                                       th:if="${category.icon == 'youtube'}" th:style="|color: ${category.color};|"></i>
+                                    <span class="Nanum" style="margin-right: 5px;" th:text="${category.category}"></span>
+                                    <div class="p-1" style="border-left: solid 2px;">
+                                        <a th:href="@{|/category/delete/${category.id}|}" role="button">
+                                            <i style="margin: 2px;" class="fa-solid fa-minus"></i></a>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -275,43 +306,6 @@
                                     </div>
                                 </li>
                             </ul>
-
-                            <!--                            <table class="table table-hover" style="border-radius: 3px; height: 100%;">-->
-                            <!--                                <thead style="border: darkgray; text-align: center; border-radius: 3px;">-->
-                            <!--                                <tr style="font-size: 13px;">-->
-                            <!--                                    <th scope="col">번호</th>-->
-                            <!--                                    <th scope="col">ID</th>-->
-                            <!--                                    <th scope="col" style="width: 30%">소개</th>-->
-                            <!--                                    <th scope="col">등록일</th>-->
-                            <!--                                    <th></th>-->
-                            <!--                                </tr>-->
-                            <!--                                </thead>-->
-                            <!--                                <tbody style="text-align: center">-->
-                            <!--                                <tr th:each="expertRequest, loop : ${expertRequestList}">-->
-                            <!--                                    <td style="width: 5%">-->
-                            <!--                                        <div class="article-element"><span th:text="${loop.count}"></span></div>-->
-                            <!--                                    </td>-->
-                            <!--                                    <td style="width: 15%">-->
-                            <!--                                        <div class="article-element"><span th:text="${expertRequest.userName}"></span></div>-->
-                            <!--                                    </td>-->
-                            <!--                                    <td style="width: 30%">-->
-                            <!--                                        <div class="article-element">-->
-                            <!--                                            <a th:href="@{|/expert/request/${expertRequest.id}|}" class="d-inline-block text-truncate" style="max-width: 450px;"-->
-                            <!--                                               th:text="${expertRequest.content}"></a>-->
-                            <!--                                        </div>-->
-                            <!--                                    </td>-->
-                            <!--                                    <td style="width: 15%">-->
-                            <!--                                        <div class="article-element"><span th:text="${#temporals.format(expertRequest.createDate, 'yyyy-MM-dd')}"></span></div>-->
-                            <!--                                    </td>-->
-                            <!--                                    <td style="width: 15%">-->
-                            <!--                                        <div class="article-element">-->
-                            <!--                                            <a class="btn btn-sm btn-outline-primary" th:href="@{|/expert/request/approve/${expertRequest.id}|}" style="margin-right: 6px;">승인</a>-->
-                            <!--                                            <a class="btn btn-sm btn-outline-secondary" th:href="@{|/expert/request/reject/${expertRequest.id}|}">거부</a>-->
-                            <!--                                        </div>-->
-                            <!--                                    </td>-->
-                            <!--                                </tr>-->
-                            <!--                                </tbody>-->
-                            <!--                            </table>-->
                         </div>
                     </div>
                 </div>

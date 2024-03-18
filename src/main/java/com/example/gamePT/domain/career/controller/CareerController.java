@@ -19,17 +19,15 @@ public class CareerController {
     private final CareerService careerService;
     private final UserService userService;
     private final ExpertService expertService;
-    private final CourseService courseService;
-    private final ReviewService reviewService;
 
 
 
     @PostMapping("/add/{username}")
     public String addCareer(@PathVariable("username") String username,
-                            @RequestParam("category") String category, @RequestParam("content") String content) {
+                            @RequestParam("category") Long categoryId, @RequestParam("content") String content) {
         SiteUser siteUser = this.userService.findByUsername(username);
         Expert expert = this.expertService.getExpertBySiteUserId(siteUser.getId());
-        this.careerService.createCareer(category, content, expert);
+        this.careerService.createCareer(categoryId, content, expert);
         return String.format("redirect:/expert/modify/%s", username);
     }
 
