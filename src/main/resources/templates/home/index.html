@@ -5,10 +5,31 @@
     <div class="container-fluid py-5 mb-5 hero-header">
         <div class="container py-5">
             <div class="row g-5 align-items-center">
+
                 <div class="col-md-12 col-lg-7">
                     <h4 class="mb-4">게임 강의 플랫폼</h4>
                     <h1 class="mb-2 text-primary text-bold">모든 유저들을 위한</h1>
                     <h1 class="mb-4 text-primary">GamePT에 오신 것을 환영 합니다.</h1>
+                    <div class="col-10 row g-1">
+                        <div class="col-3">
+                            <div class="input-group">
+                                <select class="form-select" id="category_select" aria-label="Large select example">
+                                    <option value="course">강의</option>
+                                    <option value="expert">전문가</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="input-group">
+                                <input type="text" id="search_kw" class="form-control" placeholder="검색어를 입력하세요">
+                                <a href="#" class="btn btn-outline-primary border-2" id="btn_search" type="button" >검색</a>
+                            </div>
+                        </div>
+                        <form th:action="@{/home/search}" method="get" id="searchForm">
+                            <input type="hidden" id="category" name="category">
+                            <input type="hidden" id="kw" name="kw">
+                        </form>
+                    </div>
                 </div>
                 <div class="col-md-12 col-lg-5">
                     <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
@@ -142,6 +163,16 @@
 
             </div>
         </div>
+        <script layout:fragment="script" type='text/javascript'>
+
+            const btn_search = document.getElementById("btn_search");
+            btn_search.addEventListener('click', function() {
+
+                document.getElementById('category').value = document.getElementById('category_select').value;
+                document.getElementById('kw').value = document.getElementById('search_kw').value;
+
+                document.getElementById('searchForm').submit();
+            });
+        </script>
     </div>
-    <!-- Vesitable Shop End -->
 </div>

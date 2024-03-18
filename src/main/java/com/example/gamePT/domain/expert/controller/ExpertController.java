@@ -43,12 +43,14 @@ public class ExpertController {
     //전문가 목록
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/list")
-    public String expertList(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+    public String expertList(Model model, @RequestParam(value = "page", defaultValue = "0") int page , @RequestParam(value = "kw", defaultValue = "") String kw) {
 
-        Page<SiteUser> expertUserList = this.userService.getUserListByAuthorization("Expert",page);
+        Page<SiteUser> expertUserList = this.userService.getUserListByAuthorizationAndKw(kw,page);
         Page<SiteUserWithImg> siteUserWithImgList = toDtoList(expertUserList);
 
         model.addAttribute("siteUserWithImgList", siteUserWithImgList);
+        model.addAttribute("kw", kw);
+
         return "expert/user_list";
     }
 

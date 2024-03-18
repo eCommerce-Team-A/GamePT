@@ -19,8 +19,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             + "where "
             + "   c.name like %:kw% "
             + "   or c.curriculum like %:kw% "
-            + "   or c.introduce like %:kw% "
-            + "order by c.createDate DESC")
+            + "   or c.introduce like %:kw% ")
     Page<Course> findAllByKeyword( Pageable pageable, @Param("kw") String kw);
 
     List<Course> findTop4ByOrderByCreateDateDesc();

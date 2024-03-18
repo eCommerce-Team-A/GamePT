@@ -7,12 +7,14 @@ import com.example.gamePT.domain.expert.service.ExpertService;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 @Controller
@@ -23,6 +25,14 @@ public class HomeController {
     private final UserService userService;
     private final CourseService courseService;
     private final ExpertService expertService;
+
+    @SneakyThrows
+    @GetMapping("/home/search")
+    public String search(@RequestParam(value = "category", defaultValue = "course") String searchCategory, @RequestParam(value = "kw", defaultValue = "") String searchKw) {
+
+        searchKw = URLEncoder.encode(searchKw);
+        return "redirect:/"+searchCategory+"/list?kw="+searchKw+"&page=0";
+    }
 
     @GetMapping
     public String index(Model model) {
