@@ -21,39 +21,46 @@
                     <h2 class="text-primary">강의 등록</h2>
                 </div>
                 <div class=" card-body">
-                    <form th:action="@{/course/create}" method="post">
+                    <form th:action="@{/course/create}" method="post" enctype="multipart/form-data">
                         <div class="row g-3">
 
-                            <div class="form-item">
-                                <label class="form-label my-3">게임 카테고리 <sup>*</sup></label>
-                                <input type="text" name="gameCategoryname" class="form-control"
-                                       placeholder="게임 카테고리를 입력해주세요.">
-                            </div>
                             <div class="form-item">
                                 <label class="form-label my-3">강의명 <sup>*</sup></label>
                                 <input type="text" name="name" class="form-control" placeholder="강의명을 입력해주세요.">
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">강의 소개 <sup>*</sup></label>
-                                <textarea name="introduce" class="form-control" cols="30" rows="20" style="resize: none;"
+                                <textarea name="introduce" class="form-control" cols="30" rows="20"
+                                          style="resize: none;"
                                           placeholder="강의 소개를 입력해주세요."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <input class="form-control form-control profileImg"
+                                       type="file" accept="image/gif,image/jpeg,image/png" name="introduceImg">
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">강의 커리큘럼 <sup>*</sup></label>
-                                <textarea name="curriculum" class="form-control" cols="30" rows="10" style="resize: none;"
+                                <textarea name="curriculum" class="form-control" cols="30" rows="10"
+                                          style="resize: none;"
                                           placeholder="강의 커리큘럼을 입력해주세요.">
     예)
 
     1. ~~강의 ( x 분)
     2. ~~강의 ( x 분)</textarea>
                             </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">가격(포인트) <sup>*</sup></label>
-                                <input type="number" name="price" class="form-control" placeholder="예) 5000(포인트) (단위는 생략해주세요.)">
+                            <div class="mb-3">
+                                <input class="form-control form-control profileImg"
+                                       type="file" accept="image/gif,image/jpeg,image/png" name="curriculumImg">
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">가격(포인트) <sup>*</sup></label>
-                                <input type="number" name="discountRate" class="form-control" placeholder="할인율(%)을 기입해주세요. (단위는 생략해주세요.)">
+                                <input type="number" name="price" class="form-control"
+                                       placeholder="예) 5000(포인트) (단위는 생략해주세요.)">
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">가격(포인트) <sup>*</sup></label>
+                                <input type="number" name="discountRate" class="form-control"
+                                       placeholder="할인율(%)을 기입해주세요. (단위는 생략해주세요.)">
                             </div>
                             <div class="form-item">
                                 <button type="submit"
