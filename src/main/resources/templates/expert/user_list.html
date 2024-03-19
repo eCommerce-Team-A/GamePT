@@ -36,32 +36,35 @@
             </div>
             <div class="row row-cols-4 g-4 justify-content-start">
                 <div class="col" th:each="siteUserWithImg, loop : ${siteUserWithImgList}">
-                    <a th:href="@{|/expert/detail/${siteUserWithImg.siteUser.username}|}" class="d-flex flex-column justify-content-between alin-items-between expert-card bg-white shadow border-0">
+                    <a th:href="@{|/expert/detail/${siteUserWithImg.siteUser.username}|}"
+                       class="d-flex flex-column justify-content-between alin-items-between expert-card bg-white shadow border-0">
 
-                            <div class="d-flex align-items-center">
-                                <img th:src="${siteUserWithImg.img}" alt="..."
-                                     style="width:70px; height:70px; border-radius: 50%;">
-                                <div class="Nanum ms-2 fs-5" th:text="${siteUserWithImg.siteUser.nickname}"></div>
-                            </div>
+                        <div class="d-flex align-items-center">
+                            <img th:src="${siteUserWithImg.img}" alt="..."
+                                 style="width:70px; height:70px; border-radius: 50%;">
+                            <div class="Nanum ms-2 fs-5" th:text="${siteUserWithImg.siteUser.nickname}"></div>
+                        </div>
 
-                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class=" Nanum mt-3 fs-6" th:if="${#lists.size(siteUserWithImg.expert.careerList) != 0}">
-                                <i th:class="|fa-solid fa-${siteUserWithImg.expert.careerList[0].icon} m-2|"
-                                   th:if="${siteUserWithImg.expert.careerList[0].icon != 'youtube'}" th:style="|color: ${siteUserWithImg.expert.careerList[0].color};|"></i>
-                                <i th:class="|fa-brands fa-${siteUserWithImg.expert.careerList[0].icon} m-2|"
-                                   th:if="${siteUserWithImg.expert.careerList[0].icon == 'youtube'}" th:style="|color: ${siteUserWithImg.expert.careerList[0].color};|"></i>
-<!--                                <span>[[${#lists.size(siteUserWithImg.expert.careerList) != 0 ? siteUserWithImg.expert.careerList[0].category: null}]]</span>-->
-                                <span>
-                                    [[${#lists.size(siteUserWithImg.expert.careerList) != 0 ? siteUserWithImg.expert.careerList[0].content: null}]]
-                                </span>
+                        <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 32px;"
+                             class=" Nanum mt-3 fs-6" th:if="${#lists.size(siteUserWithImg.expert.careerList) != 0}">
+                            <div th:each="career : ${siteUserWithImg.expert.careerList}" class="career-item">
+                                <i id="careerIcon" th:class="|fa-solid fa-${career.icon} m-2|"
+                                   th:if="${career.icon != 'youtube'}" th:style="|color: ${career.color};|"></i>
+                                <i th:class="|fa-brands fa-${career.icon} m-2|"
+                                   th:if="${career.icon == 'youtube'}" th:style="|color: ${career.color};|"></i>
+                                <span id="careerContent" th:text="${career.content}"></span>
                             </div>
-                            <div class="mt-3" th:unless="${#lists.size(siteUserWithImg.expert.careerList) != 0}">
-                                아직 등록된 경력이 없어요
+                        </div>
+                        <div class="Nanum mt-3" th:unless="${#lists.size(siteUserWithImg.expert.careerList) != 0}">
+                            아직 등록된 경력이 없어요
+                        </div>
+                        <div class="Nanum card bg-secondary bg-opacity-25 border-0 mt-3">
+                            <div style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
+                                 class="mx-3 my-3">
+                                [[${siteUserWithImg.expert.introduce == null ? "아직 등록된 소개글이 없어요":
+                                siteUserWithImg.expert.introduce}]]
                             </div>
-                            <div class="card bg-secondary bg-opacity-25 border-0 mt-3">
-                                <div style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;" class="mx-3 my-3">
-                                    [[${siteUserWithImg.expert.introduce == null ? "아직 등록된 소개글이 없어요": siteUserWithImg.expert.introduce}]]
-                                </div>
-                            </div>
+                        </div>
                         <div class="expert-content">
                         </div>
                     </a>
@@ -82,10 +85,11 @@
                             th:classappend="${page == siteUserWithImgList.number} ? 'active'"
                             class="page-item">
                             <a th:text="${page+1}" class="page-link"
-                               href="javascript:void(0)" th:data-page="${page}" ></a>
+                               href="javascript:void(0)" th:data-page="${page}"></a>
                         </li>
                         <li class="page-item" th:classappend="${!siteUserWithImgList.hasNext} ? 'disabled'">
-                            <a class="page-link" href="javascript:void(0)" th:data-page="${siteUserWithImgList.number + 1}">
+                            <a class="page-link" href="javascript:void(0)"
+                               th:data-page="${siteUserWithImgList.number + 1}">
                                 <span>다음</span>
                             </a>
                         </li>
@@ -122,6 +126,25 @@
 
 
 
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var items = document.querySelectorAll(".career-item");
+            function start() {
+                items.forEach(function (item, index) {
+                    setTimeout(function () {
+                        item.style.display = "block";
+                        item.classList.add("animate");
+                        item.addEventListener("animationend", function () {
+                            item.style.display = "none";
+                        });
+                    }, index * 2300); // 4초 간격으로 순차적으로 애니메이션 시작
+                });
+            }
+            start();
+            items[items.length - 1].addEventListener("animationend", function () {
+                start();
+            });
+        });
     </script>
 
 </div>
