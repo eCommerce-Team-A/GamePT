@@ -21,7 +21,7 @@
                     <h2 class="text-primary">강의 수정</h2>
                 </div>
                 <div class=" card-body">
-                    <form th:action="@{|/course/update/${course.id}|}" method="post">
+                    <form th:action="@{|/course/update/${course.id}|}" method="post" enctype="multipart/form-data">
                         <div class="row g-3">
                             <div class="form-item">
                                 <label class="form-label my-3">강의명 <sup>*</sup></label>
@@ -55,16 +55,13 @@
                                           placeholder="강의 커리큘럼을 입력해주세요."
                                           th:text="${course.curriculum}"></textarea>
                                 <div class="mt-3 row" >
-                                    <div th:if="curriculumImg == null">
-                                        sdasdawdasdas
-                                    </div>
-                                    <div class="col-2 text-center" th:if="curriculumImg != null">
+                                    <div class="col-2 text-center" >
                                         <img style="width:50px; height:50px; object-fit:scale-down;"
                                              id="curriculumPreview"
                                              class="preview" th:src="${curriculumImg}">
                                     </div>
                                     <div class="col-10">
-                                        <input class="form-control form-control-lg profileImg" name="introducePreview"
+                                        <input class="form-control form-control-lg profileImg" name="curriculumImg"
                                                id="curriculumImg" type="file" accept="image/gif,image/jpeg,image/png">
                                     </div>
                                 </div>

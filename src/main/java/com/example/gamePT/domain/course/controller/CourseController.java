@@ -83,15 +83,14 @@ public class CourseController {
         String introduceImg = this.imageService.getIntroduceImg(course.getId());
         String curriculumImg = this.imageService.getCurriculumImg(course.getId());
 
-
         model.addAttribute("expertData", expertData);
         model.addAttribute("isPurchased", isPurchased);
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("courseListByAuthor", courseListByAuthor);
         model.addAttribute("course", course);
 
-        model.addAttribute("introduceImg",introduceImg);
-        model.addAttribute("curriculumImg",curriculumImg);
+        model.addAttribute("introduceImg", introduceImg);
+        model.addAttribute("curriculumImg", curriculumImg);
 
         return "course/course_detail";
     }
@@ -126,17 +125,17 @@ public class CourseController {
         String introduceImg = this.imageService.getIntroduceImg(course.getId());
         String curriculumImg = this.imageService.getCurriculumImg(course.getId());
         model.addAttribute("course", course);
-        model.addAttribute("introduceImg",introduceImg);
-        model.addAttribute("curriculumImg",curriculumImg);
+        model.addAttribute("introduceImg", introduceImg);
+        model.addAttribute("curriculumImg", curriculumImg);
         return "course/course_update";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/update/{id}")
-    public String updateCourse(@PathVariable(value = "id") Long id, @Valid CourseCreateForm courseCreateForm,
-                               BindingResult bindingResult, Model model) {
-        Course course = this.courseService.updateCourse(id, courseCreateForm.getName(),
-                courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(), courseCreateForm.getPrice(), courseCreateForm.getDiscountRate());
+    public String updateCourse(@PathVariable(value = "id") Long id, @Valid CourseCreateForm courseCreateForm, BindingResult bindingResult, Model model,
+                               @RequestParam(value = "introduceImg") MultipartFile introduceImg, @RequestParam(value = "curriculumImg") MultipartFile curriculumImg) throws IOException{
+        Course course = this.courseService.updateCourse(id, courseCreateForm.getName(), courseCreateForm.getIntroduce(), courseCreateForm.getCurriculum(),
+                courseCreateForm.getPrice(), courseCreateForm.getDiscountRate(), introduceImg, curriculumImg);
 
         return "redirect:/course/detail/" + id;
     }

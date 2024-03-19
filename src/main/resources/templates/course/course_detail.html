@@ -245,8 +245,13 @@
                             </div>
                             <div class="p-4 rounded-bottom">
                                 <h4 th:text="${relateCourse.author.nickname}"></h4>
-                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-                                     th:text="${relateCourse.introduce}"></div>
+                                <div>
+                                    <i th:each="num : ${#numbers.sequence(1,5)}"
+                                       class="review__rating fas fa-star"></i>
+                                    <span class="Nanum" th:text="|(${#lists.size(relateCourse.reviewList)})|"></span>
+                                </div>
+                                <div class="mt-3" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                     th:text="${relateCourse.name}"></div>
                             </div>
                         </div>
                     </a>

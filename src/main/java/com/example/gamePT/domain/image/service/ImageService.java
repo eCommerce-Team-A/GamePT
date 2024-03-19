@@ -178,31 +178,41 @@ public class ImageService {
 
     public void updateCourseIntroduce(Course course, MultipartFile introduceImg) throws IOException {
 
-        Image image = imageRepository.findByRelationEntityAndRelationId("courseIntroduce", course.getId()).get();
+        Optional<Image> optionalImage = imageRepository.findByRelationEntityAndRelationId("courseIntroduce", course.getId());
 
-        String originalFileName = introduceImg.getOriginalFilename();
-        String filePath = "user/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-        File profileImgFile = new File(fileDirPath + "/" + filePath);
-        introduceImg.transferTo(profileImgFile);
-        filePath = "/file/" + filePath;
+        if (optionalImage.isEmpty()) {
+            this.saveIntroduceImg(course, introduceImg);
+        } else {
+            Image image = optionalImage.get();
+            String originalFileName = introduceImg.getOriginalFilename();
+            String filePath = "user/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            File introduceImgFile = new File(fileDirPath + "/" + filePath);
+            introduceImg.transferTo(introduceImgFile);
+            filePath = "/file/" + filePath;
 
-        image = image.toBuilder().path(filePath).originalFileName(originalFileName).relationId(course.getId()).build();
+            image = image.toBuilder().path(filePath).originalFileName(originalFileName).relationId(course.getId()).build();
 
-        imageRepository.save(image);
+            imageRepository.save(image);
+        }
     }
 
-    public void updateCoursecurriculum(Course course, MultipartFile curriculumImg) throws IOException {
+    public void updateCourseCurriculum(Course course, MultipartFile curriculumImg) throws IOException {
 
-        Image image = imageRepository.findByRelationEntityAndRelationId("courseCurriculum", course.getId()).get();
+        Optional<Image> optionalImage = imageRepository.findByRelationEntityAndRelationId("courseCurriculum", course.getId());
 
-        String originalFileName = curriculumImg.getOriginalFilename();
-        String filePath = "user/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-        File profileImgFile = new File(fileDirPath + "/" + filePath);
-        curriculumImg.transferTo(profileImgFile);
-        filePath = "/file/" + filePath;
+        if (optionalImage.isEmpty()) {
+            this.saveCurriculumImg(course, curriculumImg);
+        } else {
+            Image image = optionalImage.get();
+            String originalFileName = curriculumImg.getOriginalFilename();
+            String filePath = "user/" + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            File curriculumImgFile = new File(fileDirPath + "/" + filePath);
+            curriculumImg.transferTo(curriculumImgFile);
+            filePath = "/file/" + filePath;
 
-        image = image.toBuilder().path(filePath).originalFileName(originalFileName).relationId(course.getId()).build();
+            image = image.toBuilder().path(filePath).originalFileName(originalFileName).relationId(course.getId()).build();
 
-        imageRepository.save(image);
+            imageRepository.save(image);
+        }
     }
 }
