@@ -2,6 +2,7 @@ package com.example.gamePT.domain.course.service;
 
 import com.example.gamePT.domain.course.entity.Course;
 import com.example.gamePT.domain.course.repository.CourseRepository;
+import com.example.gamePT.domain.image.service.ImageService;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -9,7 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
+    private final ImageService imageService;
 
     public List<Course> getCourseForMain() {
 
@@ -26,10 +30,9 @@ public class CourseService {
     }
 
 
-    public Course createCourse(SiteUser author, String gameCategoryname, String name, String introduce, String curriculum, Integer price, int discountRate) {
+    public Course createCourse(SiteUser author, String name, String introduce, String curriculum, Integer price, int discountRate) {
         Course course = Course.builder()
                 .author(author)
-                .gameCategoryname(gameCategoryname)
                 .name(name)
                 .introduce(introduce)
                 .curriculum(curriculum)
@@ -60,24 +63,23 @@ public class CourseService {
         return this.courseRepository.findAll(pageable);
     }
 
-    public Page<Course> findAllByKeyword(int page,String kw) {
+    public Page<Course> findAllByKeyword(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
 
         Pageable pageable = PageRequest.of(page, 8, Sort.by(sorts));
 
-        return this.courseRepository.findAllByKeyword(pageable,kw);
+        return this.courseRepository.findAllByKeyword(pageable, kw);
     }
 
     public List<Course> findCourseByAuthorId(Long id) {
         return this.courseRepository.findCourseByAuthorId(id);
     }
 
-    public Course updateCourse(Long id, String gameCategoryname, String name,
-                               String introduce, String curriculum, Integer price, int discountRate) {
+    public Course updateCourse(Long id, String name, String introduce, String curriculum, Integer price, int discountRate
+            , MultipartFile introduceImg, MultipartFile curriculumImg) throws IOException {
         Course _course = findCourseById(id);
         Course course = _course.toBuilder()
-                .gameCategoryname(gameCategoryname)
                 .name(name)
                 .introduce(introduce)
                 .curriculum(curriculum)
@@ -86,7 +88,12 @@ public class CourseService {
                 .isActive(true)
                 .build();
         this.courseRepository.save(course);
-
+        if (!introduceImg.isEmpty()){
+            this.imageService.updateCourseIntroduce(course, introduceImg);
+        }
+        if (!curriculumImg.isEmpty()) {
+            this.imageService.updateCourseCurriculum(course, curriculumImg);
+        }
         return course;
     }
 
