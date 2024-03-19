@@ -66,18 +66,18 @@
                             <div class="tab-content mb-5 p-4">
                                 <div class="tab-pane active" id="nav-introduce" role="tabpanel" aria-labelledby="nav-introduce-tab">
                                     <div style="display: flex; flex-direction: column; align-items: center;">
-                                        <img th:src="${introduceImg}" alt="..." style="width:85%; border-radius: 1%;">
+                                        <img th:src="${introduceImg}" alt="..." style="width:100%; border-radius: 1%;" th:if="${introduceImg != null}">
                                     </div>
                                     <div class="Nanum mt-3" style="display: flex; justify-content: center;">
-                                        <span style="white-space:pre; width: 85%;" th:text="${course.introduce}"></span>
+                                        <span style="white-space:pre; width: 100%;" th:text="${course.introduce}"></span>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="nav-curriculum" role="tabpanel" aria-labelledby="nav-curriculum-tab">
                                     <div style="display: flex; flex-direction: column; align-items: center;">
-                                        <img th:src="${curriculumImg}" alt="..." style="width:85%; border-radius: 1%;">
+                                        <img th:src="${curriculumImg}" alt="..." style="width:100%; border-radius: 1%;" th:if="${curriculumImg != null}">
                                     </div>
                                     <div class="Nanum mt-3" style="display: flex; justify-content: center;">
-                                        <span style="white-space:pre; width: 85%" th:text="${course.curriculum}"></span>
+                                        <span style="white-space:pre; width: 100%" th:text="${course.curriculum}"></span>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="nav-review" role="tabpanel"
