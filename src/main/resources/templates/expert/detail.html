@@ -44,13 +44,13 @@
                         </div>
 
                         <div class="card-body">
-                            <div class="mx-2 my-4" th:each="career : ${careerList}">
+                            <div class="m2" th:each="career : ${careerList}" th:if="${careerList != null}">
                                 <div class="Nanum fs-6 d-flex flex align-items-center">
-                                    <i class="fa-solid fa-crown text-success ms-1 me-2 fa-lg"></i>
-                                    <div>
-                                        <span class="mx-2" th:text="|${career.category}"></span>
+                                        <i th:class="|fa-solid fa-${career.icon} m-2|"
+                                           th:if="${career.icon != 'youtube'}" th:style="|color: ${career.color};|"></i>
+                                        <i th:class="|fa-brands fa-${career.icon} m-2|"
+                                           th:if="${career.icon == 'youtube'}" th:style="|color: ${career.color};|"></i>
                                         <span th:text="${career.content}"></span>
-                                    </div>
                                 </div>
                             </div>
                         </div>

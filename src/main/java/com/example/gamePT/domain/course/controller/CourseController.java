@@ -93,9 +93,10 @@ public class CourseController {
     }
 
     @GetMapping("/list")
-    public String courseList(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-        Page<Course> courseList = this.courseService.findAll(page);
+    public String courseList(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
+            Page<Course> courseList = this.courseService.findAllByKeyword(page,kw);
         model.addAttribute("courseList", courseList);
+        model.addAttribute("kw", kw);
 
         return "course/course_list";
     }

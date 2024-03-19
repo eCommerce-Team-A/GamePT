@@ -16,6 +16,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class Career extends BaseEntity {
     private String category;
+    private String icon;
+    private String color;
     private String content;
     @ManyToOne
     private Expert expert;
