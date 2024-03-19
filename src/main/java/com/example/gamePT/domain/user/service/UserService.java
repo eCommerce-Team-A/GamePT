@@ -1,6 +1,7 @@
 package com.example.gamePT.domain.user.service;
 
 import com.example.gamePT.domain.image.service.ImageService;
+import com.example.gamePT.domain.orderItem.entity.OrderItem;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.repository.UserRepository;
 import com.example.gamePT.domain.user.request.SiteUserRequest;
@@ -269,12 +270,23 @@ public class UserService {
     }
 
     // 전문가 리스트 검색
-    public Page<SiteUser> getUserListByAuthorizationAndKw(String kw, int page) {
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page,8,Sort.by(sorts));
+    public Page<SiteUser> getUserListByAuthorizationAndKw(String kw,String order, int page) {
 
-        return this.userRepository.findByAuthorizationAndKw(kw,pageable);
+        String query = "";
+
+        Pageable pageable = PageRequest.of(page,8);
+
+        if( order.equals("recent")){
+            return this.userRepository.findByAuthorizationAndKw(kw,"e.createDate DESC",pageable);
+        } else if (order.equals("old")) {
+            return this.userRepository.findByAuthorizationAndKw(kw,"e.createDate ASC",pageable);
+        }else if (order.equals("review")) {
+            return this.userRepository.findByAuthorizationAndKwOrderByReviewCount(kw,pageable);
+        }else if (order.equals("grade")) {
+            return this.userRepository.findByAuthorizationAndKwOrderByReviewGrade(kw,pageable);
+        }
+
+        return this.userRepository.findByAuthorizationAndKw(kw,query,pageable);
     }
 
     public Page<SiteUser> getUserListByAuthorization(String authorization, int page) {
