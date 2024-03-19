@@ -37,15 +37,20 @@
                                           placeholder="강의 소개를 입력해주세요."
                                           th:text="${course.introduce}"></textarea>
                             </div>
-                            <div class="mt-3 row">
-                            <div class="col-2 text-center">
-                                <img style="width:50px; height:50px; object-fit:scale-down;" id="introducePreview"
-                                     class="preview" th:src="${introduceImg}">
-                            </div>
-                            <div class="col-10">
-                                <input class="form-control form-control-lg profileImg" name="introduceImg"
-                                       id="introduceImg" type="file" accept="image/gif,image/jpeg,image/png">
-                            </div>
+                            <div class="form-item" style="display: flex; justify-content: space-between; ">
+                                <div class="col-2 text-center" style="display: flex; justify-content: space-between;">이전
+                                    파일
+                                    <div style="width: 70%;">
+                                        <img style="height:50px; object-fit:scale-down; border-radius: 5px;"
+                                             id="introducePreview" class="preview" th:src="${introduceImg}"
+                                             th:if="${introduceImg != null}">
+                                        <i class="fa-solid fa-square-xmark" th:if="${introduceImg == null}"></i>
+                                    </div>
+                                </div>
+                                <div class="col-10" style="display: flex; align-items: center;">
+                                    <input class="form-control profileImg" name="introduceImg"
+                                           id="introduceImg" type="file" accept="image/gif,image/jpeg,image/png">
+                                </div>
                             </div>
 
                             <div class="form-item">
@@ -54,16 +59,20 @@
                                           style="resize: none;"
                                           placeholder="강의 커리큘럼을 입력해주세요."
                                           th:text="${course.curriculum}"></textarea>
-                                <div class="mt-3 row" >
-                                    <div class="col-2 text-center" >
-                                        <img style="width:50px; height:50px; object-fit:scale-down;"
-                                             id="curriculumPreview"
-                                             class="preview" th:src="${curriculumImg}">
+                            </div>
+                            <div class="form-item" style="display: flex; justify-content: space-between; ">
+                                <div class="col-2 text-center" style="display: flex; justify-content: space-between;">이전
+                                    파일
+                                    <div style="width: 70%;">
+                                        <img style="height:50px; object-fit:scale-down; border-radius: 5px;"
+                                             id="curriculumPreview" class="preview" th:src="${curriculumImg}" th:if="${curriculumImg != null}">
+                                        <i class="fa-solid fa-square-xmark" th:if="${curriculumImg == null}"
+                                           style="font-size:50px; object-fit:scale-down;"></i>
                                     </div>
-                                    <div class="col-10">
-                                        <input class="form-control form-control-lg profileImg" name="curriculumImg"
-                                               id="curriculumImg" type="file" accept="image/gif,image/jpeg,image/png">
-                                    </div>
+                                </div>
+                                <div class="col-10" style="display: flex; align-items: center;">
+                                    <input class="form-control profileImg" name="curriculumImg"
+                                           id="curriculumImg" type="file" accept="image/gif,image/jpeg,image/png">
                                 </div>
                             </div>
 

@@ -573,3 +573,30 @@ a {
     font-weight: 1000;
     font-style: normal;
 }
+
+/*** Career animation start ***/
+.career-item {
+    opacity: 1;
+    animation: animate 2.3s;
+    display: none;
+}
+
+.career-item.animate {
+    animation-name: fadeInOut; /* fadeInOut 애니메이션 적용 */
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, -100%, 0);
+    }
+    30%{
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+    95% { opacity: 1;}
+    100% {
+        opacity: 0;
+    }
+}
+/*** Career animation End ***/
