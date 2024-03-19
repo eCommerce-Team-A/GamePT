@@ -42,8 +42,41 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
             + "   s.nickname like %:kw% "
             + "   or e.introduce like %:kw% "
             + "   or c.content like %:kw% "
-            + "   or c.category like %:kw% ")
-    Page<SiteUser> findByAuthorizationAndKw(@Param("kw") String kw, Pageable pageable);
+            + "   or c.category like %:kw% "
+            + "order by :orderQuery")
+    Page<SiteUser> findByAuthorizationAndKw(@Param("kw") String kw, @Param("orderQuery") String orderQuery, Pageable pageable);
+
+    @Query("select "
+            + "distinct s "
+            + "from SiteUser s "
+            + "right join Expert e on s.id=e.siteUserId "
+            + "left outer join Career c on c.expert = e "
+            + "left outer join Course co on co.author = s "
+            + "left outer join Review r on r.course = co "
+            + "where "
+            + "   s.nickname like %:kw% "
+            + "   or e.introduce like %:kw% "
+            + "   or c.content like %:kw% "
+            + "   or c.category like %:kw% "
+            + "group by s.id "
+            + "order by count(r.id) desc ")
+    Page<SiteUser> findByAuthorizationAndKwOrderByReviewCount(@Param("kw") String kw, Pageable pageable);
+
+    @Query("select "
+            + "distinct s "
+            + "from SiteUser s "
+            + "right join Expert e on s.id=e.siteUserId "
+            + "left outer join Career c on c.expert = e "
+            + "left outer join Course co on co.author = s "
+            + "left outer join Review r on r.course = co "
+            + "where "
+            + "   s.nickname like %:kw% "
+            + "   or e.introduce like %:kw% "
+            + "   or c.content like %:kw% "
+            + "   or c.category like %:kw% "
+            + "group by s.id "
+            + "order by avg(r.score) desc ")
+    Page<SiteUser> findByAuthorizationAndKwOrderByReviewGrade(@Param("kw") String kw, Pageable pageable);
 
     List<SiteUser> findTop5ByAuthorizationOrderByCreateDateDesc(String authorization);
 }
