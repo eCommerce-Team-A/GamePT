@@ -272,21 +272,19 @@ public class UserService {
     // 전문가 리스트 검색
     public Page<SiteUser> getUserListByAuthorizationAndKw(String kw,String order, int page) {
 
-        String query = "";
-
         Pageable pageable = PageRequest.of(page,8);
 
         if( order.equals("recent")){
-            return this.userRepository.findByAuthorizationAndKw(kw,"e.createDate DESC",pageable);
+            return this.userRepository.findByAuthorizationAndKwCreateDateDesc(kw,pageable);
         } else if (order.equals("old")) {
-            return this.userRepository.findByAuthorizationAndKw(kw,"e.createDate ASC",pageable);
+            return this.userRepository.findByAuthorizationAndKwCreateDateAsc(kw,pageable);
         }else if (order.equals("review")) {
             return this.userRepository.findByAuthorizationAndKwOrderByReviewCount(kw,pageable);
         }else if (order.equals("grade")) {
             return this.userRepository.findByAuthorizationAndKwOrderByReviewGrade(kw,pageable);
         }
 
-        return this.userRepository.findByAuthorizationAndKw(kw,query,pageable);
+        return this.userRepository.findByAuthorizationAndKwCreateDateDesc(kw,pageable);
     }
 
     public Page<SiteUser> getUserListByAuthorization(String authorization, int page) {
