@@ -43,8 +43,21 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
             + "   or e.introduce like %:kw% "
             + "   or c.content like %:kw% "
             + "   or c.category like %:kw% "
-            + "order by :orderQuery")
-    Page<SiteUser> findByAuthorizationAndKw(@Param("kw") String kw, @Param("orderQuery") String orderQuery, Pageable pageable);
+            + "order by e.createDate DESC")
+    Page<SiteUser> findByAuthorizationAndKwCreateDateDesc(@Param("kw") String kw, Pageable pageable);
+
+    @Query("select "
+            + "distinct s "
+            + "from SiteUser s "
+            + "right join Expert e on s.id=e.siteUserId "
+            + "left outer join Career c on c.expert = e "
+            + "where "
+            + "   s.nickname like %:kw% "
+            + "   or e.introduce like %:kw% "
+            + "   or c.content like %:kw% "
+            + "   or c.category like %:kw% "
+            + "order by e.createDate ASC")
+    Page<SiteUser> findByAuthorizationAndKwCreateDateAsc(@Param("kw") String kw, Pageable pageable);
 
     @Query("select "
             + "distinct s "
