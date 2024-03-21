@@ -41,7 +41,7 @@
                             <span th:if="!${cartItem.course.isActive}">구매불가</span>
                         </div>
                         <div class="col-5 d-flex justify-content-center align-items-center" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                            <a th:href="@{|/course/detail/${cartItem.course.id}|}"><span class="badge rounded-pill text-bg-primary ">[[${cartItem.course.gameCategoryname}]]</span> [[${cartItem.course.name}]]<span th:if="!${cartItem.course.isActive}"> (폐지됨)</span></span></a>
+                            <a th:href="@{|/course/detail/${cartItem.course.id}|}"> [[${cartItem.course.name}]]<span th:if="!${cartItem.course.isActive}"> (폐지됨)</span></span></a>
                         </div>
                         <div class="col-3 d-flex justify-content-center align-items-center" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                             [[${cartItem.course.author.nickname}]]

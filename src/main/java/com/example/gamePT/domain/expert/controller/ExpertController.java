@@ -13,6 +13,8 @@ import com.example.gamePT.domain.expert.service.ExpertService;
 import com.example.gamePT.domain.orderItem.entity.OrderItem;
 import com.example.gamePT.domain.orderItem.service.OrderItemService;
 import com.example.gamePT.domain.qna.entity.QnA;
+import com.example.gamePT.domain.rebate.entity.Rebate;
+import com.example.gamePT.domain.rebate.service.RebateService;
 import com.example.gamePT.domain.review.service.ReviewService;
 import com.example.gamePT.domain.user.entity.SiteUser;
 import com.example.gamePT.domain.user.service.UserService;
@@ -38,6 +40,7 @@ public class ExpertController {
     private final ExpertService expertService;
     private final OrderItemService orderItemService;
     private final CategoryService categoryService;
+    private final RebateService rebateService;
 
 
     //전문가 목록
@@ -70,6 +73,9 @@ public class ExpertController {
     @GetMapping("/detail/{username}")
     public String expertDetail(@PathVariable("username") String username, Model model) {
         this.passData(username, model);
+
+        Rebate rebate = rebateService.findBySellerAndSalePeriod((SiteUser) model.getAttribute("siteUser"),2024,3);
+
         return "expert/detail";
     }
 
